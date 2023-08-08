@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.bootcamp.candidate.base.BaseEntity;
+import com.bootcamp.base.BaseEntity;
 
 @Entity
 @Table(name="t_candidate")

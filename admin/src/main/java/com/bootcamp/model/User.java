@@ -1,6 +1,6 @@
 package com.bootcamp.model;
 
-import com.bootcamp.candidate.base.BaseEntity;
+import com.bootcamp.base.BaseEntity;
 
 import javax.persistence.*;
 

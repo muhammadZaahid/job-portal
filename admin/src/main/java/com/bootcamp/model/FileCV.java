@@ -3,7 +3,7 @@ package com.bootcamp.model;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import com.bootcamp.candidate.base.BaseEntity;
+import com.bootcamp.base.BaseEntity;
 
 public class FileCV extends BaseEntity{
     
