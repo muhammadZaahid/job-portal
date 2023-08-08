@@ -77,4 +77,6 @@ public class Company extends BaseEntity {
         this.companyBanner = companyBanner;
     }
 
+}
+
    
