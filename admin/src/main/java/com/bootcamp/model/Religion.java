@@ -2,7 +2,7 @@ package com.bootcamp.model;
 
 import javax.persistence.Column;
 
-import com.bootcamp.candidate.base.BaseEntity;
+import com.bootcamp.base.BaseEntity;
 
 public class Religion extends BaseEntity{
     

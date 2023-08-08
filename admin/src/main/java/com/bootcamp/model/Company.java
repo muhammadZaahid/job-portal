@@ -2,7 +2,7 @@ package com.bootcamp.model;
 
 import javax.persistence.*;
 
-import com.bootcamp.candidate.base.BaseEntity;
+import com.bootcamp.base.BaseEntity;
 
 @Entity
 @Table(name = "t_company")
