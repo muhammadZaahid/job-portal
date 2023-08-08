@@ -1,10 +1,6 @@
 package com.bootcamp.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.bootcamp.base.BaseEntity;
 
@@ -25,6 +21,7 @@ public class Company extends BaseEntity {
     private String companyTaxNumber;
 
     @OneToOne
+
     @JoinColumn(name = "file_id", nullable = false)
     private File companyLogo;
 
@@ -80,5 +77,4 @@ public class Company extends BaseEntity {
         this.companyBanner = companyBanner;
     }
 
-    
-}
+   
