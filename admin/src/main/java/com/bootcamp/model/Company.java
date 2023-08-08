@@ -21,8 +21,13 @@ public class Company extends BaseEntity {
     private String companyTaxNumber;
 
     @OneToOne
-    @JoinColumn(name = "company_photo_id", nullable = false)
-    private File file;
+
+    @JoinColumn(name = "file_id", nullable = false)
+    private File companyLogo;
+
+    @OneToOne
+    @JoinColumn(name = "file_id", nullable = false)
+    private File companyBanner;
 
     public String getCompanyCode() {
         return companyCode;
@@ -56,11 +61,20 @@ public class Company extends BaseEntity {
         this.companyTaxNumber = companyTaxNumber;
     }
 
-    public File getFile() {
-        return file;
+    public File getCompanyLogo() {
+        return companyLogo;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setCompanyLogo(File companyLogo) {
+        this.companyLogo = companyLogo;
     }
-}
+
+    public File getCompanyBanner() {
+        return companyBanner;
+    }
+
+    public void setCompanyBanner(File companyBanner) {
+        this.companyBanner = companyBanner;
+    }
+
+   
