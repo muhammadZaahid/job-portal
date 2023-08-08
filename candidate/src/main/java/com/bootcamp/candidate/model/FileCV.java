@@ -1,4 +1,4 @@
-package com.bootcamp.model;
+package com.bootcamp.candidate.model;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
