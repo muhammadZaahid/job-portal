@@ -1,6 +1,6 @@
 package com.bootcamp.model;
 
-import com.bootcamp.base.BaseEntity;
+import com.lawencon.base.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
