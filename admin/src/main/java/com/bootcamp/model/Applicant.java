@@ -1,17 +1,18 @@
 package com.bootcamp.model;
 
-import com.bootcamp.base.BaseEntity;
-
 import javax.persistence.*;
+
+import com.lawencon.base.BaseEntity;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name="t_applicant")
 public class Applicant extends BaseEntity {
 
-//    @ManyToOne
-//    @JoinColumn(name = "candidate_id", nullable = false)
-//    private Candidate candidate;
+   @ManyToOne
+   @JoinColumn(name = "candidate_id", nullable = false)
+   private Candidate candidate;
 
     @ManyToOne
     @JoinColumn(name = "job_vacancy_id", nullable = false)
