@@ -20,6 +20,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.lawencon.admin.filter.AuthorizationFilter;
+import com.lawencon.admin.service.UserService;
+
 @Configuration
 public class SecurityConfig {
     @Bean

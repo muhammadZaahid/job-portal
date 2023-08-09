@@ -21,8 +21,8 @@ public class Applicant extends BaseEntity {
     @Column(name = "job_vacancy_code", nullable = false)
     private String JobVacancyCode;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "current_stage", nullable = false)
+    private boolean currentStage;
 
     @Column(name = "salary_from", nullable = false)
     private String salaryFrom;
