@@ -12,7 +12,9 @@ import com.lawencon.admin.dto.user.UserInsertReqDto;
 import com.lawencon.admin.model.Profile;
 import com.lawencon.admin.model.User;
 import com.lawencon.admin.service.UserService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService{
     
     private final ProfileDao profileDao;
