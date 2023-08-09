@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.bootcamp.base.BaseEntity;
+import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name="t_candidate")
@@ -47,10 +47,10 @@ public class Candidate extends BaseEntity{
     private Double salaryExpectation;
     
     @OneToOne
-    @JoinColumn(name="file_id")
-    private File photo_id;
+    @JoinColumn(name="photo_id")
+    private File photoId;
 
     @OneToOne
-    @JoinColumn(name="file_id")
-    private File resume_id;
+    @JoinColumn(name="resume_id")
+    private File resumeId;
 }

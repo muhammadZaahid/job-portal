@@ -1,6 +1,6 @@
 package com.bootcamp.model;
 
-import com.bootcamp.base.BaseEntity;
+import com.lawencon.base.BaseEntity;
 
 import javax.persistence.*;
 
@@ -13,8 +13,11 @@ public class User extends BaseEntity {
     @JoinColumn(name="profile_id")
     private Profile profile;
 
-    @Column(name = "email",unique = true, nullable = false)
+    @Column(name = "email",unique = true, nullable = true)
     private String email;
+
+    @Column(name = "password",nullable = true)
+    private String password;
 
     public Profile getProfile() {
         return profile;
@@ -31,4 +34,12 @@ public class User extends BaseEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }    
 }
