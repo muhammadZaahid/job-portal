@@ -16,7 +16,7 @@ public class UserDao extends AbstractJpaDao{
 
     public User getByEmail(String email){
         final String sql = "SELECT "
-				+ "tu.id, tu.password, tp.profile_name "
+				+ "tu.id, tu.password, tp.full_name "
 				+ "FROM "
 				+ "t_user tu "
 				+ "INNER JOIN "

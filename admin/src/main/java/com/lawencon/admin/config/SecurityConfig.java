@@ -3,6 +3,8 @@ package com.lawencon.admin.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawencon.admin.filter.AuthorizationFilter;
+import com.lawencon.admin.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -50,7 +52,7 @@ public class SecurityConfig {
 		matchers.add(new AntPathRequestMatcher("/files/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/swagger-ui/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/v3/**", HttpMethod.GET.toString()));
-        matchers.add(new AntPathRequestMatcher("/admin/users/**",HttpMethod.POST.toString()));
+        // matchers.add(new AntPathRequestMatcher("/admin/u",HttpMethod.POST.toString()));
 		return matchers;
 	}
 

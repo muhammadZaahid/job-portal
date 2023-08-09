@@ -13,6 +13,11 @@ import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.user.UserInsertReqDto;
 import com.lawencon.admin.service.UserService;
 
+import com.lawencon.base.ConnHandler;
+
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("admin/users")
 public class UserController {
@@ -25,8 +30,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<InsertResDto> insert(@Valid @RequestBody UserInsertReqDto data){
+        ConnHandler.begin();
         final InsertResDto response = userService.addUser(data);
-
+        ConnHandler.commit();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

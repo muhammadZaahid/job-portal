@@ -37,7 +37,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, 
 			HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-			System.out.println("Masuk ke filter");
 		final long count = matchers.stream().filter(m -> m.matches(request)).collect(Collectors.counting());
 		if (count == 0) {
 			final String header = request.getHeader("Authorization");
@@ -46,7 +45,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 				try {					
 					final Map<String, Object> map = jwtService.parseJwt(jwt);
 					
-					final Authentication auth = new UsernamePasswordAuthenticationToken(map, null);
+					final Authentication auth = new UsernamePasswordAuthenticationToken(map.get("id"), null);
 					SecurityContextHolder.getContext().setAuthentication(auth);
 					
 				} catch (Exception e) {

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,19 +24,16 @@ import com.lawencon.admin.service.UserService;
 @RestController
 @RequestMapping("admin/login")
 public class LoginController {
-    private final UserService userService;
-	private final AuthenticationManager authenticationManager;
-	private final JwtService jwtService;
 
-    public LoginController(UserService userService, AuthenticationManager authenticationManager,
-            JwtService jwtService) {
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
+	@Autowired
+    UserService userService;
+	@Autowired
+	AuthenticationManager authenticationManager;
+	@Autowired
+	JwtService jwtService;
     
     @PostMapping
-	public ResponseEntity<?> login(@RequestBody final LoginReqDto user) {
+	public ResponseEntity<?> login(@RequestBody LoginReqDto user) {
 		final Authentication auth = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 
 		authenticationManager.authenticate(auth);
