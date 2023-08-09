@@ -2,7 +2,7 @@ package com.bootcamp.model;
 
 import javax.persistence.*;
 
-import com.bootcamp.base.BaseEntity;
+import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name = "t_company")
@@ -21,12 +21,11 @@ public class Company extends BaseEntity {
     private String companyTaxNumber;
 
     @OneToOne
-
-    @JoinColumn(name = "file_id", nullable = false)
+    @JoinColumn(name = "company_logo", nullable = false)
     private File companyLogo;
 
     @OneToOne
-    @JoinColumn(name = "file_id", nullable = false)
+    @JoinColumn(name = "company_banner", nullable = false)
     private File companyBanner;
 
     public String getCompanyCode() {

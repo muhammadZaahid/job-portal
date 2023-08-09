@@ -4,7 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.bootcamp.base.BaseEntity;
+import com.lawencon.base.BaseEntity;
 
 @Entity
 @Table(name="t_file")

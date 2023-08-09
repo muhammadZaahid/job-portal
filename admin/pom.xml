@@ -65,10 +65,10 @@
 		    <scope>runtime</scope>
 		</dependency>
 		
-		<dependency>
+		<!-- <dependency>
 		    <groupId>org.liquibase</groupId>
 		    <artifactId>liquibase-core</artifactId>
-		</dependency>
+		</dependency> -->
 		
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -80,5 +80,11 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+
+	<dependency>
+            <groupId>com.lawencon</groupId>
+            <artifactId>core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 	</dependencies>
 </project>
