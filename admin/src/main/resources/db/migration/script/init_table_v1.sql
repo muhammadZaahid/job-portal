@@ -30,3 +30,14 @@ CREATE TABLE t_user (
 
 ALTER TABLE public.t_user ADD CONSTRAINT profile_id_fk FOREIGN KEY (profile_id) REFERENCES public.t_profile(id);
 
+CREATE TABLE public.t_job_lvl (
+	id varchar(36) NOT NULL,
+	created_at timestamp NOT NULL,
+	created_by varchar(255) NOT NULL,
+	is_active bool NULL,
+	updated_at timestamp NULL,
+	updated_by varchar(255) NULL,
+	ver int4 NULL,
+	job_lvl_name varchar(255) NOT NULL,
+	CONSTRAINT t_job_lvl_pkey PRIMARY KEY (id)
+);
