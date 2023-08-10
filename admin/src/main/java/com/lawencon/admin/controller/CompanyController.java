@@ -16,7 +16,9 @@ import com.lawencon.admin.dto.company.CompanyInsertReqDto;
 import com.lawencon.admin.dto.company.CompanyResDto;
 import com.lawencon.admin.service.CompanyService;
 import com.lawencon.base.ConnHandler;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+@SecurityRequirement(name = "bearerAuth")
 @RestController
 @RequestMapping("admin/company")
 public class CompanyController {

@@ -25,10 +25,18 @@ CREATE TABLE t_user (
 	CONSTRAINT user_pk PRIMARY KEY (id)
 );
 
-
--- public.t_user foreign keys
-
-ALTER TABLE t_user ADD CONSTRAINT profile_id_fk FOREIGN KEY (profile_id) REFERENCES t_profile(id);
+CREATE TABLE public.t_file (
+	id varchar(36) NOT NULL,
+	files varchar(255) NOT NULL,
+	file_format varchar(255) NOT NULL,
+	created_at timestamp NOT NULL,
+	created_by varchar(255) NOT NULL,
+	is_active bool NULL,
+	updated_at timestamp NULL,
+	updated_by varchar(255) NULL,
+	ver int4 NULL,
+	CONSTRAINT t_file_pkey PRIMARY KEY (id)
+);
 
 CREATE TABLE t_job_lvl (
 	id varchar(36) NOT NULL,
@@ -63,18 +71,6 @@ CREATE TABLE public.t_applicant (
 	CONSTRAINT t_applicant_pkey PRIMARY KEY (id)
 );
 
-
--- public.t_applicant foreign keys
-
-ALTER TABLE public.t_applicant ADD CONSTRAINT candidate_id_fk FOREIGN KEY (candidate_id) REFERENCES public.t_candidate(id);
-ALTER TABLE public.t_applicant ADD CONSTRAINT job_vacancy_id_fk FOREIGN KEY (job_vacancy_id) REFERENCES public.t_job_vacancy(id);
-
--- public.t_application definition
-
--- Drop table
-
--- DROP TABLE public.t_application;
-
 CREATE TABLE public.t_application (
 	id varchar(36) NOT NULL,
 	is_accepted bool NULL,
@@ -88,18 +84,6 @@ CREATE TABLE public.t_application (
 	ver int4 NULL,
 	CONSTRAINT t_application_pkey PRIMARY KEY (id)
 );
-
-
--- public.t_application foreign keys
-
-ALTER TABLE public.t_application ADD CONSTRAINT applicant_id_fk FOREIGN KEY (applicant_id) REFERENCES public.t_applicant(id);
-
-
--- public.t_candidate definition
-
--- Drop table
-
--- DROP TABLE public.t_candidate;
 
 CREATE TABLE public.t_candidate (
 	id varchar(36) NOT NULL,
@@ -126,19 +110,6 @@ CREATE TABLE public.t_candidate (
 	CONSTRAINT t_candidate_ukey UNIQUE (email)
 );
 
-
--- public.t_candidate foreign keys
-
-ALTER TABLE public.t_candidate ADD CONSTRAINT resume_id_fk FOREIGN KEY (resume_id) REFERENCES public.t_file(id);
-ALTER TABLE public.t_candidate ADD CONSTRAINT photo_id FOREIGN KEY (photo_id) REFERENCES public.t_file(id);
-
-
--- public.t_company definition
-
--- Drop table
-
--- DROP TABLE public.t_company;
-
 CREATE TABLE public.t_company (
 	id varchar(36) NOT NULL,
 	company_code varchar(255) NOT NULL,
@@ -156,18 +127,6 @@ CREATE TABLE public.t_company (
 	CONSTRAINT t_company_pkey PRIMARY KEY (id)
 );
 
-
--- public.t_company foreign keys
-
-ALTER TABLE public.t_company ADD CONSTRAINT company_banner_fk FOREIGN KEY (company_banner) REFERENCES public.t_file(id);
-ALTER TABLE public.t_company ADD CONSTRAINT company_logo_fk FOREIGN KEY (company_logo) REFERENCES public.t_file(id);
-
--- public.t_company_banner definition
-
--- Drop table
-
--- DROP TABLE public.t_company_banner;
-
 CREATE TABLE public.t_company_banner (
 	id varchar(36) NOT NULL,
 	company_id varchar(36) NULL,
@@ -181,18 +140,6 @@ CREATE TABLE public.t_company_banner (
 	CONSTRAINT t_company_banner_pkey PRIMARY KEY (id)
 );
 
-
--- public.t_company_banner foreign keys
-
-ALTER TABLE public.t_company_banner ADD CONSTRAINT file_id_fk FOREIGN KEY (file_id) REFERENCES public.t_file(id);
-ALTER TABLE public.t_company_banner ADD CONSTRAINT company_id_fk FOREIGN KEY (company_id) REFERENCES public.t_company(id);
-
--- public.t_company_logo definition
-
--- Drop table
-
--- DROP TABLE public.t_company_logo;
-
 CREATE TABLE public.t_company_logo (
 	id varchar(36) NOT NULL,
 	company_id varchar(36) NULL,
@@ -205,37 +152,6 @@ CREATE TABLE public.t_company_logo (
 	ver int4 NULL,
 	CONSTRAINT t_company_logo_pkey PRIMARY KEY (id)
 );
-
-
--- public.t_company_logo foreign keys
-
-ALTER TABLE public.t_company_logo ADD CONSTRAINT company_id_fk FOREIGN KEY (company_id) REFERENCES public.t_company(id);
-ALTER TABLE public.t_company_logo ADD CONSTRAINT file_id_fk FOREIGN KEY (file_id) REFERENCES public.t_file(id);
-
--- public.t_file definition
-
--- Drop table
-
--- DROP TABLE public.t_file;
-
-CREATE TABLE public.t_file (
-	id varchar(36) NOT NULL,
-	files varchar(255) NOT NULL,
-	file_format varchar(255) NOT NULL,
-	created_at timestamp NOT NULL,
-	created_by varchar(255) NOT NULL,
-	is_active bool NULL,
-	updated_at timestamp NULL,
-	updated_by varchar(255) NULL,
-	ver int4 NULL,
-	CONSTRAINT t_file_pkey PRIMARY KEY (id)
-);
-
--- public.t_job_vacancy definition
-
--- Drop table
-
--- DROP TABLE public.t_job_vacancy;
 
 CREATE TABLE public.t_job_vacancy (
 	id varchar(36) NOT NULL,
@@ -261,8 +177,19 @@ CREATE TABLE public.t_job_vacancy (
 );
 
 
--- public.t_job_vacancy foreign keys
-
 ALTER TABLE public.t_job_vacancy ADD CONSTRAINT pic_id_fk FOREIGN KEY (pic_id) REFERENCES public.t_user(id);
 ALTER TABLE public.t_job_vacancy ADD CONSTRAINT company_id_fk FOREIGN KEY (company_id) REFERENCES public.t_company(id);
 ALTER TABLE public.t_job_vacancy ADD CONSTRAINT job_level_id_fk FOREIGN KEY (job_level_id) REFERENCES public.t_job_lvl(id);
+ALTER TABLE t_user ADD CONSTRAINT profile_id_fk FOREIGN KEY (profile_id) REFERENCES t_profile(id);
+ALTER TABLE public.t_company_logo ADD CONSTRAINT company_id_fk FOREIGN KEY (company_id) REFERENCES public.t_company(id);
+ALTER TABLE public.t_company_logo ADD CONSTRAINT file_id_fk FOREIGN KEY (file_id) REFERENCES public.t_file(id);
+ALTER TABLE public.t_company_banner ADD CONSTRAINT file_id_fk FOREIGN KEY (file_id) REFERENCES public.t_file(id);
+ALTER TABLE public.t_company_banner ADD CONSTRAINT company_id_fk FOREIGN KEY (company_id) REFERENCES public.t_company(id);
+ALTER TABLE public.t_company ADD CONSTRAINT company_banner_fk FOREIGN KEY (company_banner) REFERENCES public.t_file(id);
+ALTER TABLE public.t_company ADD CONSTRAINT company_logo_fk FOREIGN KEY (company_logo) REFERENCES public.t_file(id);
+ALTER TABLE public.t_candidate ADD CONSTRAINT resume_id_fk FOREIGN KEY (resume_id) REFERENCES public.t_file(id);
+ALTER TABLE public.t_candidate ADD CONSTRAINT photo_id FOREIGN KEY (photo_id) REFERENCES public.t_file(id);
+ALTER TABLE public.t_application ADD CONSTRAINT applicant_id_fk FOREIGN KEY (applicant_id) REFERENCES public.t_applicant(id);
+ALTER TABLE public.t_applicant ADD CONSTRAINT candidate_id_fk FOREIGN KEY (candidate_id) REFERENCES public.t_candidate(id);
+ALTER TABLE public.t_applicant ADD CONSTRAINT job_vacancy_id_fk FOREIGN KEY (job_vacancy_id) REFERENCES public.t_job_vacancy(id);
+
