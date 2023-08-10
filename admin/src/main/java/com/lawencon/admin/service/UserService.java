@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.admin.dto.login.LoginReqDto;
@@ -25,17 +26,21 @@ public class UserService implements UserDetailsService{
     UserDao userDao;
     @Autowired
     ProfileDao profileDao;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public InsertResDto addUser(UserInsertReqDto data) {
         InsertResDto response = new InsertResDto();
 
         final Profile profile = new Profile();
         profile.setName(data.getFullName());
+        profile.setPhone(data.getPhone());
         profileDao.save(profile);
 
         final User user = new User();
         user.setEmail(data.getEmail());
-        user.setPassword(data.getPassword());
+        final String encodedPassword = passwordEncoder.encode(data.getPassword());
+        user.setPassword(encodedPassword);
         user.setProfile(profile);
 
         final User createdUser = userDao.save(user);
