@@ -4,20 +4,22 @@ import com.lawencon.admin.dto.file.FileResDto;
 
 public class CompanyResDto {
 
-	private Long id;
+	private String id;
 	private String companyCode;
 	private String companyName;
 	private String companyDesc;
 	private String companyTaxNumber;
-	private FileResDto companyLogo;
-	private FileResDto companyBanner;
+	private String companyLogoId;
+	private String companyBannerId;
 	
-	public Long getId() {
+
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public String getCompanyCode() {
 		return companyCode;
 	}
@@ -42,18 +44,19 @@ public class CompanyResDto {
 	public void setCompanyTaxNumber(String companyTaxNumber) {
 		this.companyTaxNumber = companyTaxNumber;
 	}
-	public FileResDto getCompanyLogo() {
-		return companyLogo;
+	public String getCompanyLogoId() {
+		return companyLogoId;
 	}
-	public void setCompanyLogo(FileResDto companyLogo) {
-		this.companyLogo = companyLogo;
+	public void setCompanyLogoId(String companyLogoId) {
+		this.companyLogoId = companyLogoId;
 	}
-	public FileResDto getCompanyBanner() {
-		return companyBanner;
+	public String getCompanyBannerId() {
+		return companyBannerId;
 	}
-	public void setCompanyBanner(FileResDto companyBanner) {
-		this.companyBanner = companyBanner;
+	public void setCompanyBannerId(String companyBannerId) {
+		this.companyBannerId = companyBannerId;
 	}
+
 	
 	
 }

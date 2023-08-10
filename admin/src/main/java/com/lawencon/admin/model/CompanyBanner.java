@@ -10,27 +10,31 @@ public class CompanyBanner extends BaseEntity{
 
     @OneToOne
     @JoinColumn(name="company_id")
-    private Company companyId;
+    private Company company;
 
     @OneToOne
     @JoinColumn(name="file_id")
-    private File fileId;
+    private File file;
 
-    public Company getCompanyId() {
-        return companyId;
-    }
 
-    public void setCompanyId(Company companyId) {
-        this.companyId = companyId;
-    }
 
-    public File getFileId() {
-        return fileId;
-    }
+	public Company getCompany() {
+		return company;
+	}
 
-    public void setFileId(File fileId) {
-        this.fileId = fileId;
-    }
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+   
 
     
 }

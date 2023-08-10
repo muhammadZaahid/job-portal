@@ -1,5 +1,7 @@
 package com.lawencon.admin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +36,9 @@ public class CompanyController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<CompanyResDto> getAllCompany(){
-		ConnHandler.begin();
-		CompanyResDto response = companyService.getAllCompany();
-		
-		ConnHandler.commit();
+	public ResponseEntity<List<CompanyResDto>> getAllCompany(){
+
+		List<CompanyResDto> response = companyService.getAllCompany();
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
