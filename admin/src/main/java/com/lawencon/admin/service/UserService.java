@@ -19,7 +19,7 @@ import com.lawencon.admin.model.Profile;
 import com.lawencon.admin.model.User;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService{
 
     @Autowired
     UserDao userDao;
