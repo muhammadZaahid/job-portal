@@ -21,11 +21,11 @@ public class Company extends BaseEntity {
     private String companyTaxNumber;
 
     @OneToOne
-    @JoinColumn(name = "company_logo", nullable = false)
+    @JoinColumn(name = "company_logo")
     private File companyLogo;
 
     @OneToOne
-    @JoinColumn(name = "company_banner", nullable = false)
+    @JoinColumn(name = "company_banner")
     private File companyBanner;
 
     public String getCompanyCode() {

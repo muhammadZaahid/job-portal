@@ -1,5 +1,7 @@
 package com.lawencon.admin.service.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -61,10 +63,12 @@ public class UserServiceImpl implements UserService{
         return loginResDto;
     }
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'loadUserByUsername'");
-    }
-
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		final User user = userDao.getByEmail(username);
+		if(user != null) {
+			return new org.springframework.security.core.userdetails.User(username, user.getPassword(), new ArrayList<>());
+		} 
+		throw new UsernameNotFoundException("Email not found!");
+	}
     
 }
