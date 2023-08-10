@@ -1,5 +1,7 @@
 package com.lawencon.admin.dto.candidate;
 
+import com.lawencon.admin.dto.file.FileReqDto;
+
 public class CandidateInsertReqDto {
 	
 	private String nik;
@@ -11,10 +13,10 @@ public class CandidateInsertReqDto {
 	private String socmed1;
 	private String socmed2;
 	private String socmed3;
-	private String experienceYear;
-	private String salaryExpectation;
-	private String photoId;
-	private String resumeId;
+	private Double experienceYear;
+	private Double salaryExpectation;
+	private FileReqDto photo;
+	private FileReqDto resume;
 	
 	public String getNik() {
 		return nik;
@@ -70,30 +72,33 @@ public class CandidateInsertReqDto {
 	public void setSocmed3(String socmed3) {
 		this.socmed3 = socmed3;
 	}
-	public String getExperienceYear() {
+
+	public Double getExperienceYear() {
 		return experienceYear;
 	}
-	public void setExperienceYear(String experienceYear) {
+	public void setExperienceYear(Double experienceYear) {
 		this.experienceYear = experienceYear;
 	}
-	public String getSalaryExpectation() {
+
+	public Double getSalaryExpectation() {
 		return salaryExpectation;
 	}
-	public void setSalaryExpectation(String salaryExpectation) {
+	public void setSalaryExpectation(Double salaryExpectation) {
 		this.salaryExpectation = salaryExpectation;
 	}
-	public String getPhotoId() {
-		return photoId;
+	public FileReqDto getPhoto() {
+		return photo;
 	}
-	public void setPhotoId(String photoId) {
-		this.photoId = photoId;
+	public void setPhoto(FileReqDto photo) {
+		this.photo = photo;
 	}
-	public String getResumeId() {
-		return resumeId;
+	public FileReqDto getResume() {
+		return resume;
 	}
-	public void setResumeId(String resumeId) {
-		this.resumeId = resumeId;
+	public void setResume(FileReqDto resume) {
+		this.resume = resume;
 	}
+
 
 	
 

@@ -107,8 +107,7 @@ public class CompanyService {
 			responses.add(response);
 			
 		});
-		
-		;
+				
 		return responses;
 	}
 	
