@@ -93,7 +93,6 @@ public class CompanyService {
 	public List<CompanyResDto> getAllCompany() {
 		
 		List<CompanyResDto> responses = new ArrayList<>(); 
-		
 		companyDao.getAll(Company.class).forEach(c -> {
 			CompanyResDto response = new CompanyResDto();
 			
@@ -102,8 +101,8 @@ public class CompanyService {
 			response.setCompanyName(c.getCompanyName());
 			response.setCompanyTaxNumber(c.getCompanyTaxNumber());
 			response.setCompanyDesc(c.getCompanyDesc());
-			response.setCompanyBannerId(c.getCompanyBanner().getId());
-			response.setCompanyLogoId(c.getCompanyLogo().getId());
+			response.setCompanyBannerId(companyBannerDao.getCompanyBannerByCompanyId(c.getId()));
+			response.setCompanyLogoId(companyLogoDao.getCompanyLogoByCompanyId(c.getId()));
 						
 			responses.add(response);
 			
