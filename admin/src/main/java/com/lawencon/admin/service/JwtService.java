@@ -1,13 +1,33 @@
 package com.lawencon.admin.service;
 
+import java.security.KeyPair;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-@Service
-public interface JwtService {
-    
-    String generateJwt(Map<String, Object> claims);
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
-	Map<String, Object> parseJwt(String jwt);
+@Service
+public class JwtService {
+    
+    private final KeyPair key = Keys.keyPairFor(SignatureAlgorithm.RS256);
+	
+	public String generateJwt(final Map<String, Object> claims) {
+		final String jwt = Jwts.builder()
+				.setClaims(claims)
+				.signWith(key.getPrivate())
+				.compact();
+		
+		return jwt;
+	}
+	
+	public Map<String, Object> parseJwt(final String jwt) {
+		return Jwts.parserBuilder()
+				.setSigningKey(key.getPublic())
+				.build()
+				.parseClaimsJws(jwt)
+				.getBody();
+	}
 }
