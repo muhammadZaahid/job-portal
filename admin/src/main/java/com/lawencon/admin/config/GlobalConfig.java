@@ -18,22 +18,22 @@ public class GlobalConfig {
 		return new BCryptPasswordEncoder();
 	}
     
-	@Bean(name = "initTable")
-	public SpringLiquibase initTable(DataSource dataSource) {
-		final SpringLiquibase liquibase = new SpringLiquibase();
-		liquibase.setChangeLog("classpath:/db/migration/script/init_table_v1.sql");
-		liquibase.setDataSource(dataSource);
-		
-		return liquibase;
-	}
-	
-	@Bean(name = "initData")
-	@DependsOn("initTable")
-	public SpringLiquibase initData(DataSource dataSource) {
-		final SpringLiquibase liquibase = new SpringLiquibase();
-		liquibase.setChangeLog("classpath:/db/migration/script/init_data_v1.sql");
-		liquibase.setDataSource(dataSource);
-		
-		return liquibase;
-	}
+//	@Bean(name = "initTable")
+//	public SpringLiquibase initTable(DataSource dataSource) {
+//		final SpringLiquibase liquibase = new SpringLiquibase();
+//		liquibase.setChangeLog("classpath:/db/migration/script/init_table_v1.sql");
+//		liquibase.setDataSource(dataSource);
+//		
+//		return liquibase;
+//	}
+//	
+//	@Bean(name = "initData")
+//	@DependsOn("initTable")
+//	public SpringLiquibase initData(DataSource dataSource) {
+//		final SpringLiquibase liquibase = new SpringLiquibase();
+//		liquibase.setChangeLog("classpath:/db/migration/script/init_data_v1.sql");
+//		liquibase.setDataSource(dataSource);
+//		
+//		return liquibase;
+//	}
 }

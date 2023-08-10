@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
@@ -11,6 +13,10 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name="t_interview")
 public class Interview extends BaseEntity{
+	
+	@OneToOne
+	@JoinColumn(name="applicant_id")
+	private Applicant applicant;
 	
 	@Column(name="interview_venue ", nullable = false)
 	private String interviewVenue;
