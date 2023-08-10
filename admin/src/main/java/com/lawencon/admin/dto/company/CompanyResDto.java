@@ -1,6 +1,5 @@
 package com.lawencon.admin.dto.company;
 
-import com.lawencon.admin.dto.file.FileResDto;
 
 public class CompanyResDto {
 

@@ -1,7 +1,6 @@
 package com.lawencon.admin.dto.company;
 
 import com.lawencon.admin.dto.file.FileReqDto;
-import com.lawencon.admin.model.File;
 
 public class CompanyInsertReqDto {
 
