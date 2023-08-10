@@ -23,11 +23,21 @@ public class JobVacancy extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "location")
+    private String location;
+
+    @OneToOne
+    @JoinColumn(name = "job_level_id")
+    private JobLevel jobLevel;
+
+    @Column(name = "benefit_desc")
+    private String benefitDesc;
+
     @Column(name = "salary_from", nullable = false)
-    private String salaryFrom;
+    private Long salaryFrom;
 
     @Column(name = "salary_to", nullable = false)
-    private String salaryTo;
+    private Long salaryTo;
 
     @Column(name = "salary_publish", nullable = false)
     private boolean SalaryPublish;
@@ -40,21 +50,6 @@ public class JobVacancy extends BaseEntity {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
-    @Column(name = "stg_application", nullable = false)
-    private boolean stgApplication;
-
-    @Column(name = "stg_assessment", nullable = false)
-    private boolean stgAssessment;
-
-    @Column(name = "stg_interview", nullable = false)
-    private boolean stgInterview;
-
-    @Column(name = "stg_mcu", nullable = false)
-    private boolean stgMcu;
-
-    @Column(name = "stg_offer", nullable = false)
-    private boolean stgOffer;
-
 
     public Company getCompany() {
         return company;
@@ -88,19 +83,19 @@ public class JobVacancy extends BaseEntity {
         this.title = title;
     }
 
-    public String getSalaryFrom() {
+    public Long getSalaryFrom() {
         return salaryFrom;
     }
 
-    public void setSalaryFrom(String salaryFrom) {
+    public void setSalaryFrom(Long salaryFrom) {
         this.salaryFrom = salaryFrom;
     }
 
-    public String getSalaryTo() {
+    public Long getSalaryTo() {
         return salaryTo;
     }
 
-    public void setSalaryTo(String salaryTo) {
+    public void setSalaryTo(Long salaryTo) {
         this.salaryTo = salaryTo;
     }
 
@@ -136,43 +131,27 @@ public class JobVacancy extends BaseEntity {
         isActive = active;
     }
 
-    public boolean isStgApplication() {
-        return stgApplication;
+    public String getLocation() {
+        return location;
     }
 
-    public void setStgApplication(boolean stgApplication) {
-        this.stgApplication = stgApplication;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public boolean isStgAssessment() {
-        return stgAssessment;
+    public JobLevel getJobLevel() {
+        return jobLevel;
     }
 
-    public void setStgAssessment(boolean stgAssessment) {
-        this.stgAssessment = stgAssessment;
+    public void setJobLevel(JobLevel jobLevel) {
+        this.jobLevel = jobLevel;
     }
 
-    public boolean isStgInterview() {
-        return stgInterview;
+    public String getBenefitDesc() {
+        return benefitDesc;
     }
 
-    public void setStgInterview(boolean stgInterview) {
-        this.stgInterview = stgInterview;
-    }
-
-    public boolean isStgMcu() {
-        return stgMcu;
-    }
-
-    public void setStgMcu(boolean stgMcu) {
-        this.stgMcu = stgMcu;
-    }
-
-    public boolean isStgOffer() {
-        return stgOffer;
-    }
-
-    public void setStgOffer(boolean stgOffer) {
-        this.stgOffer = stgOffer;
+    public void setBenefitDesc(String benefitDesc) {
+        this.benefitDesc = benefitDesc;
     }
 }
