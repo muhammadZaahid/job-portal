@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,10 @@ import com.lawencon.admin.dao.FileDao;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.admin.dto.candidate.CandidateResDto;
+import com.lawencon.admin.dto.candidate.CandidateSeekerInsertReqDto;
 import com.lawencon.admin.model.Candidate;
 import com.lawencon.admin.model.File;
+import com.lawencon.util.GeneratorUtil;
 
 @Service
 public class CandidateService {
@@ -57,7 +60,8 @@ public class CandidateService {
 		resume.setFiles(request.getResume().getFiles());
 		resume.setFileFormat(request.getResume().getFileFormat());
 		fileDao.save(resume);
-		candidate.setResume(resume);			
+		candidate.setResume(resume);	
+		candidate.setCandidateCode(GeneratorUtil.generateUniqueProductCode());		
 		
 		Candidate createdCandidate = candidateDao.save(candidate);
 		
@@ -70,6 +74,26 @@ public class CandidateService {
 		return response;
 	}
 	
+	public InsertResDto saveCandidateFromSeeker(CandidateSeekerInsertReqDto data){
+		final InsertResDto response = new InsertResDto();
+
+		Candidate candidate = new Candidate();
+		candidate.setEmail(data.getEmail());
+		candidate.setName(data.getFullName());
+		candidate.setCandidateCode(data.getCandidateCode());
+
+		Supplier<String> supplier = () -> "system";
+
+		Candidate createdCandidate = candidateDao.saveNoLogin(candidate, supplier);
+
+		if(createdCandidate != null){
+			response.setId(createdCandidate.getId());
+			response.setMessage("Success create candidate in Admin");
+		}
+
+		return response;
+	}
+
 	public List<CandidateResDto> getAllCandidate(){
 		
 		List<CandidateResDto> response = new ArrayList<>();

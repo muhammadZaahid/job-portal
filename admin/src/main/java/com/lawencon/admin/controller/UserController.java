@@ -2,6 +2,7 @@ package com.lawencon.admin.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,17 +23,14 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @RequestMapping("admin/users")
 public class UserController {
     
-    private final UserService userService;
-
-    UserController(UserService userService){
-        this.userService = userService;
-    }
+    @Autowired
+    UserService userService;
 
     @PostMapping
     public ResponseEntity<InsertResDto> insert(@Valid @RequestBody UserInsertReqDto data){
         ConnHandler.begin();
         final InsertResDto response = userService.addUser(data);
         ConnHandler.commit();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

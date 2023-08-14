@@ -4,20 +4,12 @@ import com.lawencon.admin.dto.file.FileReqDto;
 
 public class CompanyInsertReqDto {
 
-	private String companyCode;
 	private String companyName;
 	private String companyDesc;
 	private String companyTaxNumber;
 	private FileReqDto companyLogo;
 	private FileReqDto companyBanner;
 
-
-	public String getCompanyCode() {
-		return companyCode;
-	}
-	public void setCompanyCode(String companyCode) {
-		this.companyCode = companyCode;
-	}
 	public String getCompanyName() {
 		return companyName;
 	}

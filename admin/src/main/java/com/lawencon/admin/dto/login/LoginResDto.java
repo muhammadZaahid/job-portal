@@ -22,6 +22,4 @@ public class LoginResDto {
     public void setProfileName(String profileName) {
         this.profileName = profileName;
     }
-
-
 }

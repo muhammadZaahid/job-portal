@@ -13,7 +13,7 @@ import com.lawencon.base.BaseEntity;
 @Entity
 @Table(name="t_candidate")
 public class Candidate extends BaseEntity{
-    @Column(name="nik", nullable = false)
+    @Column(name="nik")
     private String nik;
 
     @Column(name="name", nullable = false)
@@ -22,7 +22,7 @@ public class Candidate extends BaseEntity{
     @Column(name="email", unique = true, nullable = false)
     private String email;
 
-    @Column(name="phone", nullable = false)
+    @Column(name="phone")
     private String phone;
 
     @Column(name="birth_place")
@@ -40,10 +40,10 @@ public class Candidate extends BaseEntity{
     @Column(name="soc_med_3")
     private String socmed3;
 
-    @Column(name="experience_year", nullable = false)
+    @Column(name="experience_year")
     private Double experienceYear;
 
-    @Column(name="salary_expect", nullable = false)
+    @Column(name="salary_expect")
     private Double salaryExpectation;
     
     @OneToOne
@@ -51,8 +51,11 @@ public class Candidate extends BaseEntity{
     private File photo;
 
     @OneToOne
-    @JoinColumn(name="resume_id", nullable = false)
+    @JoinColumn(name="resume_id")
     private File resume;
+
+	@Column(name="candidate_code",nullable = false)
+	private String candidateCode;
 
 	public String getNik() {
 		return nik;
@@ -158,7 +161,12 @@ public class Candidate extends BaseEntity{
 		this.resume = resume;
 	}
 
+	public String getCandidateCode() {
+		return candidateCode;
+	}
 
-    
-    
+	public void setCandidateCode(String candidateCode) {
+		this.candidateCode = candidateCode;
+	}
+
 }

@@ -81,7 +81,7 @@
 		    <artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-	<dependency>
+		<dependency>
             <groupId>com.lawencon</groupId>
             <artifactId>core</artifactId>
             <version>${project.version}</version>

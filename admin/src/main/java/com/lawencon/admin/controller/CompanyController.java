@@ -29,12 +29,9 @@ public class CompanyController {
 	@PostMapping
 	public ResponseEntity<InsertResDto> createCompany(@RequestBody CompanyInsertReqDto request){
 		
-		ConnHandler.begin();
 		InsertResDto response = companyService.createCompany(request);
 		
-		ConnHandler.commit();
-		
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
 	}
 	
 	@GetMapping

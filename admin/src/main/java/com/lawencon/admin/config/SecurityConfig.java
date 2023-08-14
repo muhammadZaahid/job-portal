@@ -20,12 +20,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.lawencon.admin.filter.AuthorizationFilter;
-import com.lawencon.admin.service.UserService;
-
 @Configuration
 public class SecurityConfig {
-    @Bean
+	@Bean
 	public AuthenticationManager authManager(HttpSecurity http, UserService userService, BCryptPasswordEncoder encoder)
 			throws Exception {
 
@@ -52,7 +49,8 @@ public class SecurityConfig {
 		matchers.add(new AntPathRequestMatcher("/files/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/swagger-ui/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/v3/**", HttpMethod.GET.toString()));
-        // matchers.add(new AntPathRequestMatcher("/admin/u",HttpMethod.POST.toString()));
+		matchers.add(new AntPathRequestMatcher("/admin/candidate/seeker", HttpMethod.POST.toString()));
+		matchers.add(new AntPathRequestMatcher("/admin/applicant/seeker", HttpMethod.POST.toString()));
 		return matchers;
 	}
 
@@ -64,14 +62,15 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public org.springframework.web.servlet.config.annotation.WebMvcConfigurer mvcConfigurer(){
+	public org.springframework.web.servlet.config.annotation.WebMvcConfigurer mvcConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
-			public void addCorsMappings(CorsRegistry registry){
+			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-				.allowedOrigins("http://localhost:4200")
-				.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(),HttpMethod.PUT.name(),HttpMethod.PATCH.name());
-			}	
+						.allowedOrigins("http://localhost:4200")
+						.allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(),
+								HttpMethod.PATCH.name());
+			}
 		};
 	}
 }
