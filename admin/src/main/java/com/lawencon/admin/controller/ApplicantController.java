@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertReqDto;
 import com.lawencon.admin.service.ApplicantService;
 import com.lawencon.base.ConnHandler;
@@ -23,11 +24,16 @@ public class ApplicantController {
 	@PostMapping
 	public ResponseEntity<InsertResDto> createApplicant(@RequestBody ApplicantInsertReqDto request){
 		
-		ConnHandler.begin();
 		InsertResDto response = applicantService.createApplicant(request);
-		ConnHandler.commit();
 		
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		return new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/seeker")
+	public ResponseEntity<InsertResDto> createApplicantNoLogin(@RequestBody ApplicantInsertAdminReqDto data){
+		final InsertResDto response = applicantService.createApplicantNoLogin(data);
+
+		return new ResponseEntity<>(response,HttpStatus.CREATED);
 	}
 
 }

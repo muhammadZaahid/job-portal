@@ -33,7 +33,7 @@ public class JobVacancyController {
         final InsertResDto response = jobVacancyService.insert(data);
         ConnHandler.commit();
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping

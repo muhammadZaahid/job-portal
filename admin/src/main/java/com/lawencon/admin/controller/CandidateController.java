@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.admin.dto.candidate.CandidateResDto;
+import com.lawencon.admin.dto.candidate.CandidateSeekerInsertReqDto;
 import com.lawencon.admin.service.CandidateService;
 import com.lawencon.base.ConnHandler;
 
@@ -31,9 +32,18 @@ public class CandidateController {
 		InsertResDto response = candidateService.createCandidate(request);
 		ConnHandler.commit();
 		
-		return new ResponseEntity<>(response, HttpStatus.OK); 
+		return new ResponseEntity<>(response, HttpStatus.CREATED); 
 	}
 	
+	@PostMapping(value = "/seeker")
+	public ResponseEntity<InsertResDto> createCandidateFromSeeker(@RequestBody CandidateSeekerInsertReqDto data){
+		ConnHandler.begin();
+		InsertResDto response = candidateService.saveCandidateFromSeeker(data);
+		ConnHandler.commit();
+
+		return new ResponseEntity<>(response,HttpStatus.CREATED);
+	}
+
 	@GetMapping
 	public ResponseEntity<List<CandidateResDto>> getAllCandidates(){
 		
