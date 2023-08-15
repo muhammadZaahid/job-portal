@@ -5,11 +5,8 @@ import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,8 +21,6 @@ import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertReqDto;
-import com.lawencon.admin.dto.applicant.ApplicantUpdateReqDto;
-import com.lawencon.admin.dto.applicant.ApplicantUpdateSeekerReqDto;
 import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Application;
 import com.lawencon.admin.model.Assessment;
@@ -129,21 +124,25 @@ public class ApplicantService {
 		User userpic = userDao.getById(User.class, job.getUser().getId());
 
 		if (applicant.getCurrentStage().equals("application")) {
-
-			Assessment assessment = new Assessment();
-			assessment.setApplicantId(applicant);
-			assessment.setAssessmentLastEmailSend(LocalDateTime.now().toString());
-			assessment.setAssessmentPic(userpic);
-			assessmentDao.save(assessment);
-
+			
 			try {
-				ResponseEntity<UpdateResDto> res = restTemplate.exchange("http://localhost:8081/seeker/applicant/"+applicant.getApplicantCode(),
+				ResponseEntity<UpdateResDto> res = restTemplate.exchange(
+						"http://localhost:8081/seeker/applicant/" + applicant.getApplicantCode(),
 						HttpMethod.PATCH, null, UpdateResDto.class);
 				if (res.getStatusCode().equals(HttpStatus.OK)) {
 					applicant.setCurrentStage("assessment");
 					applicant.setStgAssessment(true);
 					applicant.setVersion(applicant.getVersion() + 1);
 					applicantDao.save(applicant);
+					Assessment assessment = new Assessment();
+					assessment.setApplicantId(applicant);
+					assessment.setAssessmentLastEmailSend(LocalDateTime.now().toString());
+					assessment.setAssessmentPic(userpic);
+					assessmentDao.save(assessment);
+					Application application = applicationDao.getByApplicant(data);
+					System.out.println(application.getId());
+					application.setIsAccepted(true);
+					applicationDao.save(application);
 					ConnHandler.commit();
 					response.setVer(applicant.getVersion());
 					response.setMessage("Success update status applicant");
