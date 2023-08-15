@@ -1,6 +1,8 @@
 package com.lawencon.candidate.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +19,23 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.candidate.dao.ApplicantDao;
 import com.lawencon.candidate.dao.CandidateDao;
 import com.lawencon.candidate.dao.JobVacancyDao;
+import com.lawencon.candidate.dao.UserDao;
 import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertReqDto;
-import com.lawencon.candidate.dto.applicant.ApplicantUpdateReqDto;
+import com.lawencon.candidate.dto.applicant.ApplicantResDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.candidate.model.Applicant;
 import com.lawencon.candidate.model.Candidate;
 import com.lawencon.candidate.model.JobVacancy;
+import com.lawencon.candidate.model.User;
+import com.lawencon.security.principal.PrincipalService;
 import com.lawencon.util.GeneratorUtil;
 
 @Service
 public class ApplicantService {
+	@Autowired
+	PrincipalService principalService;
 	@Autowired
 	ApplicantDao applicantDao;
 	@Autowired
@@ -36,11 +43,11 @@ public class ApplicantService {
 	@Autowired
 	JobVacancyDao jobVacancyDao;
 	@Autowired
+	UserDao userDao;
+	@Autowired
 	RestTemplate restTemplate;
 
 	public InsertResDto createApplicant(ApplicantInsertReqDto request) {
-		System.out.println(request.getCandidateId());
-		System.out.println(request.getJobVacancyId());
 		ConnHandler.begin();
 		InsertResDto response = new InsertResDto();
 
@@ -67,7 +74,7 @@ public class ApplicantService {
 				if (res.getStatusCode().equals(HttpStatus.CREATED)) {
 					ConnHandler.commit();
 					response.setId(createdApplicant.getId());
-					response.setMessage("Applicant Created Successfully");
+					response.setMessage("Sukses Melamar Posisi "+jobVacancy.getTitle()+" !");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -102,5 +109,21 @@ public class ApplicantService {
 		}
 
 		return response;
+	}
+
+	public List<ApplicantResDto> getApplicantByUser(){
+		User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
+		List<Applicant> applicants = applicantDao.getAllByCandidate(user.getCandidate().getId());
+		List<ApplicantResDto> responses = new ArrayList<>();
+		
+		for(int i = 0;i<applicants.size();i++){
+			ApplicantResDto response = new ApplicantResDto();
+			response.setJobTitle(applicants.get(i).getJobVacancy().getTitle());
+			response.setCompanyName(applicants.get(i).getJobVacancy().getCompany().getCompanyName());
+			response.setCurrentStage(applicants.get(i).getCurrentStage());
+			response.setAppliedDate(applicants.get(i).getAppliedDate().toString());
+			responses.add(response);
+		}
+		return responses;
 	}
 }

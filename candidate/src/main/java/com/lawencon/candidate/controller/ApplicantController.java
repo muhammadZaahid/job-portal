@@ -1,8 +1,11 @@
 package com.lawencon.candidate.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +17,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertReqDto;
+import com.lawencon.candidate.dto.applicant.ApplicantResDto;
 import com.lawencon.candidate.service.ApplicantService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,6 +40,13 @@ public class ApplicantController {
     @PatchMapping("/{code}")
     public ResponseEntity<UpdateResDto> updateStatus(@PathVariable("code") String applicantCode){
         final UpdateResDto response = applicantService.updateApplicant(applicantCode);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ApplicantResDto>> getAllApplicants(){
+        final List<ApplicantResDto> response = applicantService.getApplicantByUser();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
