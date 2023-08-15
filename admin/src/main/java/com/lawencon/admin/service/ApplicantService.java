@@ -67,9 +67,11 @@ public class ApplicantService {
 	}
 
 	public InsertResDto createApplicantNoLogin(ApplicantInsertAdminReqDto request) {
+		ConnHandler.begin();
 		Supplier<String> supplier = () -> "System";
 		InsertResDto response = new InsertResDto();
 		
+		try{
 		Applicant applicant = new Applicant();
 		Candidate candidate = candidateDao.getByCode(request.getCandidateCode());
 		applicant.setCandidate(candidate);		
@@ -78,6 +80,7 @@ public class ApplicantService {
 		applicant.setCurrentStage("application");
 		applicant.setStgApplication(true);
 		applicant.setAppliedDate(LocalDate.now());	
+		applicant.setApplicantCode(request.getApplicantCode());
 			
 		
 		Applicant createdApplicant = applicantDao.saveNoLogin(applicant,supplier);
@@ -87,8 +90,14 @@ public class ApplicantService {
 			Application application = new Application();
 			application.setApplicant(createdApplicant);
 			applicationDao.saveNoLogin(application,supplier);
+			ConnHandler.commit();
 			response.setId(createdApplicant.getId());
 			response.setMessage("Applicant Created Successfully");
+		}
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			ConnHandler.rollback();
 		}
 						
 		return response;

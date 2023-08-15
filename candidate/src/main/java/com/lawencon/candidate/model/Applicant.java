@@ -9,34 +9,37 @@ import java.time.LocalDate;
 @Table(name = "t_applicant")
 public class Applicant extends BaseEntity {
 
-   @ManyToOne
-   @JoinColumn(name = "candidate_id", nullable = false)
-   private Candidate candidate;
+	@ManyToOne
+	@JoinColumn(name = "candidate_id", nullable = false)
+	private Candidate candidate;
 
-    @ManyToOne
-    @JoinColumn(name = "job_vacancy_id", nullable = false)
-    private JobVacancy jobVacancy;
+	@ManyToOne
+	@JoinColumn(name = "job_vacancy_id", nullable = false)
+	private JobVacancy jobVacancy;
 
-    @Column(name = "current_stage", nullable = false)
-    private String currentStage;
+	@Column(name="applicant_code",nullable = false)
+	private String applicantCode;
 
-    @Column(name = "applied_date", nullable = false)
-    private LocalDate appliedDate;
-    
-    @Column(name = "stg_application")
-    private boolean stgApplication;
+	@Column(name = "current_stage", nullable = false)
+	private String currentStage;
 
-    @Column(name = "stg_assessment")
-    private boolean stgAssessment;
+	@Column(name = "applied_date", nullable = false)
+	private LocalDate appliedDate;
 
-    @Column(name = "stg_interview")
-    private boolean stgInterview;
+	@Column(name = "stg_application")
+	private boolean stgApplication;
 
-    @Column(name = "stg_mcu")
-    private boolean stgMcu;
+	@Column(name = "stg_assessment")
+	private boolean stgAssessment;
 
-    @Column(name = "stg_offer")
-    private boolean stgOffer;
+	@Column(name = "stg_interview")
+	private boolean stgInterview;
+
+	@Column(name = "stg_mcu")
+	private boolean stgMcu;
+
+	@Column(name = "stg_offer")
+	private boolean stgOffer;
 
 	public Candidate getCandidate() {
 		return candidate;
@@ -53,8 +56,6 @@ public class Applicant extends BaseEntity {
 	public void setJobVacancy(JobVacancy jobVacancy) {
 		this.jobVacancy = jobVacancy;
 	}
-
-
 
 	public String getCurrentStage() {
 		return currentStage;
@@ -112,7 +113,12 @@ public class Applicant extends BaseEntity {
 		this.stgOffer = stgOffer;
 	}
 
-	
-    
-    
+	public String getApplicantCode() {
+		return applicantCode;
+	}
+
+	public void setApplicantCode(String applicantCode) {
+		this.applicantCode = applicantCode;
+	}
+
 }

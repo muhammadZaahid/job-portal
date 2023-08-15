@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.RestTemplate;
 
 import liquibase.integration.spring.SpringLiquibase;
 
@@ -35,5 +36,9 @@ public class GlobalConfig {
 		liquibase.setDataSource(dataSource);
 		
 		return liquibase;
+	}
+	@Bean
+	public RestTemplate restTemplate(){
+		return new RestTemplate();
 	}
 }
