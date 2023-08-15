@@ -18,6 +18,9 @@ public class Applicant extends BaseEntity {
     @JoinColumn(name = "job_vacancy_id", nullable = false)
     private JobVacancy jobVacancy;
 
+	@Column(name="applicant_code",nullable = false)
+	private String applicantCode;
+
     @Column(name = "current_stage", nullable = false)
     private String currentStage;
 
@@ -54,8 +57,6 @@ public class Applicant extends BaseEntity {
 	public void setJobVacancy(JobVacancy jobVacancy) {
 		this.jobVacancy = jobVacancy;
 	}
-
-
 
 	public String getCurrentStage() {
 		return currentStage;
@@ -111,6 +112,14 @@ public class Applicant extends BaseEntity {
 
 	public void setStgOffer(boolean stgOffer) {
 		this.stgOffer = stgOffer;
+	}
+
+	public String getApplicantCode() {
+		return applicantCode;
+	}
+
+	public void setApplicantCode(String applicantCode) {
+		this.applicantCode = applicantCode;
 	}
 
 	
