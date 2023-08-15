@@ -1,6 +1,7 @@
 package com.lawencon.candidate.service;
 
 import java.time.LocalDate;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,7 +18,9 @@ import com.lawencon.candidate.dao.ApplicantDao;
 import com.lawencon.candidate.dao.CandidateDao;
 import com.lawencon.candidate.dao.JobVacancyDao;
 import com.lawencon.candidate.dto.InsertResDto;
+import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertReqDto;
+import com.lawencon.candidate.dto.applicant.ApplicantUpdateReqDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.candidate.model.Applicant;
 import com.lawencon.candidate.model.Candidate;
@@ -77,5 +80,27 @@ public class ApplicantService {
 
 		return response;
 
+	}
+
+	public UpdateResDto updateApplicant(String data){
+		ConnHandler.begin();
+		Supplier<String> supplier = () -> "System";
+		final UpdateResDto response = new UpdateResDto();
+
+		Applicant applicant = applicantDao.getByCode(data);
+
+		if(applicant != null){
+			if(applicant.getCurrentStage().equals("application")){
+				applicant.setCurrentStage("assessment");
+				applicant.setStgAssessment(true);
+				applicant.setVersion(applicant.getVersion() + 1);
+				applicantDao.saveNoLogin(applicant, supplier);
+				ConnHandler.commit();
+				response.setVer(applicant.getVersion());
+				response.setMessage("Success update status applicant");
+			}
+		}
+
+		return response;
 	}
 }

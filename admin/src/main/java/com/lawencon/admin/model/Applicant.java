@@ -7,40 +7,40 @@ import com.lawencon.base.BaseEntity;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="t_applicant")
+@Table(name = "t_applicant")
 public class Applicant extends BaseEntity {
 
-   @ManyToOne
-   @JoinColumn(name = "candidate_id", nullable = false)
-   private Candidate candidate;
+	@ManyToOne
+	@JoinColumn(name = "candidate_id", nullable = false)
+	private Candidate candidate;
 
-    @ManyToOne
-    @JoinColumn(name = "job_vacancy_id", nullable = false)
-    private JobVacancy jobVacancy;
+	@ManyToOne
+	@JoinColumn(name = "job_vacancy_id", nullable = false)
+	private JobVacancy jobVacancy;
 
-	@Column(name="applicant_code",nullable = false)
+	@Column(name = "applicant_code", nullable = false)
 	private String applicantCode;
 
-    @Column(name = "current_stage", nullable = false)
-    private String currentStage;
+	@Column(name = "current_stage", nullable = false)
+	private String currentStage;
 
-    @Column(name = "applied_date", nullable = false)
-    private LocalDate appliedDate;
-    
-    @Column(name = "stg_application")
-    private boolean stgApplication;
+	@Column(name = "applied_date", nullable = false)
+	private LocalDate appliedDate;
 
-    @Column(name = "stg_assessment")
-    private boolean stgAssessment;
+	@Column(name = "stg_application")
+	private boolean stgApplication;
 
-    @Column(name = "stg_interview")
-    private boolean stgInterview;
+	@Column(name = "stg_assessment")
+	private boolean stgAssessment;
 
-    @Column(name = "stg_mcu")
-    private boolean stgMcu;
+	@Column(name = "stg_interview")
+	private boolean stgInterview;
 
-    @Column(name = "stg_offer")
-    private boolean stgOffer;
+	@Column(name = "stg_mcu")
+	private boolean stgMcu;
+
+	@Column(name = "stg_offer")
+	private boolean stgOffer;
 
 	public Candidate getCandidate() {
 		return candidate;
@@ -122,7 +122,4 @@ public class Applicant extends BaseEntity {
 		this.applicantCode = applicantCode;
 	}
 
-	
-    
-    
 }
