@@ -4,7 +4,6 @@ public class JobVacancyResDto {
     private String id;
     private String code;
     private String title;
-    private String picName;
     private String companyName;
     private String jobLevelName;
     private String location;
@@ -52,12 +51,6 @@ public class JobVacancyResDto {
     }
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-    public String getPicName() {
-        return picName;
-    }
-    public void setPicName(String picName) {
-        this.picName = picName;
     }
     public String getCompanyName() {
         return companyName;
