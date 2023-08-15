@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.lawencon.base.BaseEntity;
@@ -13,6 +15,10 @@ import com.lawencon.base.BaseEntity;
 @Table(name="t_assessment")
 public class Assessment extends BaseEntity{
 	
+	@OneToOne
+	@JoinColumn(name = "applicant_id",nullable = false)
+	private Applicant applicantId;
+
 	@Column(name="assessment_venue", nullable = false)
 	private String assessmentVenue;
 	
@@ -22,8 +28,9 @@ public class Assessment extends BaseEntity{
 	@Column(name="assessment_time", nullable = false)
 	private LocalDateTime assessmentTime;
 	
-	@Column(name="assessment_pic", nullable = false)
-	private String assessmentPic;
+	@OneToOne
+	@JoinColumn(name="assessment_pic", nullable = false)
+	private User assessmentPic;
 	
 	@Column(name="assessment_pic_phone", nullable = false)
 	private String assessmentPicPhone;
@@ -31,13 +38,13 @@ public class Assessment extends BaseEntity{
 	@Column(name="assessment_pic_email", nullable = false)
 	private String assessmentPicEmail;
 	
-	@Column(name="assessment_note", nullable = false)
+	@Column(name="assessment_note")
 	private String assessmentNote;
 	
 	@Column(name="assessment_last_email_send", nullable = false)
 	private String assessmentLastEmailSend;
 		
-	@Column(name="assessment_same_interview", nullable = false)
+	@Column(name="assessment_same_interview")
 	private String assessmentSameInterview;
 
 	public String getAssessmentVenue() {
@@ -64,11 +71,11 @@ public class Assessment extends BaseEntity{
 		this.assessmentTime = assessmentTime;
 	}
 
-	public String getAssessmentPic() {
+	public User getAssessmentPic() {
 		return assessmentPic;
 	}
 
-	public void setAssessmentPic(String assessmentPic) {
+	public void setAssessmentPic(User assessmentPic) {
 		this.assessmentPic = assessmentPic;
 	}
 
@@ -110,6 +117,14 @@ public class Assessment extends BaseEntity{
 
 	public void setAssessmentSameInterview(String assessmentSameInterview) {
 		this.assessmentSameInterview = assessmentSameInterview;
+	}
+
+	public Applicant getApplicantId() {
+		return applicantId;
+	}
+
+	public void setApplicantId(Applicant applicantId) {
+		this.applicantId = applicantId;
 	}
 	
 	
