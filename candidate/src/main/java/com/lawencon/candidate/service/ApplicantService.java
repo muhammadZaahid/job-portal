@@ -118,6 +118,7 @@ public class ApplicantService {
 		
 		for(int i = 0;i<applicants.size();i++){
 			ApplicantResDto response = new ApplicantResDto();
+			response.setJobVacancyId(applicants.get(i).getJobVacancy().getId());
 			response.setJobTitle(applicants.get(i).getJobVacancy().getTitle());
 			response.setCompanyName(applicants.get(i).getJobVacancy().getCompany().getCompanyName());
 			response.setCurrentStage(applicants.get(i).getCurrentStage());
