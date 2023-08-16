@@ -52,7 +52,7 @@ public class CompanyService {
 		CompanyBanner companyBanner = new CompanyBanner();
 
 		Company company = new Company();
-		company.setCompanyCode(GeneratorUtil.generateUniqueProductCode());
+		company.setCompanyCode(GeneratorUtil.generateCode());
 		company.setCompanyName(request.getCompanyName());
 		company.setCompanyTaxNumber(request.getCompanyTaxNumber());
 		company.setCompanyDesc(request.getCompanyDesc());

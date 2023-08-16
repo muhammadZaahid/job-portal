@@ -61,7 +61,7 @@ public class CandidateService {
 		resume.setFileFormat(request.getResume().getFileFormat());
 		fileDao.save(resume);
 		candidate.setResume(resume);	
-		candidate.setCandidateCode(GeneratorUtil.generateUniqueProductCode());		
+		candidate.setCandidateCode(GeneratorUtil.generateCode());		
 		
 		Candidate createdCandidate = candidateDao.save(candidate);
 		

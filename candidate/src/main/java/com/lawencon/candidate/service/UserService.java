@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
         Supplier<String> supplier = () -> "system";
         final Candidate candidate = new Candidate();
         candidate.setName(data.getFullName());
-        candidate.setCandidateCode(GeneratorUtil.generateUniqueProductCode());
+        candidate.setCandidateCode(GeneratorUtil.generateCode());
         candidate.setEmail(data.getEmail());
         candidateDao.saveNoLogin(candidate, supplier);
 
