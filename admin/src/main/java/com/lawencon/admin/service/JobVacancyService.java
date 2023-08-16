@@ -48,7 +48,7 @@ public class JobVacancyService {
 
         final JobVacancy jobVacancy = new JobVacancy();
         jobVacancy.setTitle(data.getTitle());
-        jobVacancy.setJobVacancyCode(GeneratorUtil.generateUniqueProductCode());
+        jobVacancy.setJobVacancyCode(GeneratorUtil.generateCode());
         jobVacancy.setLocation(data.getLocation());
         jobVacancy.setBenefitDesc(data.getBenefitDesc());
         jobVacancy.setSalaryPublish(data.getSalaryPublish());

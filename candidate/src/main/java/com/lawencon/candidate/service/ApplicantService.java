@@ -59,7 +59,7 @@ public class ApplicantService {
 		applicant.setCurrentStage("application");
 		applicant.setStgApplication(true);
 		applicant.setAppliedDate(LocalDate.now());
-		applicant.setApplicantCode(GeneratorUtil.generateUniqueProductCode());
+		applicant.setApplicantCode(GeneratorUtil.generateCode());
 		Applicant createdApplicant = applicantDao.save(applicant);
 
 		if (createdApplicant != null) {
