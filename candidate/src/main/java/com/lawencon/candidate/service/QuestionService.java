@@ -5,19 +5,32 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.candidate.dao.ApplicantDao;
 import com.lawencon.candidate.dao.JobVacancyDao;
 import com.lawencon.candidate.dao.QuestionAssessmentDao;
 import com.lawencon.candidate.dao.QuestionDao;
 import com.lawencon.candidate.dao.QuestionOptionDao;
 import com.lawencon.candidate.dao.QuestionTopicDao;
 import com.lawencon.candidate.dto.InsertResDto;
+import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.question.QuestionAnswerResDto;
+import com.lawencon.candidate.dto.question.QuestionAssessmentAnswerReqDto;
 import com.lawencon.candidate.dto.question.QuestionAssessmentInsertReqDto;
+import com.lawencon.candidate.dto.question.QuestionAssessmentUpdateScore;
+import com.lawencon.candidate.dto.question.QuestionSubmitAssessmentReqDto;
 import com.lawencon.candidate.dto.question.QuestionTopicInsertSeekerReqDto;
 import com.lawencon.candidate.dto.question.QuestionsResDto;
+import com.lawencon.candidate.model.Applicant;
 import com.lawencon.candidate.model.JobVacancy;
 import com.lawencon.candidate.model.Question;
 import com.lawencon.candidate.model.QuestionAssessment;
@@ -36,6 +49,10 @@ public class QuestionService {
     QuestionAssessmentDao qAssessmentDao;
     @Autowired
     JobVacancyDao jobVacancyDao;
+    @Autowired
+    ApplicantDao applicantDao;
+    @Autowired
+    RestTemplate restTemplate;
 
     public InsertResDto createQuestion(QuestionTopicInsertSeekerReqDto data) {
         Supplier<String> supplier = () -> "System";
@@ -74,26 +91,26 @@ public class QuestionService {
         return response;
     }
 
-    public InsertResDto insertAssessment(QuestionAssessmentInsertReqDto data){
+    public InsertResDto insertAssessment(QuestionAssessmentInsertReqDto data) {
         Supplier<String> supplier = () -> "System";
         ConnHandler.begin();
         final InsertResDto response = new InsertResDto();
 
-        try{
+        try {
             QuestionAssessment qAssessment = new QuestionAssessment();
             JobVacancy jobVacancy = jobVacancyDao.getByCode(data.getJobVacancyCode());
             QuestionTopic questionTopic = qTopicDao.getByCode(data.getTopicCode());
             qAssessment.setJobVacancy(jobVacancy);
             qAssessment.setQuestionTopic(questionTopic);
 
-            QuestionAssessment cAssessment = qAssessmentDao.saveNoLogin(qAssessment,supplier);
+            QuestionAssessment cAssessment = qAssessmentDao.saveNoLogin(qAssessment, supplier);
 
-            if(cAssessment != null){
+            if (cAssessment != null) {
                 ConnHandler.commit();
                 response.setId(cAssessment.getId());
                 response.setMessage("Sukses memasangkan question assessment!");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             ConnHandler.rollback();
             throw new RuntimeException();
@@ -101,16 +118,16 @@ public class QuestionService {
 
         return response;
     }
-    
-    public List<QuestionsResDto> getQuestionByCode (String code){
+
+    public List<QuestionsResDto> getQuestionByCode(String code) {
         List<QuestionsResDto> responses = new ArrayList<>();
         QuestionTopic topic = qTopicDao.getByCode(code);
-        questionDao.getQuestionsByTopic(topic.getId()).forEach(c ->{
+        questionDao.getQuestionsByTopic(topic.getId()).forEach(c -> {
             QuestionsResDto response = new QuestionsResDto();
             response.setQuestionDesc(c.getQuestion());
             response.setQuestionId(c.getId());
             List<QuestionAnswerResDto> options = new ArrayList<>();
-            qOptionDao.getOptionsByQuestion(c.getId()).forEach(o ->{
+            qOptionDao.getOptionsByQuestion(c.getId()).forEach(o -> {
                 QuestionAnswerResDto option = new QuestionAnswerResDto();
                 option.setAnswerId(o.getId());
                 option.setAnswerText(o.getAnswer());
@@ -121,5 +138,36 @@ public class QuestionService {
         });
 
         return responses;
+    }
+
+    public InsertResDto calculateAssessmentScore(QuestionSubmitAssessmentReqDto data) {
+        final InsertResDto response = new InsertResDto();
+        Double score = Double.valueOf(0);
+        Applicant applicant = applicantDao.getById(Applicant.class, data.getApplicantId());
+        int correctCount = 0;
+        for (int i = 0; i < data.getAnswers().size(); i++) {
+            Boolean isCorrect = qOptionDao.getIsCorrect(data.getAnswers().get(i).getQuestionId(), data.getAnswers().get(i).getAnswerId());
+            if (isCorrect) {
+                correctCount++;
+            }
+        }
+        Double correct = (double) correctCount / data.getAnswers().size();
+        score = (correct) * 100;
+        try{
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<QuestionAssessmentUpdateScore> reqBody = new HttpEntity<QuestionAssessmentUpdateScore>(
+                new QuestionAssessmentUpdateScore(applicant.getApplicantCode(), score));
+            
+            ResponseEntity<UpdateResDto> res = restTemplate.exchange("http://localhost:8080/admin/questions/assessment",HttpMethod.PATCH,reqBody,UpdateResDto.class);
+            if(res.getStatusCode().equals(HttpStatus.OK)){
+                response.setId(data.getApplicantId());
+                response.setMessage("Assessment berhasil di submit!");
+            }
+        }catch(Exception e){
+            throw new RuntimeException();
+        }
+
+        return response;
     }
 }

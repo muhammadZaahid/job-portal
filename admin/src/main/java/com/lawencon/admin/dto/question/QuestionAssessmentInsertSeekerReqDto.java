@@ -4,6 +4,10 @@ public class QuestionAssessmentInsertSeekerReqDto {
     private String topicCode;
     private String jobVacancyCode;
 
+    public QuestionAssessmentInsertSeekerReqDto(String topicCode, String jobVacancyCode) {
+        this.topicCode = topicCode;
+        this.jobVacancyCode = jobVacancyCode;
+    }
     public String getJobVacancyCode() {
         return jobVacancyCode;
     }

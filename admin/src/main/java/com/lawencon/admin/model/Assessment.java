@@ -33,7 +33,7 @@ public class Assessment extends BaseEntity{
 	private User assessmentPic;
 	
 	@Column(name="assessment_score")
-	private String assessmentScore;
+	private Double assessmentScore;
 
 	@Column(name="assessment_note")
 	private String assessmentNote;
@@ -108,11 +108,11 @@ public class Assessment extends BaseEntity{
 		this.applicantId = applicantId;
 	}
 
-	public String getAssessmentScore() {
+	public Double getAssessmentScore() {
 		return assessmentScore;
 	}
 
-	public void setAssessmentScore(String assessmentScore) {
+	public void setAssessmentScore(Double assessmentScore) {
 		this.assessmentScore = assessmentScore;
 	}
 	
