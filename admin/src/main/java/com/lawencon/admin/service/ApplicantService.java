@@ -15,6 +15,7 @@ import com.lawencon.admin.dao.ApplicantDao;
 import com.lawencon.admin.dao.ApplicationDao;
 import com.lawencon.admin.dao.AssessmentDao;
 import com.lawencon.admin.dao.CandidateDao;
+import com.lawencon.admin.dao.InterviewDao;
 import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dao.UserDao;
 import com.lawencon.admin.dto.InsertResDto;
@@ -25,6 +26,7 @@ import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Application;
 import com.lawencon.admin.model.Assessment;
 import com.lawencon.admin.model.Candidate;
+import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
@@ -42,6 +44,8 @@ public class ApplicantService {
 	ApplicationDao applicationDao;
 	@Autowired
 	AssessmentDao assessmentDao;
+	@Autowired
+	InterviewDao interviewDao;
 	@Autowired
 	UserDao userDao;
 	@Autowired
@@ -149,6 +153,14 @@ public class ApplicantService {
 					Assessment assessment = assessmentDao.getByApplicantId(data);
 					assessment.setIsAccepted(true);
 					assessmentDao.saveAndFlush(assessment);
+				}else if(applicant.getCurrentStage().equals("interview")){
+					applicant.setCurrentStage("mcu");
+					applicant.setStgMcu(true);
+					applicant.setVersion(applicant.getVersion() + 1);
+					applicantDao.save(applicant);
+					Interview interview = interviewDao.getByApplicantId(data);
+					interview.setIsAccepted(true);
+					assessmentDao.saveAndFlush(interview);
 				}
 				ConnHandler.commit();
 				response.setVer(applicant.getVersion());

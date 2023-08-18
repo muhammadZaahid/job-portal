@@ -43,6 +43,12 @@ public class Interview extends BaseEntity{
 	@Column(name="interview_last_email_send", nullable = false)
 	private String interviewLastEmailSend;
 
+	@Column(name="is_accepted")
+	private Boolean isAccepted;
+	
+	@Column(name="is_rejected")
+	private Boolean isRejected;
+
 	public String getInterviewVenue() {
 		return interviewVenue;
 	}
@@ -114,7 +120,21 @@ public class Interview extends BaseEntity{
 	public void setApplicant(Applicant applicant) {
 		this.applicant = applicant;
 	}
-		
 
-	
+	public Boolean getIsAccepted() {
+		return isAccepted;
+	}
+
+	public void setIsAccepted(Boolean isAccepted) {
+		this.isAccepted = isAccepted;
+	}
+
+	public Boolean getIsRejected() {
+		return isRejected;
+	}
+
+	public void setIsRejected(Boolean isRejected) {
+		this.isRejected = isRejected;
+	}
+			
 }
