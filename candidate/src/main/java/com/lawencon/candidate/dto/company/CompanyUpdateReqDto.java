@@ -1,22 +1,21 @@
-package com.lawencon.admin.dto.company;
+package com.lawencon.candidate.dto.company;
 
-import com.lawencon.admin.dto.file.FileReqDto;
+import com.lawencon.candidate.dto.file.FileReqDto;
 
 public class CompanyUpdateReqDto {
 
-	private String companyId;
+	private String companyCode;
 	private String companyName;
 	private String companyDesc;
 	private String companyTaxNumber;
 	private FileReqDto companyLogo;
 	private FileReqDto companyBanner;
 	
-
-	public String getCompanyId() {
-		return companyId;
+	public String getCompanyCode() {
+		return companyCode;
 	}
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
 	}
 	public String getCompanyName() {
 		return companyName;

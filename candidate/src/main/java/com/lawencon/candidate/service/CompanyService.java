@@ -11,7 +11,9 @@ import com.lawencon.candidate.dao.CompanyDao;
 import com.lawencon.candidate.dao.CompanyLogoDao;
 import com.lawencon.candidate.dao.FileDao;
 import com.lawencon.candidate.dto.InsertResDto;
+import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.company.CompanyInsertReqDto;
+import com.lawencon.candidate.dto.company.CompanyUpdateReqDto;
 import com.lawencon.candidate.model.Company;
 import com.lawencon.candidate.model.CompanyBanner;
 import com.lawencon.candidate.model.CompanyLogo;
@@ -84,5 +86,55 @@ public class CompanyService {
         }
 
         return response;
+    }
+    
+    public UpdateResDto updateCompany(CompanyUpdateReqDto request) {
+    	
+    	ConnHandler.begin();
+    	
+    	final UpdateResDto updateResDto = new UpdateResDto();
+    	
+    	Supplier<String> supplier = () -> "System";
+    	
+    	Company company = companyDao.getCompanyByCode(request.getCompanyCode());
+        	    
+    	company.setCompanyName(request.getCompanyName());
+    	company.setCompanyDesc(request.getCompanyDesc());
+    	company.setCompanyTaxNumber(request.getCompanyTaxNumber());
+    	
+    	if (request.getCompanyLogo().getFiles() != null) {
+    		CompanyLogo companyLogo = companyLogoDao.getByCompanyId(company.getId());
+			File fileLogo = fileDao.getById(File.class, companyLogo.getFile().getId());
+			fileLogo.setFiles(request.getCompanyLogo().getFiles());
+			fileLogo.setFileFormat(request.getCompanyLogo().getFileFormat());
+			fileDao.saveNoLogin(fileLogo, supplier);
+			company.setCompanyLogo(fileLogo);
+			companyLogo.setFile(fileLogo);
+			companyLogoDao.saveNoLogin(companyLogo, supplier);
+		}
+
+		if (request.getCompanyBanner().getFiles() != null) {
+			CompanyBanner companyBanner = companyBannerDao.getByCompanyId(company.getId());
+			File fileBanner = fileDao.getById(File.class, companyBanner.getFile().getId());
+			fileBanner.setFiles(request.getCompanyBanner().getFiles());
+			fileBanner.setFileFormat(request.getCompanyBanner().getFileFormat());
+			fileDao.saveNoLogin(fileBanner, supplier);
+			company.setCompanyBanner(fileBanner);
+			companyBanner.setFile(fileBanner);
+			companyBannerDao.saveNoLogin(companyBanner, supplier);
+		}
+		
+		company.setVersion(company.getVersion() + 1);
+		
+		Company updatedCompany = companyDao.saveNoLogin(company, supplier);
+		
+		if(updatedCompany !=null) {
+			
+			ConnHandler.commit();
+			updateResDto.setVer(updatedCompany.getVersion());
+			updateResDto.setMessage("Company Updated Successfully");
+		}
+    	
+    	return updateResDto;
     }
 }

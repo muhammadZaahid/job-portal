@@ -2,21 +2,33 @@ package com.lawencon.admin.dto.company;
 
 import com.lawencon.admin.dto.file.FileReqDto;
 
-public class CompanyUpdateReqDto {
+public class CompanyUpdateSeekerReqDto {
 
-	private String companyId;
+	private String companyCode;
 	private String companyName;
 	private String companyDesc;
 	private String companyTaxNumber;
 	private FileReqDto companyLogo;
 	private FileReqDto companyBanner;
 	
-
-	public String getCompanyId() {
-		return companyId;
+	
+	
+	public CompanyUpdateSeekerReqDto(String companyCode, String companyName, String companyDesc,
+			String companyTaxNumber, FileReqDto companyLogo, FileReqDto companyBanner) {
+		super();
+		this.companyCode = companyCode;
+		this.companyName = companyName;
+		this.companyDesc = companyDesc;
+		this.companyTaxNumber = companyTaxNumber;
+		this.companyLogo = companyLogo;
+		this.companyBanner = companyBanner;
 	}
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
+	
+	public String getCompanyCode() {
+		return companyCode;
+	}
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
 	}
 	public String getCompanyName() {
 		return companyName;

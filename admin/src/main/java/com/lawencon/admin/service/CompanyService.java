@@ -5,7 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,9 +18,12 @@ import com.lawencon.admin.dao.CompanyDao;
 import com.lawencon.admin.dao.CompanyLogoDao;
 import com.lawencon.admin.dao.FileDao;
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.company.CompanyInsertReqDto;
 import com.lawencon.admin.dto.company.CompanyInsertSeekerReqDto;
 import com.lawencon.admin.dto.company.CompanyResDto;
+import com.lawencon.admin.dto.company.CompanyUpdateReqDto;
+import com.lawencon.admin.dto.company.CompanyUpdateSeekerReqDto;
 import com.lawencon.admin.model.Company;
 import com.lawencon.admin.model.CompanyBanner;
 import com.lawencon.admin.model.CompanyLogo;
@@ -42,6 +48,7 @@ public class CompanyService {
 
 	@Autowired
 	RestTemplate restTemplate;
+	
 
 	public InsertResDto createCompany(CompanyInsertReqDto request) {
 		ConnHandler.begin();
@@ -128,5 +135,81 @@ public class CompanyService {
 		});
 
 		return responses;
+	}
+	
+	public UpdateResDto updateCompany(CompanyUpdateReqDto request) {
+		
+		ConnHandler.begin();
+		
+		final UpdateResDto updateResDto = new UpdateResDto();
+			
+		final Company company = companyDao.getById(Company.class,request.getCompanyId());
+		company.setCompanyName(request.getCompanyName());
+		company.setCompanyTaxNumber(request.getCompanyTaxNumber());
+		company.setCompanyDesc(request.getCompanyDesc());	
+		
+		if (request.getCompanyLogo().getFiles() != null) {
+			CompanyLogo companyLogo = companyLogoDao.getByCompanyId(request.getCompanyId());
+			File fileLogo = fileDao.getById(File.class, companyLogo.getFile().getId());
+			fileLogo.setFiles(request.getCompanyLogo().getFiles());
+			fileLogo.setFileFormat(request.getCompanyLogo().getFileFormat());
+			fileDao.save(fileLogo);
+			company.setCompanyLogo(fileLogo);
+			companyLogo.setFile(fileLogo);
+			companyLogoDao.save(companyLogo);
+		}
+
+		if (request.getCompanyBanner().getFiles() != null) {
+			CompanyBanner companyBanner = companyBannerDao.getByCompanyId(request.getCompanyId());
+			File fileBanner = fileDao.getById(File.class, companyBanner.getFile().getId());
+			fileBanner.setFiles(request.getCompanyBanner().getFiles());
+			fileBanner.setFileFormat(request.getCompanyBanner().getFileFormat());
+			fileDao.save(fileBanner);
+			company.setCompanyBanner(fileBanner);
+			companyBanner.setFile(fileBanner);
+			companyBannerDao.save(companyBanner);
+		}
+		
+		company.setVersion(company.getVersion() + 1);
+		
+		Company updatedCompany = companyDao.save(company);
+		
+		if(updatedCompany != null) {
+			
+			HttpHeaders headers = new HttpHeaders();
+			
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<CompanyUpdateSeekerReqDto> reqBody = new HttpEntity<CompanyUpdateSeekerReqDto>(
+					new CompanyUpdateSeekerReqDto(
+							company.getCompanyCode(),
+							request.getCompanyName(),
+							request.getCompanyDesc(),
+							request.getCompanyTaxNumber(),	
+							request.getCompanyLogo(),
+							request.getCompanyBanner()
+							)
+					);
+			
+			ResponseEntity<UpdateResDto> updateRes = restTemplate.exchange(
+					"http://localhost:8081/seeker/companies",
+					HttpMethod.PUT,
+					reqBody,
+					UpdateResDto.class
+					);
+			
+			if(updateRes.getStatusCode().equals(HttpStatus.OK)) {
+				ConnHandler.commit();
+				updateResDto.setVer(updatedCompany.getVersion());
+				updateResDto.setMessage("Company Updated Successfully");
+				
+			}else {
+				ConnHandler.rollback();
+				throw new RuntimeException();
+			}
+			
+		}
+		
+		
+		return updateResDto;
 	}
 }
