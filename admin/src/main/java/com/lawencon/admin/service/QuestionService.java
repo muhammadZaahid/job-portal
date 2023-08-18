@@ -2,6 +2,7 @@ package com.lawencon.admin.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -13,16 +14,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.lawencon.admin.dao.ApplicantDao;
+import com.lawencon.admin.dao.AssessmentDao;
 import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dao.QuestionAssessmentDao;
 import com.lawencon.admin.dao.QuestionDao;
 import com.lawencon.admin.dao.QuestionOptionDao;
 import com.lawencon.admin.dao.QuestionTopicDao;
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
+import com.lawencon.admin.dto.question.QuestionAssessmentInsertSeekerReqDto;
+import com.lawencon.admin.dto.question.QuestionAssessmentSubmittedReqDto;
 import com.lawencon.admin.dto.question.QuestionResDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertSeekerReqDto;
+import com.lawencon.admin.model.Applicant;
+import com.lawencon.admin.model.Assessment;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.Question;
 import com.lawencon.admin.model.QuestionAssessment;
@@ -44,6 +52,10 @@ public class QuestionService {
     QuestionOptionDao qOptionDao;
     @Autowired
     JobVacancyDao jobVacancyDao;
+    @Autowired
+    ApplicantDao applicantDao;
+    @Autowired
+    AssessmentDao assessmentDao;
     @Autowired
     RestTemplate restTemplate;
 
@@ -82,7 +94,7 @@ public class QuestionService {
                 ConnHandler.commit();
                 response.setId(createdTopic.getId());
                 response.setMessage("Topic question sukses dibuat");
-            }else{
+            } else {
                 throw new RuntimeException();
             }
         } catch (Exception e) {
@@ -104,8 +116,8 @@ public class QuestionService {
 
         return responses;
     }
-    
-    public InsertResDto insertAssessment(QuestionAssessmentInsertReqDto data){
+
+    public InsertResDto insertAssessment(QuestionAssessmentInsertReqDto data) {
         ConnHandler.begin();
         final InsertResDto response = new InsertResDto();
 
@@ -116,13 +128,51 @@ public class QuestionService {
 
         QuestionTopic qTopic = qTopicDao.getById(QuestionTopic.class, data.getTopicId());
         assessment.setQuestionTopic(qTopic);
-        
-        QuestionAssessment createdAssessment = questionAssessmentDao.save(assessment);
-        if(createdAssessment != null){
 
-            response.setId(createdAssessment.getId());
-            response.setMessage("Sukses memasangkan question assessment!");
+        QuestionAssessment createdAssessment = questionAssessmentDao.save(assessment);
+        if (createdAssessment != null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<QuestionAssessmentInsertSeekerReqDto> reqBody = new HttpEntity<QuestionAssessmentInsertSeekerReqDto>(
+                    new QuestionAssessmentInsertSeekerReqDto(qTopic.getCode(), vacancy.getJobVacancyCode()), headers);
+
+            ResponseEntity<InsertResDto> res = restTemplate.exchange(
+                    "http://localhost:8081/seeker/questions/assessment", HttpMethod.POST, reqBody, InsertResDto.class);
+            if (res.getStatusCode().equals(HttpStatus.CREATED)) {
+                ConnHandler.commit();
+                response.setId(createdAssessment.getId());
+                response.setMessage("Sukses memasangkan question assessment!");
+            } else {
+                ConnHandler.rollback();
+                throw new RuntimeException();
+            }
         }
+        return response;
+    }
+
+    public UpdateResDto updateScoreAssessment(QuestionAssessmentSubmittedReqDto data) {
+        ConnHandler.begin();
+        Supplier<String> supplier = () -> "System";
+
+        final UpdateResDto response = new UpdateResDto();
+        try {
+
+            Applicant applicant = applicantDao.getByCode(data.getApplicantCode());
+
+            Assessment assessment = assessmentDao.getByApplicantId(applicant.getId());
+            System.out.println(assessment.getId());
+            assessment.setAssessmentScore(data.getScore());
+            assessment.setVersion(assessment.getVersion() + 1);
+            assessmentDao.saveNoLogin(assessment, supplier);
+
+            ConnHandler.commit();
+            response.setVer(assessment.getVersion());
+            response.setMessage("Sukses update nilai candidate!");
+        } catch (Exception e) {
+            ConnHandler.rollback();
+            throw new RuntimeException();
+        }
+
         return response;
     }
 }

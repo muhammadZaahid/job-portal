@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.candidate.dto.InsertResDto;
+import com.lawencon.candidate.dto.question.QuestionAssessmentAnswerReqDto;
+import com.lawencon.candidate.dto.question.QuestionAssessmentInsertReqDto;
+import com.lawencon.candidate.dto.question.QuestionSubmitAssessmentReqDto;
 import com.lawencon.candidate.dto.question.QuestionTopicInsertSeekerReqDto;
 import com.lawencon.candidate.dto.question.QuestionsResDto;
 import com.lawencon.candidate.service.QuestionService;
@@ -39,5 +42,19 @@ public class QuestionController {
         List<QuestionsResDto> response = questionService.getQuestionByCode(code);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PostMapping("/answer")
+    public ResponseEntity<InsertResDto> calculateScore (@RequestBody QuestionSubmitAssessmentReqDto data){
+        InsertResDto response = questionService.calculateAssessmentScore(data);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PostMapping("/assessment")
+    public ResponseEntity<InsertResDto> insertAssessment(@RequestBody QuestionAssessmentInsertReqDto data){
+        InsertResDto response = questionService.insertAssessment(data);
+
+        return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 }

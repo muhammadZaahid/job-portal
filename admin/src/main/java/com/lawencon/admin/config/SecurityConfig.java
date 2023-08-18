@@ -51,6 +51,7 @@ public class SecurityConfig {
 		matchers.add(new AntPathRequestMatcher("/v3/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/admin/candidate/seeker", HttpMethod.POST.toString()));
 		matchers.add(new AntPathRequestMatcher("/admin/applicant/seeker", HttpMethod.POST.toString()));
+		matchers.add(new AntPathRequestMatcher("/admin/questions/**", HttpMethod.PATCH.toString()));
 		return matchers;
 	}
 

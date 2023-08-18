@@ -24,4 +24,19 @@ public class QuestionOptionDao extends AbstractJpaDao{
             return null;
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public Boolean getIsCorrect(String questionId, String answerId){
+        List<QuestionOption> queryResult = ConnHandler.getManager()
+        .createNativeQuery("SELECT * FROM t_question_option where question_id = :questionId and id = :answerId",QuestionOption.class)
+        .setParameter("questionId",questionId)
+        .setParameter("answerId",answerId)
+        .getResultList();
+
+        if(queryResult.size() > 0){
+            return queryResult.get(0).getIsCorrect();
+        }else{
+            return null;
+        }
+    }
 }

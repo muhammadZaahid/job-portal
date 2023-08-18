@@ -6,13 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
+import com.lawencon.admin.dto.question.QuestionAssessmentSubmittedReqDto;
 import com.lawencon.admin.dto.question.QuestionResDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertReqDto;
 import com.lawencon.admin.service.QuestionService;
@@ -46,5 +49,12 @@ public class QuestionController {
         final InsertResDto response = questionService.insertAssessment(data);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/assessment")
+    public ResponseEntity<UpdateResDto> updateAssessmentScore(@RequestBody QuestionAssessmentSubmittedReqDto data){
+        final UpdateResDto response = questionService.updateScoreAssessment(data);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
