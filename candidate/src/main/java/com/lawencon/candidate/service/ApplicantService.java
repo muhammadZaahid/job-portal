@@ -101,14 +101,20 @@ public class ApplicantService {
 			if (applicant.getCurrentStage().equals("application")) {
 				applicant.setCurrentStage("assessment");
 				applicant.setStgAssessment(true);
-				applicant.setVersion(applicant.getVersion() + 1);
-				applicantDao.saveNoLogin(applicant, supplier);
 			} else if (applicant.getCurrentStage().equals("assessment")) {
 				applicant.setCurrentStage("interview");
 				applicant.setStgInterview(true);
-				applicant.setVersion(applicant.getVersion() + 1);
-				applicantDao.saveNoLogin(applicant, supplier);
+			} else if (applicant.getCurrentStage().equals("interview")) {
+				applicant.setCurrentStage("mcu");
+				applicant.setStgMcu(true);
+			} else if (applicant.getCurrentStage().equals("mcu")) {
+				applicant.setCurrentStage("offer");
+				applicant.setStgOffer(true);
+			} else if (applicant.getCurrentStage().equals("offer")) {
+				applicant.setCurrentStage("hired");
 			}
+			applicant.setVersion(applicant.getVersion() + 1);
+			applicantDao.saveNoLogin(applicant, supplier);
 			ConnHandler.commit();
 			response.setVer(applicant.getVersion());
 			response.setMessage("Success update status applicant");
