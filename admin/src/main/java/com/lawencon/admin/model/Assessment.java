@@ -32,12 +32,9 @@ public class Assessment extends BaseEntity{
 	@JoinColumn(name="assessment_pic", nullable = false)
 	private User assessmentPic;
 	
-	@Column(name="assessment_pic_phone", nullable = false)
-	private String assessmentPicPhone;
-	
-	@Column(name="assessment_pic_email", nullable = false)
-	private String assessmentPicEmail;
-	
+	@Column(name="assessment_score")
+	private String assessmentScore;
+
 	@Column(name="assessment_note")
 	private String assessmentNote;
 	
@@ -79,22 +76,6 @@ public class Assessment extends BaseEntity{
 		this.assessmentPic = assessmentPic;
 	}
 
-	public String getAssessmentPicPhone() {
-		return assessmentPicPhone;
-	}
-
-	public void setAssessmentPicPhone(String assessmentPicPhone) {
-		this.assessmentPicPhone = assessmentPicPhone;
-	}
-
-	public String getAssessmentPicEmail() {
-		return assessmentPicEmail;
-	}
-
-	public void setAssessmentPicEmail(String assessmentPicEmail) {
-		this.assessmentPicEmail = assessmentPicEmail;
-	}
-
 	public String getAssessmentNote() {
 		return assessmentNote;
 	}
@@ -125,6 +106,14 @@ public class Assessment extends BaseEntity{
 
 	public void setApplicantId(Applicant applicantId) {
 		this.applicantId = applicantId;
+	}
+
+	public String getAssessmentScore() {
+		return assessmentScore;
+	}
+
+	public void setAssessmentScore(String assessmentScore) {
+		this.assessmentScore = assessmentScore;
 	}
 	
 	
