@@ -123,13 +123,12 @@ public class ApplicantService {
 
 		User userpic = userDao.getById(User.class, job.getUser().getId());
 
-		if (applicant.getCurrentStage().equals("application")) {
-			
-			try {
-				ResponseEntity<UpdateResDto> res = restTemplate.exchange(
-						"http://localhost:8081/seeker/applicant/" + applicant.getApplicantCode(),
-						HttpMethod.PATCH, null, UpdateResDto.class);
-				if (res.getStatusCode().equals(HttpStatus.OK)) {
+		try {
+			ResponseEntity<UpdateResDto> res = restTemplate.exchange(
+					"http://localhost:8081/seeker/applicant/" + applicant.getApplicantCode(),
+					HttpMethod.PATCH, null, UpdateResDto.class);
+			if (res.getStatusCode().equals(HttpStatus.OK)) {
+				if (applicant.getCurrentStage().equals("application")) {
 					applicant.setCurrentStage("assessment");
 					applicant.setStgAssessment(true);
 					applicant.setVersion(applicant.getVersion() + 1);
@@ -140,18 +139,25 @@ public class ApplicantService {
 					assessment.setAssessmentPic(userpic);
 					assessmentDao.save(assessment);
 					Application application = applicationDao.getByApplicant(data);
-					System.out.println(application.getId());
 					application.setIsAccepted(true);
 					applicationDao.save(application);
-					ConnHandler.commit();
-					response.setVer(applicant.getVersion());
-					response.setMessage("Success update status applicant");
+				}else if(applicant.getCurrentStage().equals("assessment")){
+					applicant.setCurrentStage("interview");
+					applicant.setStgInterview(true);
+					applicant.setVersion(applicant.getVersion() + 1);
+					applicantDao.save(applicant);
+					Assessment assessment = assessmentDao.getByApplicantId(data);
+					assessment.setIsAccepted(true);
+					assessmentDao.saveAndFlush(assessment);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				ConnHandler.rollback();
-				throw new RuntimeException();
+				ConnHandler.commit();
+				response.setVer(applicant.getVersion());
+				response.setMessage("Success update status applicant");
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ConnHandler.rollback();
+			throw new RuntimeException();
 		}
 
 		return response;

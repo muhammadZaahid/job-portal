@@ -44,6 +44,12 @@ public class Assessment extends BaseEntity{
 	@Column(name="assessment_same_interview")
 	private String assessmentSameInterview;
 
+	@Column(name="is_accepted")
+	private Boolean isAccepted;
+	
+	@Column(name="is_rejected")
+	private Boolean isRejected;
+
 	public String getAssessmentVenue() {
 		return assessmentVenue;
 	}
@@ -115,6 +121,20 @@ public class Assessment extends BaseEntity{
 	public void setAssessmentScore(Double assessmentScore) {
 		this.assessmentScore = assessmentScore;
 	}
-	
-	
+
+	public Boolean getIsAccepted() {
+		return isAccepted;
+	}
+
+	public void setIsAccepted(Boolean isAccepted) {
+		this.isAccepted = isAccepted;
+	}
+
+	public Boolean getIsRejected() {
+		return isRejected;
+	}
+
+	public void setIsRejected(Boolean isRejected) {
+		this.isRejected = isRejected;
+	}	
 }

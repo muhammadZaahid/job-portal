@@ -66,7 +66,8 @@ public class ApplicantService {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			HttpEntity<ApplicantInsertAdminReqDto> reqBody = new HttpEntity<ApplicantInsertAdminReqDto>(
-					new ApplicantInsertAdminReqDto(candidate.getCandidateCode(), jobVacancy.getJobVacancyCode(),applicant.getApplicantCode()),
+					new ApplicantInsertAdminReqDto(candidate.getCandidateCode(), jobVacancy.getJobVacancyCode(),
+							applicant.getApplicantCode()),
 					headers);
 			try {
 				ResponseEntity<InsertResDto> res = restTemplate.exchange(
@@ -74,7 +75,7 @@ public class ApplicantService {
 				if (res.getStatusCode().equals(HttpStatus.CREATED)) {
 					ConnHandler.commit();
 					response.setId(createdApplicant.getId());
-					response.setMessage("Sukses Melamar Posisi "+jobVacancy.getTitle()+" !");
+					response.setMessage("Sukses Melamar Posisi " + jobVacancy.getTitle() + " !");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -89,34 +90,39 @@ public class ApplicantService {
 
 	}
 
-	public UpdateResDto updateApplicant(String data){
+	public UpdateResDto updateApplicant(String data) {
 		ConnHandler.begin();
 		Supplier<String> supplier = () -> "System";
 		final UpdateResDto response = new UpdateResDto();
 
 		Applicant applicant = applicantDao.getByCode(data);
 
-		if(applicant != null){
-			if(applicant.getCurrentStage().equals("application")){
+		if (applicant != null) {
+			if (applicant.getCurrentStage().equals("application")) {
 				applicant.setCurrentStage("assessment");
 				applicant.setStgAssessment(true);
 				applicant.setVersion(applicant.getVersion() + 1);
 				applicantDao.saveNoLogin(applicant, supplier);
-				ConnHandler.commit();
-				response.setVer(applicant.getVersion());
-				response.setMessage("Success update status applicant");
+			} else if (applicant.getCurrentStage().equals("assessment")) {
+				applicant.setCurrentStage("interview");
+				applicant.setStgInterview(true);
+				applicant.setVersion(applicant.getVersion() + 1);
+				applicantDao.saveNoLogin(applicant, supplier);
 			}
+			ConnHandler.commit();
+			response.setVer(applicant.getVersion());
+			response.setMessage("Success update status applicant");
 		}
 
 		return response;
 	}
 
-	public List<ApplicantResDto> getApplicantByUser(){
+	public List<ApplicantResDto> getApplicantByUser() {
 		User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
 		List<Applicant> applicants = applicantDao.getAllByCandidate(user.getCandidate().getId());
 		List<ApplicantResDto> responses = new ArrayList<>();
-		
-		for(int i = 0;i<applicants.size();i++){
+
+		for (int i = 0; i < applicants.size(); i++) {
 			ApplicantResDto response = new ApplicantResDto();
 			response.setJobVacancyId(applicants.get(i).getJobVacancy().getId());
 			response.setJobTitle(applicants.get(i).getJobVacancy().getTitle());

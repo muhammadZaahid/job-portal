@@ -27,8 +27,9 @@ public class Interview extends BaseEntity{
 	@Column(name="interview_time", nullable = false)
 	private LocalDateTime interviewTime;
 	
-	@Column(name="interview_pic", nullable = false)
-	private String interviewPic;
+	@OneToOne
+	@JoinColumn(name="interview_pic", nullable = false)
+	private User interviewPic;
 	
 	@Column(name="interview_pic_phone", nullable = false)
 	private String interviewPicPhone;
@@ -66,11 +67,11 @@ public class Interview extends BaseEntity{
 		this.interviewTime = interviewTime;
 	}
 
-	public String getInterviewPic() {
+	public User getInterviewPic() {
 		return interviewPic;
 	}
 
-	public void setInterviewPic(String interviewPic) {
+	public void setInterviewPic(User interviewPic) {
 		this.interviewPic = interviewPic;
 	}
 
@@ -104,6 +105,14 @@ public class Interview extends BaseEntity{
 
 	public void setInterviewLastEmailSend(String interviewLastEmailSend) {
 		this.interviewLastEmailSend = interviewLastEmailSend;
+	}
+
+	public Applicant getApplicant() {
+		return applicant;
+	}
+
+	public void setApplicant(Applicant applicant) {
+		this.applicant = applicant;
 	}
 		
 
