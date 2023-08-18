@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionResDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertReqDto;
 import com.lawencon.admin.service.QuestionService;
@@ -36,6 +37,13 @@ public class QuestionController {
     @PostMapping
     public ResponseEntity<InsertResDto> createQuestion(@RequestBody QuestionTopicInsertReqDto data){
         final InsertResDto response = questionService.createQuestion(data);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/assessment")
+    public ResponseEntity<InsertResDto> insertAssessmentQuestion(@RequestBody QuestionAssessmentInsertReqDto data){
+        final InsertResDto response = questionService.insertAssessment(data);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

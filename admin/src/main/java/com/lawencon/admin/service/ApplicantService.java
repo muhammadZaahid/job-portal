@@ -150,6 +150,7 @@ public class ApplicantService {
 			} catch (Exception e) {
 				e.printStackTrace();
 				ConnHandler.rollback();
+				throw new RuntimeException();
 			}
 		}
 

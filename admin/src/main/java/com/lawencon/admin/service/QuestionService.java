@@ -13,15 +13,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dao.QuestionAssessmentDao;
 import com.lawencon.admin.dao.QuestionDao;
 import com.lawencon.admin.dao.QuestionOptionDao;
 import com.lawencon.admin.dao.QuestionTopicDao;
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionResDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertSeekerReqDto;
+import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.Question;
+import com.lawencon.admin.model.QuestionAssessment;
 import com.lawencon.admin.model.QuestionOption;
 import com.lawencon.admin.model.QuestionTopic;
 import com.lawencon.base.ConnHandler;
@@ -38,6 +42,8 @@ public class QuestionService {
     QuestionTopicDao qTopicDao;
     @Autowired
     QuestionOptionDao qOptionDao;
+    @Autowired
+    JobVacancyDao jobVacancyDao;
     @Autowired
     RestTemplate restTemplate;
 
@@ -97,5 +103,26 @@ public class QuestionService {
         });
 
         return responses;
+    }
+    
+    public InsertResDto insertAssessment(QuestionAssessmentInsertReqDto data){
+        ConnHandler.begin();
+        final InsertResDto response = new InsertResDto();
+
+        QuestionAssessment assessment = new QuestionAssessment();
+
+        JobVacancy vacancy = jobVacancyDao.getById(JobVacancy.class, data.getJobVacancyId());
+        assessment.setJobVacancy(vacancy);
+
+        QuestionTopic qTopic = qTopicDao.getById(QuestionTopic.class, data.getTopicId());
+        assessment.setQuestionTopic(qTopic);
+        
+        QuestionAssessment createdAssessment = questionAssessmentDao.save(assessment);
+        if(createdAssessment != null){
+
+            response.setId(createdAssessment.getId());
+            response.setMessage("Sukses memasangkan question assessment!");
+        }
+        return response;
     }
 }
