@@ -7,13 +7,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.candidate.dto.InsertResDto;
+import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.jobvacancy.InsertJobVacancyReqDto;
 import com.lawencon.candidate.dto.jobvacancy.JobVacancyResDto;
+import com.lawencon.candidate.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.candidate.service.JobVacancyService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,4 +41,13 @@ public class JobVacancyController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
+    @PutMapping
+   	public ResponseEntity<UpdateResDto> updateJobVacancy(@RequestBody JobVacancyUpdateReqDto request){
+   		
+   		UpdateResDto response = jobVacancyService.updateJobVacancy(request);
+   		
+   		return new ResponseEntity<>(response, HttpStatus.OK);
+   				
+   	}
 }
