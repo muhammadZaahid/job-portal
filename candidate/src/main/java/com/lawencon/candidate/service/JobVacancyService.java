@@ -11,9 +11,12 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.candidate.dao.CompanyDao;
 import com.lawencon.candidate.dao.JobLevelDao;
 import com.lawencon.candidate.dao.JobVacancyDao;
+import com.lawencon.candidate.dao.UserDao;
 import com.lawencon.candidate.dto.InsertResDto;
+import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.jobvacancy.InsertJobVacancyReqDto;
 import com.lawencon.candidate.dto.jobvacancy.JobVacancyResDto;
+import com.lawencon.candidate.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.candidate.model.Company;
 import com.lawencon.candidate.model.JobLevel;
 import com.lawencon.candidate.model.JobVacancy;
@@ -28,6 +31,8 @@ public class JobVacancyService {
     CompanyDao companyDao;
     @Autowired
     JobLevelDao jobLevelDao;
+    @Autowired
+    UserDao userDao;
 
     public InsertResDto insert(InsertJobVacancyReqDto data) {
         ConnHandler.begin();
@@ -83,4 +88,39 @@ public class JobVacancyService {
         ;
         return responses;
     }
+    
+public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
+    	
+    	ConnHandler.begin();
+    	
+    	final UpdateResDto updateResDto = new UpdateResDto();
+    	
+    	Supplier<String> supplier = ()-> "System";
+    	
+    	final JobVacancy jobVacancy = jobVacancyDao.getByCode(request.getJobVacancyCode());
+    	final JobLevel jobLevel = jobLevelDao.getById(JobLevel.class, request.getJobLevelId());
+    
+    	jobVacancy.setTitle(request.getTitle());    
+    	jobVacancy.setJobLevel(jobLevel);
+    	jobVacancy.setLocation(request.getLocation());
+    	jobVacancy.setBenefitDesc(request.getBenefitDesc());
+    	jobVacancy.setSalaryFrom(request.getSalaryFrom());
+    	jobVacancy.setSalaryTo(request.getSalaryTo());
+    	jobVacancy.setSalaryPublish(request.getSalaryPublish());
+    	jobVacancy.setStartDate(DateUtil.parseStringToDate(request.getStartDate()).toLocalDate());
+    	jobVacancy.setEndDate(DateUtil.parseStringToDate(request.getEndDate()).toLocalDate());
+    	
+    	jobVacancy.setVersion(jobVacancy.getVersion() + 1);
+    	
+    	JobVacancy updatedJobVacancy = jobVacancyDao.saveNoLogin(jobVacancy, supplier);
+    	
+    	if(updatedJobVacancy != null) {    		    	
+			ConnHandler.commit();
+			updateResDto.setVer(updatedJobVacancy.getVersion());
+			updateResDto.setMessage("Job Vacancy Updated Successfully");						
+    	}
+    	
+    	return updateResDto;
+    }
+
 }
