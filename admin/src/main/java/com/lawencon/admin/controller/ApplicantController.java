@@ -1,8 +1,11 @@
 package com.lawencon.admin.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +17,7 @@ import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertReqDto;
+import com.lawencon.admin.dto.applicant.ApplicantsResDto;
 import com.lawencon.admin.service.ApplicantService;
 import com.lawencon.base.ConnHandler;
 
@@ -47,5 +51,5 @@ public class ApplicantController {
 		final UpdateResDto response = applicantService.updateApplicant(data);
 
 		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
+	}	
 }

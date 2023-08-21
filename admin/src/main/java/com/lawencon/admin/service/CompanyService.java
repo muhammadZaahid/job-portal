@@ -137,6 +137,20 @@ public class CompanyService {
 		return responses;
 	}
 	
+	public CompanyResDto getCompanyById(String companyId) {
+		final CompanyResDto response = new CompanyResDto();
+		Company c = companyDao.getById(Company.class, companyId);
+			response.setId(c.getId());
+			response.setCompanyCode(c.getCompanyCode());
+			response.setCompanyName(c.getCompanyName());
+			response.setCompanyTaxNumber(c.getCompanyTaxNumber());
+			response.setCompanyDesc(c.getCompanyDesc());
+			response.setCompanyBannerId(companyBannerDao.getCompanyBannerByCompanyId(c.getId()));
+			response.setCompanyLogoId(companyLogoDao.getCompanyLogoByCompanyId(c.getId()));
+
+		return response;
+	}
+
 	public UpdateResDto updateCompany(CompanyUpdateReqDto request) {
 		
 		ConnHandler.begin();

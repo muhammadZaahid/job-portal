@@ -24,4 +24,17 @@ public class CandidateDao extends AbstractJpaDao {
             return null;
         }
     }
+    @SuppressWarnings("unchecked")
+    public Candidate getById(String candidateId){
+        List<Candidate> queryRes = ConnHandler.getManager()
+        .createNativeQuery("SELECT * FROM t_candidate where id = :candidateId", Candidate.class)
+        .setParameter("candidateId",candidateId)
+        .getResultList();
+
+        if(queryRes.size() > 0){
+            return queryRes.get(0);
+        }else{
+            return null;
+        }
+    }
 }

@@ -44,4 +44,11 @@ public class ErrorHandler {
 		return new ResponseEntity<>(responses, HttpStatus.BAD_REQUEST);
 		
 	}
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<ErrorResDto<String>> handleRuntimeException(RuntimeException exception){
+		final ErrorResDto<String> response = new ErrorResDto<>();
+		response.setMessage(exception.getMessage());
+
+		return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+	}
 }
