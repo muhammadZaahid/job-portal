@@ -107,14 +107,26 @@ public class CandidateService {
 			candidateData.setEmail(c.getEmail());
 			candidateData.setPhone(c.getPhone());
 			candidateData.setBirthPlace(c.getBirthPlace());
-			candidateData.setBirthDate(c.getBirthDate().toString());
+			if (c.getBirthDate() == null) {
+				candidateData.setBirthDate(null);
+			} else {
+				candidateData.setBirthDate(c.getBirthDate().toString());
+			}
 			candidateData.setSocmed1(c.getSocmed1());
 			candidateData.setSocmed2(c.getSocmed2());
 			candidateData.setSocmed3(c.getSocmed3());
 			candidateData.setExperienceYear(c.getExperienceYear());
 			candidateData.setSalaryExpectation(c.getSalaryExpectation());
-			candidateData.setPhotoId(c.getPhoto().getId());
-			candidateData.setResumeId(c.getResume().getId());
+			if (c.getPhoto() == null) {
+				candidateData.setPhotoId(null);
+			} else {
+				candidateData.setPhotoId(c.getPhoto().getId());
+			}
+			if (c.getResume() == null) {
+				candidateData.setResumeId(null);
+			} else {
+				candidateData.setResumeId(c.getResume().getId());
+			}
 
 			response.add(candidateData);
 
@@ -132,9 +144,9 @@ public class CandidateService {
 		response.setEmail(candidate.getEmail());
 		response.setPhone(candidate.getPhone());
 		response.setBirthPlace(candidate.getBirthPlace());
-		if(candidate.getBirthDate() == null){
+		if (candidate.getBirthDate() == null) {
 			response.setBirthDate(null);
-		}else{
+		} else {
 			response.setBirthDate(candidate.getBirthDate().toString());
 		}
 		response.setSocmed1(candidate.getSocmed1());
@@ -142,14 +154,14 @@ public class CandidateService {
 		response.setSocmed3(candidate.getSocmed3());
 		response.setExperienceYear(candidate.getExperienceYear());
 		response.setSalaryExpectation(candidate.getSalaryExpectation());
-		if(candidate.getPhoto() == null){
+		if (candidate.getPhoto() == null) {
 			response.setPhotoId(null);
-		}else{
+		} else {
 			response.setPhotoId(candidate.getPhoto().getId());
 		}
-		if(candidate.getResume() == null){
+		if (candidate.getResume() == null) {
 			response.setResumeId(null);
-		}else{
+		} else {
 			response.setResumeId(candidate.getResume().getId());
 		}
 
