@@ -3,10 +3,15 @@ package com.lawencon.admin.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +36,7 @@ import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Application;
 import com.lawencon.admin.model.Assessment;
 import com.lawencon.admin.model.Candidate;
+import com.lawencon.admin.model.Email;
 import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.Medical;
@@ -57,7 +63,12 @@ public class ApplicantService {
 	@Autowired
 	UserDao userDao;
 	@Autowired
+	EmailService emailService;
+	@Autowired
 	RestTemplate restTemplate;
+
+	@Value("${spring.mail.username}")
+	private String emailSender;
 
 	public InsertResDto createApplicant(ApplicantInsertReqDto request) {
 		ConnHandler.begin();
@@ -116,6 +127,23 @@ public class ApplicantService {
 				ConnHandler.commit();
 				response.setId(createdApplicant.getId());
 				response.setMessage("Applicant Created Successfully");
+
+				try {
+					Map<String, Object> properties = new HashMap<>();
+					properties.put("name", candidate.getName());
+					properties.put("jobName",jobVacancy.getTitle());
+					properties.put("jobDate",applicant.getAppliedDate());
+					Email email = new Email();
+					email.setSubject("Success! You have applied for " + jobVacancy.getCompany().getCompanyName());
+					email.setRecipientEmail(candidate.getEmail());
+					email.setRecipientName(candidate.getName());
+					email.setSenderEmail(emailSender);
+					email.setProperties(properties);
+					email.setTemplate("success-apply");
+					emailService.sendHtmlMessage(email);
+				} catch (MessagingException exception) {
+					exception.printStackTrace();
+				}
 			}
 
 		} catch (Exception e) {
@@ -153,7 +181,7 @@ public class ApplicantService {
 					Application application = applicationDao.getByApplicant(data);
 					application.setIsAccepted(true);
 					applicationDao.save(application);
-				}else if(applicant.getCurrentStage().equals("assessment")){
+				} else if (applicant.getCurrentStage().equals("assessment")) {
 					applicant.setCurrentStage("interview");
 					applicant.setStgInterview(true);
 					applicant.setVersion(applicant.getVersion() + 1);
@@ -161,7 +189,7 @@ public class ApplicantService {
 					Assessment assessment = assessmentDao.getByApplicantId(data);
 					assessment.setIsAccepted(true);
 					assessmentDao.saveAndFlush(assessment);
-				}else if(applicant.getCurrentStage().equals("interview")){
+				} else if (applicant.getCurrentStage().equals("interview")) {
 					applicant.setCurrentStage("mcu");
 					applicant.setStgMcu(true);
 					applicant.setVersion(applicant.getVersion() + 1);
@@ -169,7 +197,7 @@ public class ApplicantService {
 					Interview interview = interviewDao.getByApplicantId(data);
 					interview.setIsAccepted(true);
 					assessmentDao.saveAndFlush(interview);
-				}else if(applicant.getCurrentStage().equals("mcu")){
+				} else if (applicant.getCurrentStage().equals("mcu")) {
 					applicant.setCurrentStage("offer");
 					applicant.setStgOffer(true);
 					applicant.setVersion(applicant.getVersion() + 1);
@@ -188,10 +216,10 @@ public class ApplicantService {
 		return response;
 	}
 
-	public List<ApplicantsResDto> getAllByVacancy(String jobVacancyId){
+	public List<ApplicantsResDto> getAllByVacancy(String jobVacancyId) {
 		List<ApplicantsResDto> responses = new ArrayList<>();
 
-		applicantDao.getAllByVacancy(jobVacancyId).forEach(a ->{
+		applicantDao.getAllByVacancy(jobVacancyId).forEach(a -> {
 			ApplicantsResDto response = new ApplicantsResDto();
 			response.setApplicantId(a.getId());
 			response.setCandidateNik(a.getCandidate().getNik());

@@ -19,11 +19,13 @@ import com.lawencon.admin.dao.CompanyLogoDao;
 import com.lawencon.admin.dao.FileDao;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
+import com.lawencon.admin.dto.company.CompanyDetailResDto;
 import com.lawencon.admin.dto.company.CompanyInsertReqDto;
 import com.lawencon.admin.dto.company.CompanyInsertSeekerReqDto;
 import com.lawencon.admin.dto.company.CompanyResDto;
 import com.lawencon.admin.dto.company.CompanyUpdateReqDto;
 import com.lawencon.admin.dto.company.CompanyUpdateSeekerReqDto;
+import com.lawencon.admin.dto.file.FileReqDto;
 import com.lawencon.admin.model.Company;
 import com.lawencon.admin.model.CompanyBanner;
 import com.lawencon.admin.model.CompanyLogo;
@@ -137,17 +139,31 @@ public class CompanyService {
 		return responses;
 	}
 	
-	public CompanyResDto getCompanyById(String companyId) {
-		final CompanyResDto response = new CompanyResDto();
+	public CompanyDetailResDto getCompanyById(String companyId) {
+		final CompanyDetailResDto response = new CompanyDetailResDto();
 		Company c = companyDao.getById(Company.class, companyId);
+		CompanyBanner cb = companyBannerDao.getByCompanyId(companyId);
+		CompanyLogo cl = companyLogoDao.getByCompanyId(companyId);
+		
 			response.setId(c.getId());
 			response.setCompanyCode(c.getCompanyCode());
 			response.setCompanyName(c.getCompanyName());
 			response.setCompanyTaxNumber(c.getCompanyTaxNumber());
 			response.setCompanyDesc(c.getCompanyDesc());
-			response.setCompanyBannerId(companyBannerDao.getCompanyBannerByCompanyId(c.getId()));
-			response.setCompanyLogoId(companyLogoDao.getCompanyLogoByCompanyId(c.getId()));
-
+			if(cb != null){
+				File fileBanner = fileDao.getById(File.class, cb.getFile().getId());
+				FileReqDto banner = new FileReqDto();
+				banner.setFiles(fileBanner.getFiles());
+				banner.setFileFormat(fileBanner.getFileFormat());
+				response.setCompanyBanner(banner);
+			}
+			if(cl != null){
+				File fileLogo = fileDao.getById(File.class, cl.getFile().getId());
+				FileReqDto logo = new FileReqDto();
+				logo.setFiles(fileLogo.getFiles());
+				logo.setFileFormat(fileLogo.getFileFormat());
+				response.setCompanyLogo(logo);
+			}
 		return response;
 	}
 
