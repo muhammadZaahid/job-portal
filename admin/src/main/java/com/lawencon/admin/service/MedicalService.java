@@ -16,7 +16,7 @@ import com.lawencon.util.DateUtil;
 
 @Service
 public class MedicalService {
-    
+
     @Autowired
     MedicalDao medicalDao;
     @Autowired
@@ -24,35 +24,41 @@ public class MedicalService {
     @Autowired
     FileDao fileDao;
 
-    public InsertResDto insert(MedicalInsertReqDto data){
+    public InsertResDto insert(MedicalInsertReqDto data) {
         ConnHandler.begin();
         final InsertResDto response = new InsertResDto();
         System.out.println(data.getApplicantId());
-        Applicant applicant = applicantDao.getById(Applicant.class,data.getApplicantId());
+        Applicant applicant = applicantDao.getById(Applicant.class, data.getApplicantId());
 
-        Medical medical = new Medical();
-        medical.setApplicantId(applicant);
-        medical.setMedicalDate(DateUtil.parseToDateOnly(data.getMedicalDate()));
-        medical.setMedicalLocation(data.getMedicalLocation());
-        medical.setMedicalNotes(data.getMedicalNotes());
-        
-        if(data.getMedicalFile() != null){
-            File file = new File();
-            file.setFiles(data.getMedicalFile().getFiles());
-            file.setFileFormat(data.getMedicalFile().getFileFormat());
-            File createdFile = fileDao.save(file);
-            medical.setMedicalFile(createdFile);
-        }
+        if (applicant.getCurrentStage().equals("mcu")) {
+            Medical medical = new Medical();
+            medical.setApplicantId(applicant);
+            medical.setMedicalDate(DateUtil.parseToDateOnly(data.getMedicalDate()));
+            medical.setMedicalLocation(data.getMedicalLocation());
+            medical.setMedicalNotes(data.getMedicalNotes());
 
-        Medical createdMedical = medicalDao.save(medical);
+            if (data.getMedicalFile() != null) {
+                File file = new File();
+                file.setFiles(data.getMedicalFile().getFiles());
+                file.setFileFormat(data.getMedicalFile().getFileFormat());
+                File createdFile = fileDao.save(file);
+                medical.setMedicalFile(createdFile);
+            }
 
-        if(createdMedical != null){
-            ConnHandler.commit();
-            response.setId(createdMedical.getId());
-            response.setMessage("Success Insert Medical Check-up Candidate!");
+            Medical createdMedical = medicalDao.save(medical);
+
+            if (createdMedical != null) {
+                ConnHandler.commit();
+                response.setId(createdMedical.getId());
+                response.setMessage("Success Insert Medical Check-up Candidate!");
+            } else {
+                ConnHandler.rollback();
+                response.setMessage("Error pada API Candidate");
+                throw new RuntimeException();
+            }
+
         }else{
-            ConnHandler.rollback();
-            throw new RuntimeException();
+            throw new RuntimeException("Error, candidate belum mencapai tahap MCU");
         }
 
         return response;

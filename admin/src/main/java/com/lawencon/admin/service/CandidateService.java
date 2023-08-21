@@ -24,17 +24,17 @@ public class CandidateService {
 
 	@Autowired
 	CandidateDao candidateDao;
-	
+
 	@Autowired
 	FileDao fileDao;
-	
+
 	public InsertResDto createCandidate(CandidateInsertReqDto request) {
-		
+
 		InsertResDto response = new InsertResDto();
-		
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate birthDate = LocalDate.parse(request.getBirthDate(), formatter);
-		
+
 		Candidate candidate = new Candidate();
 		candidate.setNik(request.getNik());
 		candidate.setName(request.getName());
@@ -47,34 +47,34 @@ public class CandidateService {
 		candidate.setSocmed3(request.getSocmed3());
 		candidate.setExperienceYear(request.getExperienceYear());
 		candidate.setSalaryExpectation(request.getSalaryExpectation());
-		
-		if(request.getPhoto() != null) {
+
+		if (request.getPhoto() != null) {
 			File photo = new File();
 			photo.setFiles(request.getPhoto().getFiles());
 			photo.setFileFormat(request.getPhoto().getFileFormat());
-			fileDao.save(photo);		
+			fileDao.save(photo);
 			candidate.setPhoto(photo);
 		}
-		
+
 		File resume = new File();
 		resume.setFiles(request.getResume().getFiles());
 		resume.setFileFormat(request.getResume().getFileFormat());
 		fileDao.save(resume);
-		candidate.setResume(resume);	
-		candidate.setCandidateCode(GeneratorUtil.generateCode());		
-		
+		candidate.setResume(resume);
+		candidate.setCandidateCode(GeneratorUtil.generateCode());
+
 		Candidate createdCandidate = candidateDao.save(candidate);
-		
-		if(createdCandidate != null) {
-			
+
+		if (createdCandidate != null) {
+
 			response.setId(createdCandidate.getId());
 			response.setMessage("Candidate Created Successfully");
 		}
-				
+
 		return response;
 	}
-	
-	public InsertResDto saveCandidateFromSeeker(CandidateSeekerInsertReqDto data){
+
+	public InsertResDto saveCandidateFromSeeker(CandidateSeekerInsertReqDto data) {
 		final InsertResDto response = new InsertResDto();
 
 		Candidate candidate = new Candidate();
@@ -86,7 +86,7 @@ public class CandidateService {
 
 		Candidate createdCandidate = candidateDao.saveNoLogin(candidate, supplier);
 
-		if(createdCandidate != null){
+		if (createdCandidate != null) {
 			response.setId(createdCandidate.getId());
 			response.setMessage("Success create candidate in Admin");
 		}
@@ -94,13 +94,13 @@ public class CandidateService {
 		return response;
 	}
 
-	public List<CandidateResDto> getAllCandidate(){
-		
+	public List<CandidateResDto> getAllCandidate() {
+
 		List<CandidateResDto> response = new ArrayList<>();
-		
-		candidateDao.getAll(Candidate.class).forEach(c ->{
+
+		candidateDao.getAll(Candidate.class).forEach(c -> {
 			CandidateResDto candidateData = new CandidateResDto();
-			
+
 			candidateData.setId(c.getId());
 			candidateData.setNik(c.getNik());
 			candidateData.setName(c.getName());
@@ -115,11 +115,44 @@ public class CandidateService {
 			candidateData.setSalaryExpectation(c.getSalaryExpectation());
 			candidateData.setPhotoId(c.getPhoto().getId());
 			candidateData.setResumeId(c.getResume().getId());
-			
+
 			response.add(candidateData);
-			
+
 		});
-		
+
+		return response;
+	}
+
+	public CandidateResDto getByCandidateId(String candidateId) {
+		CandidateResDto response = new CandidateResDto();
+		Candidate candidate = candidateDao.getById(Candidate.class, candidateId);
+		response.setId(candidate.getId());
+		response.setNik(candidate.getNik());
+		response.setName(candidate.getName());
+		response.setEmail(candidate.getEmail());
+		response.setPhone(candidate.getPhone());
+		response.setBirthPlace(candidate.getBirthPlace());
+		if(candidate.getBirthDate() == null){
+			response.setBirthDate(null);
+		}else{
+			response.setBirthDate(candidate.getBirthDate().toString());
+		}
+		response.setSocmed1(candidate.getSocmed1());
+		response.setSocmed2(candidate.getSocmed2());
+		response.setSocmed3(candidate.getSocmed3());
+		response.setExperienceYear(candidate.getExperienceYear());
+		response.setSalaryExpectation(candidate.getSalaryExpectation());
+		if(candidate.getPhoto() == null){
+			response.setPhotoId(null);
+		}else{
+			response.setPhotoId(candidate.getPhoto().getId());
+		}
+		if(candidate.getResume() == null){
+			response.setResumeId(null);
+		}else{
+			response.setResumeId(candidate.getResume().getId());
+		}
+
 		return response;
 	}
 }

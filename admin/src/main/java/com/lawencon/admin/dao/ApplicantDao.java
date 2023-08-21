@@ -23,4 +23,14 @@ public class ApplicantDao extends AbstractJpaDao{
             return null;
         }
     }
+
+    @SuppressWarnings(value = "unchecked")
+    public List<Applicant> getAllByVacancy(String jobVacancyId){
+        List<Applicant> queryRes = ConnHandler.getManager()
+        .createNativeQuery("SELECT * FROM t_applicant where job_vacancy_id = :jobVacancyId", Applicant.class)
+        .setParameter("jobVacancyId",jobVacancyId)
+        .getResultList();
+
+        return queryRes;
+    }
 }

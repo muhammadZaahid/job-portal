@@ -2,6 +2,8 @@ package com.lawencon.admin.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +13,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.lawencon.admin.constant.ApiList;
 import com.lawencon.admin.dao.ApplicantDao;
 import com.lawencon.admin.dao.ApplicationDao;
 import com.lawencon.admin.dao.AssessmentDao;
 import com.lawencon.admin.dao.CandidateDao;
 import com.lawencon.admin.dao.InterviewDao;
 import com.lawencon.admin.dao.JobVacancyDao;
+import com.lawencon.admin.dao.MedicalDao;
 import com.lawencon.admin.dao.UserDao;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertReqDto;
+import com.lawencon.admin.dto.applicant.ApplicantsResDto;
 import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Application;
 import com.lawencon.admin.model.Assessment;
 import com.lawencon.admin.model.Candidate;
 import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
+import com.lawencon.admin.model.Medical;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
 
@@ -46,6 +52,8 @@ public class ApplicantService {
 	AssessmentDao assessmentDao;
 	@Autowired
 	InterviewDao interviewDao;
+	@Autowired
+	MedicalDao medicalDao;
 	@Autowired
 	UserDao userDao;
 	@Autowired
@@ -129,7 +137,7 @@ public class ApplicantService {
 
 		try {
 			ResponseEntity<UpdateResDto> res = restTemplate.exchange(
-					"http://localhost:8081/seeker/applicant/" + applicant.getApplicantCode(),
+					ApiList.ApiApplicant.apiUrl + applicant.getApplicantCode(),
 					HttpMethod.PATCH, null, UpdateResDto.class);
 			if (res.getStatusCode().equals(HttpStatus.OK)) {
 				if (applicant.getCurrentStage().equals("application")) {
@@ -161,6 +169,11 @@ public class ApplicantService {
 					Interview interview = interviewDao.getByApplicantId(data);
 					interview.setIsAccepted(true);
 					assessmentDao.saveAndFlush(interview);
+				}else if(applicant.getCurrentStage().equals("mcu")){
+					applicant.setCurrentStage("offer");
+					applicant.setStgOffer(true);
+					applicant.setVersion(applicant.getVersion() + 1);
+					applicantDao.save(applicant);
 				}
 				ConnHandler.commit();
 				response.setVer(applicant.getVersion());
@@ -173,5 +186,22 @@ public class ApplicantService {
 		}
 
 		return response;
+	}
+
+	public List<ApplicantsResDto> getAllByVacancy(String jobVacancyId){
+		List<ApplicantsResDto> responses = new ArrayList<>();
+
+		applicantDao.getAllByVacancy(jobVacancyId).forEach(a ->{
+			ApplicantsResDto response = new ApplicantsResDto();
+			response.setApplicantId(a.getId());
+			response.setCandidateNik(a.getCandidate().getNik());
+			response.setCandidateName(a.getCandidate().getName());
+			response.setCandidateEmail(a.getCandidate().getEmail());
+			response.setCurrentStage(a.getCurrentStage());
+			response.setAppliedDate(a.getAppliedDate().toString());
+			responses.add(response);
+		});
+
+		return responses;
 	}
 }
