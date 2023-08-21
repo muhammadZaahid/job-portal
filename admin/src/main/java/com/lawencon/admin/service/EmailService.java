@@ -14,24 +14,24 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.lawencon.admin.model.Email;
 
-// @Service
-// public class EmailService {
+@Service
+public class EmailService {
     
-//     @Autowired
-//     JavaMailSender emailSender;
-//     @Autowired
-//     SpringTemplateEngine templateEngine;
+    @Autowired
+    JavaMailSender emailSender;
+    @Autowired
+    SpringTemplateEngine templateEngine;
 
-//     public void sendHtmlMessage(Email email) throws MessagingException {
-//         MimeMessage message = emailSender.createMimeMessage();
-//         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
-//         Context context = new Context();
-//         context.setVariables(email.getProperties());
-//         helper.setFrom(email.getRecipientEmail());
-//         helper.setTo(email.getSenderEmail());
-//         helper.setSubject(email.getSubject());
-//         String html = templateEngine.process(email.getTemplate(), context);
-//         helper.setText(html, true);
-//         emailSender.send(message);
-//     }
-// }
+    public void sendHtmlMessage(Email email) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+        Context context = new Context();
+        context.setVariables(email.getProperties());
+        helper.setFrom(email.getSenderEmail());
+        helper.setTo(email.getRecipientEmail());
+        helper.setSubject(email.getSubject());
+        String html = templateEngine.process(email.getTemplate(), context);
+        helper.setText(html, true);
+        emailSender.send(message);
+    }
+}

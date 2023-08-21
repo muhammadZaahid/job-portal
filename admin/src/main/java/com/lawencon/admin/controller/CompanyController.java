@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
+import com.lawencon.admin.dto.company.CompanyDetailResDto;
 import com.lawencon.admin.dto.company.CompanyInsertReqDto;
 import com.lawencon.admin.dto.company.CompanyResDto;
 import com.lawencon.admin.dto.company.CompanyUpdateReqDto;
@@ -46,9 +47,9 @@ public class CompanyController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CompanyResDto> getCompany(@PathVariable("id") String id){
+	public ResponseEntity<CompanyDetailResDto> getCompany(@PathVariable("id") String id){
 
-		CompanyResDto response = companyService.getCompanyById(id);
+		CompanyDetailResDto response = companyService.getCompanyById(id);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
