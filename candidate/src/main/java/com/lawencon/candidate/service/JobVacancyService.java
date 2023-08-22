@@ -1,5 +1,6 @@
 package com.lawencon.candidate.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -47,8 +48,8 @@ public class JobVacancyService {
         jobVacancy.setSalaryPublish(data.getSalaryPublish());
         jobVacancy.setSalaryFrom(data.getSalaryFrom());
         jobVacancy.setSalaryTo(data.getSalaryTo());
-        jobVacancy.setStartDate(DateUtil.parseStringToDate(data.getStartDate()).toLocalDate());
-        jobVacancy.setEndDate(DateUtil.parseStringToDate(data.getEndDate()).toLocalDate());
+        jobVacancy.setStartDate(LocalDate.parse(data.getStartDate()));
+        jobVacancy.setEndDate(LocalDate.parse(data.getEndDate()));
 
         final Company company = companyDao.getCompanyByCode(data.getCompanyCode());
         jobVacancy.setCompany(company);
