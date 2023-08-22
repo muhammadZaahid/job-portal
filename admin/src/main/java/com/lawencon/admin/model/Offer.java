@@ -29,7 +29,7 @@ public class Offer extends BaseEntity {
 	private LocalDateTime offerLastEmailSend;
 	
 	@Column(name="offer_basic_salary", nullable = false)
-	private Long offerBasicSalary;
+	private Double offerBasicSalary;
 	
 	@Column(name="Offer_letter", nullable = false)
 	private String offerLetter;
@@ -58,11 +58,11 @@ public class Offer extends BaseEntity {
 		this.offerLastEmailSend = offerLastEmailSend;
 	}
 
-	public Long getOfferBasicSalary() {
+	public Double getOfferBasicSalary() {
 		return offerBasicSalary;
 	}
 
-	public void setOfferBasicSalary(Long offerBasicSalary) {
+	public void setOfferBasicSalary(Double offerBasicSalary) {
 		this.offerBasicSalary = offerBasicSalary;
 	}
 
