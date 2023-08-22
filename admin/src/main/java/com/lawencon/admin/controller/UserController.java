@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.user.UserInsertReqDto;
+import com.lawencon.admin.dto.user.UsersListResDto;
 import com.lawencon.admin.dto.user.UsersResDto;
 import com.lawencon.admin.service.UserService;
 
@@ -38,10 +39,17 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/pic-list")
     public ResponseEntity<List<UsersResDto>> getUsers(){
         final List<UsersResDto> response = userService.getAllUser();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UsersListResDto>> getListUsers(){
+        final List<UsersListResDto> response = userService.getUsers();
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
