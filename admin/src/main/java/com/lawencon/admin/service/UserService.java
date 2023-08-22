@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.admin.dto.login.LoginReqDto;
 import com.lawencon.admin.dto.login.LoginResDto;
 import com.lawencon.admin.dto.user.UserInsertReqDto;
+import com.lawencon.admin.dto.user.UsersListResDto;
 import com.lawencon.admin.dto.user.UsersResDto;
 import com.lawencon.admin.model.Profile;
 import com.lawencon.admin.model.User;
@@ -85,6 +86,21 @@ public class UserService implements UserDetailsService{
             response.setFullname(u.getProfile().getName());
             response.setId(u.getId());
             
+            responses.add(response);
+        });
+
+        return responses;
+    }
+
+    public List<UsersListResDto> getUsers(){
+        List<UsersListResDto> responses = new ArrayList<>();
+
+        userDao.getAll(User.class).forEach(u->{
+            UsersListResDto response = new UsersListResDto();
+            response.setId(u.getId());
+            response.setEmail(u.getEmail());
+            response.setFullname(u.getProfile().getName());
+            response.setPhone(u.getProfile().getPhone());
             responses.add(response);
         });
 
