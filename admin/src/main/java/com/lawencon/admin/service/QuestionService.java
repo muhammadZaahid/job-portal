@@ -1,5 +1,6 @@
 package com.lawencon.admin.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -163,6 +164,7 @@ public class QuestionService {
             System.out.println(assessment.getId());
             assessment.setAssessmentScore(data.getScore());
             assessment.setVersion(assessment.getVersion() + 1);
+            assessment.setAssessmentTime(LocalDateTime.now());
             assessmentDao.saveNoLogin(assessment, supplier);
 
             ConnHandler.commit();
