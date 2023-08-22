@@ -75,7 +75,7 @@ public class QuestionService {
                     option.setAnswer(data.getQuestions().get(i).getOptions().get(j).getAnswerText());
                     option.setIsCorrect(data.getQuestions().get(i).getOptions().get(j).getIsCorrect());
                     option.setQuestionId(createdQuestion);
-                    qOptionDao.save(option);
+                    qOptionDao.saveNoLogin(option, supplier);
                 }
             }
 

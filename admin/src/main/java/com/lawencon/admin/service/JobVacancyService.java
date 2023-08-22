@@ -138,8 +138,8 @@ public class JobVacancyService {
         jobVacancy.setSalaryFrom(request.getSalaryFrom());
         jobVacancy.setSalaryTo(request.getSalaryTo());
         jobVacancy.setSalaryPublish(request.getSalaryPublish());
-        jobVacancy.setStartDate(DateUtil.parseStringToDate(request.getStartDate()).toLocalDate());
-        jobVacancy.setEndDate(DateUtil.parseStringToDate(request.getEndDate()).toLocalDate());
+        jobVacancy.setStartDate(LocalDate.parse(request.getStartDate()));
+        jobVacancy.setEndDate(LocalDate.parse(request.getEndDate()));
 
         jobVacancy.setVersion(jobVacancy.getVersion() + 1);
 
