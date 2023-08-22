@@ -23,6 +23,7 @@ import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.jobvacancy.AllJobVacancyResDto;
 import com.lawencon.admin.dto.jobvacancy.InsertJobVacancyReqDto;
 import com.lawencon.admin.dto.jobvacancy.InsertJobVacancySeekerReqDto;
+import com.lawencon.admin.dto.jobvacancy.JobVacancyResDto;
 import com.lawencon.admin.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.admin.dto.jobvacancy.JobVacancyUpdateSeekerReqDto;
 import com.lawencon.admin.model.Company;
@@ -89,7 +90,7 @@ public class JobVacancyService {
                 ConnHandler.commit();
                 response.setId(createdJob.getId());
                 response.setMessage("Success Create Job Vacancy!");
-            }else{
+            } else {
                 ConnHandler.rollback();
             }
         }
@@ -118,73 +119,88 @@ public class JobVacancyService {
         ;
         return responses;
     }
-    
-    public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
-    	
-    	ConnHandler.begin();
-    	
-    	final UpdateResDto updateResDto = new UpdateResDto();
-    	
-    	final JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, request.getJobVacancyId());
-    	final User pic = userDao.getById(User.class, request.getPicId());
-    	final JobLevel jobLevel = jobLevelDao.getById(JobLevel.class, request.getJobLevelId());
-   
-    	jobVacancy.setTitle(request.getTitle());
-    	jobVacancy.setUser(pic);
-    	jobVacancy.setJobLevel(jobLevel);
-    	jobVacancy.setLocation(request.getLocation());
-    	jobVacancy.setBenefitDesc(request.getBenefitDesc());
-    	jobVacancy.setSalaryFrom(request.getSalaryFrom());
-    	jobVacancy.setSalaryTo(request.getSalaryTo());
-    	jobVacancy.setSalaryPublish(request.getSalaryPublish());
-    	jobVacancy.setStartDate(DateUtil.parseStringToDate(request.getStartDate()).toLocalDate());
-    	jobVacancy.setEndDate(DateUtil.parseStringToDate(request.getEndDate()).toLocalDate());
-    	
-    	jobVacancy.setVersion(jobVacancy.getVersion() + 1);
-    	
-    	JobVacancy updatedJobVacancy = jobVacancyDao.save(jobVacancy);
-    	
-    	if(updatedJobVacancy != null) {
-    		
-    		HttpHeaders headers = new HttpHeaders();
-    		
-    		headers.setContentType(MediaType.APPLICATION_JSON);
-    		HttpEntity<JobVacancyUpdateSeekerReqDto> reqBody = new HttpEntity<JobVacancyUpdateSeekerReqDto>(
 
-    				new JobVacancyUpdateSeekerReqDto(
-    							
-    							jobVacancy.getJobVacancyCode(),
-    							request.getTitle(),
-    							request.getJobLevelId(),
-    							request.getLocation(),
-    							request.getBenefitDesc(),
-    							request.getSalaryFrom(),
-    							request.getSalaryTo(),
-    							request.getSalaryPublish(),
-    							request.getStartDate(),
-    							request.getEndDate()    							
-    							)
-    				);
-    		
-    		ResponseEntity<UpdateResDto> updateRes = restTemplate.exchange(
-					"http://localhost:8081/seeker/job-vacancies",
-					HttpMethod.PUT,
-					reqBody,
-					UpdateResDto.class
-					);
-			
-			if(updateRes.getStatusCode().equals(HttpStatus.OK)) {
-				ConnHandler.commit();
-				updateResDto.setVer(updatedJobVacancy.getVersion());
-				updateResDto.setMessage("Job Vacancy Updated Successfully");
-				
-			}else {
-				ConnHandler.rollback();
-				throw new RuntimeException();
-			}
-    	}
-    	
-    	return updateResDto;
+    public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
+
+        ConnHandler.begin();
+
+        final UpdateResDto updateResDto = new UpdateResDto();
+
+        final JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, request.getJobVacancyId());
+        final User pic = userDao.getById(User.class, request.getPicId());
+        final JobLevel jobLevel = jobLevelDao.getById(JobLevel.class, request.getJobLevelId());
+
+        jobVacancy.setTitle(request.getTitle());
+        jobVacancy.setUser(pic);
+        jobVacancy.setJobLevel(jobLevel);
+        jobVacancy.setLocation(request.getLocation());
+        jobVacancy.setBenefitDesc(request.getBenefitDesc());
+        jobVacancy.setSalaryFrom(request.getSalaryFrom());
+        jobVacancy.setSalaryTo(request.getSalaryTo());
+        jobVacancy.setSalaryPublish(request.getSalaryPublish());
+        jobVacancy.setStartDate(DateUtil.parseStringToDate(request.getStartDate()).toLocalDate());
+        jobVacancy.setEndDate(DateUtil.parseStringToDate(request.getEndDate()).toLocalDate());
+
+        jobVacancy.setVersion(jobVacancy.getVersion() + 1);
+
+        JobVacancy updatedJobVacancy = jobVacancyDao.save(jobVacancy);
+
+        if (updatedJobVacancy != null) {
+
+            HttpHeaders headers = new HttpHeaders();
+
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<JobVacancyUpdateSeekerReqDto> reqBody = new HttpEntity<JobVacancyUpdateSeekerReqDto>(
+
+                    new JobVacancyUpdateSeekerReqDto(
+
+                            jobVacancy.getJobVacancyCode(),
+                            request.getTitle(),
+                            request.getJobLevelId(),
+                            request.getLocation(),
+                            request.getBenefitDesc(),
+                            request.getSalaryFrom(),
+                            request.getSalaryTo(),
+                            request.getSalaryPublish(),
+                            request.getStartDate(),
+                            request.getEndDate()));
+
+            ResponseEntity<UpdateResDto> updateRes = restTemplate.exchange(
+                    "http://localhost:8081/seeker/job-vacancies",
+                    HttpMethod.PUT,
+                    reqBody,
+                    UpdateResDto.class);
+
+            if (updateRes.getStatusCode().equals(HttpStatus.OK)) {
+                ConnHandler.commit();
+                updateResDto.setVer(updatedJobVacancy.getVersion());
+                updateResDto.setMessage("Job Vacancy Updated Successfully");
+
+            } else {
+                ConnHandler.rollback();
+                throw new RuntimeException();
+            }
+        }
+
+        return updateResDto;
     }
 
+    public JobVacancyResDto getById(String jobVacancyId) {
+        JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, jobVacancyId);
+        final JobVacancyResDto response = new JobVacancyResDto();
+
+        response.setId(jobVacancy.getId());
+        response.setTitle(jobVacancy.getTitle());
+        response.setPicId(jobVacancy.getUser().getId());
+        response.setBenefitDesc(jobVacancy.getBenefitDesc());
+        response.setSalaryFrom(jobVacancy.getSalaryFrom());
+        response.setSalaryTo(jobVacancy.getSalaryTo());
+        response.setSalaryPublish(jobVacancy.isSalaryPublish());
+        response.setJobLevelId(jobVacancy.getJobLevel().getId());
+        response.setLocation(jobVacancy.getLocation());
+        response.setStartDate(jobVacancy.getStartDate().toString());
+        response.setEndDate(jobVacancy.getEndDate().toString());
+
+        return response;
+    }
 }
