@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.applicant.ApplicantsResDto;
-import com.lawencon.admin.dto.company.CompanyUpdateReqDto;
 import com.lawencon.admin.dto.jobvacancy.AllJobVacancyResDto;
 import com.lawencon.admin.dto.jobvacancy.InsertJobVacancyReqDto;
+import com.lawencon.admin.dto.jobvacancy.JobVacancyResDto;
 import com.lawencon.admin.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.admin.service.ApplicantService;
 import com.lawencon.admin.service.JobVacancyService;
@@ -60,10 +60,17 @@ public class JobVacancyController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 				
 	}
-    @GetMapping("/{id}")
-	public ResponseEntity<List<ApplicantsResDto>> getByVacancyId(@PathVariable("id") String jobVacancyId){
+    @GetMapping("/applicants/{id}")
+	public ResponseEntity<List<ApplicantsResDto>> getApplicantsByVacancyId(@PathVariable("id") String jobVacancyId){
 		final List<ApplicantsResDto> response = applicantService.getAllByVacancy(jobVacancyId);
 
 		return new ResponseEntity<>(response,HttpStatus.OK);
-	}	
+	}
+
+    @GetMapping("/{id}")
+    public ResponseEntity<JobVacancyResDto> getById(@PathVariable("id") String jobVacancy){
+        final JobVacancyResDto response = jobVacancyService.getById(jobVacancy);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }	
 }
