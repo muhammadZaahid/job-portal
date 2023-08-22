@@ -2,14 +2,13 @@ package com.lawencon.admin.dto.user;
 
 public class UsersResDto {
 	
-	private Long id;
+	private String id;
 	private String fullname;
-	private String phone;
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getFullname() {
@@ -18,12 +17,4 @@ public class UsersResDto {
 	public void setFullname(String fullname) {
 		this.fullname = fullname;
 	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	
-
 }
