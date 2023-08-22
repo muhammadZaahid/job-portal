@@ -24,12 +24,14 @@ import com.lawencon.admin.dao.QuestionOptionDao;
 import com.lawencon.admin.dao.QuestionTopicDao;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
+import com.lawencon.admin.dto.question.QuestionAnswerResDto;
 import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionAssessmentInsertSeekerReqDto;
 import com.lawencon.admin.dto.question.QuestionAssessmentSubmittedReqDto;
 import com.lawencon.admin.dto.question.QuestionResDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertSeekerReqDto;
+import com.lawencon.admin.dto.question.QuestionTopicResDto;
 import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Assessment;
 import com.lawencon.admin.model.JobVacancy;
@@ -110,10 +112,21 @@ public class QuestionService {
         List<QuestionResDto> responses = new ArrayList<>();
         questionDao.getAll(Question.class).forEach(c -> {
             QuestionResDto response = new QuestionResDto();
-            response.setId(c.getId());
+            response.setQuestionId(c.getId());
             response.setQuestionDesc(c.getQuestion());
+            List<QuestionOption> qo = qOptionDao.getByQuestionId(c.getId());
+            List<QuestionAnswerResDto> qos = new ArrayList<>();
+            for(int i=0;i<qo.size();i++){
+                QuestionAnswerResDto option = new QuestionAnswerResDto();
+                option.setAnswerId(qo.get(i).getId());
+                option.setAnswerText(qo.get(i).getAnswer());
+                option.setIsCorrect(qo.get(i).getIsCorrect());
+                qos.add(option);
+            }
+            response.setAnswerOptions(qos);
             responses.add(response);
         });
+        
 
         return responses;
     }
@@ -176,5 +189,19 @@ public class QuestionService {
         }
 
         return response;
+    }
+
+    public List<QuestionTopicResDto> getAllTopics(){
+        List<QuestionTopicResDto> responses = new ArrayList<>();
+        List<QuestionTopic> qTopics = questionDao.getAll(QuestionTopic.class);
+        for(int i=0;i<qTopics.size();i++){
+            QuestionTopicResDto response = new QuestionTopicResDto();
+            response.setTopicId(qTopics.get(i).getId());
+            response.setTopicName(qTopics.get(i).getTitle());
+            response.setQuestionCount(questionDao.getCountByTopicId(qTopics.get(i).getId()));
+            responses.add(response);
+        }
+
+        return responses;
     }
 }

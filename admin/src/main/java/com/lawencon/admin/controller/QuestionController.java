@@ -18,6 +18,7 @@ import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
 import com.lawencon.admin.dto.question.QuestionAssessmentSubmittedReqDto;
 import com.lawencon.admin.dto.question.QuestionResDto;
 import com.lawencon.admin.dto.question.QuestionTopicInsertReqDto;
+import com.lawencon.admin.dto.question.QuestionTopicResDto;
 import com.lawencon.admin.service.QuestionService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -30,7 +31,7 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<List<QuestionResDto>> getQuestions(){
         List<QuestionResDto> response = questionService.getAll();
 
@@ -49,6 +50,13 @@ public class QuestionController {
         final InsertResDto response = questionService.insertAssessment(data);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<QuestionTopicResDto>> getAllTopics(){
+        List<QuestionTopicResDto> response = questionService.getAllTopics();
+        
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/assessment")
