@@ -5,6 +5,7 @@ import com.lawencon.admin.dao.UserDao;
 import com.lawencon.admin.dto.InsertResDto;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.lawencon.admin.dto.login.LoginReqDto;
 import com.lawencon.admin.dto.login.LoginResDto;
 import com.lawencon.admin.dto.user.UserInsertReqDto;
+import com.lawencon.admin.dto.user.UsersResDto;
 import com.lawencon.admin.model.Profile;
 import com.lawencon.admin.model.User;
 
@@ -73,5 +75,19 @@ public class UserService implements UserDetailsService{
                     new ArrayList<>());
         }
         throw new UsernameNotFoundException("Email not found!");
+    }
+
+    public List<UsersResDto> getAllUser(){
+        List<UsersResDto> responses = new ArrayList<>();
+        
+        userDao.getAll(User.class).forEach(u->{
+            UsersResDto response = new UsersResDto();
+            response.setFullname(u.getProfile().getName());
+            response.setId(u.getId());
+            
+            responses.add(response);
+        });
+
+        return responses;
     }
 }
