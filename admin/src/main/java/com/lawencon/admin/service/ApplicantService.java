@@ -39,7 +39,6 @@ import com.lawencon.admin.model.Candidate;
 import com.lawencon.admin.model.Email;
 import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
-import com.lawencon.admin.model.Medical;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
 
@@ -226,6 +225,25 @@ public class ApplicantService {
 			response.setCandidateName(a.getCandidate().getName());
 			response.setCandidateEmail(a.getCandidate().getEmail());
 			response.setCurrentStage(a.getCurrentStage());
+			response.setJobTitle(a.getJobVacancy().getTitle());
+			response.setAppliedDate(a.getAppliedDate().toString());
+			responses.add(response);
+		});
+
+		return responses;
+	}
+
+	public List<ApplicantsResDto> getAllApplicants() {
+		List<ApplicantsResDto> responses = new ArrayList<>();
+
+		applicantDao.getAll(Applicant.class).forEach(a -> {
+			ApplicantsResDto response = new ApplicantsResDto();
+			response.setApplicantId(a.getId());
+			response.setCandidateNik(a.getCandidate().getNik());
+			response.setCandidateName(a.getCandidate().getName());
+			response.setCandidateEmail(a.getCandidate().getEmail());
+			response.setCurrentStage(a.getCurrentStage());
+			response.setJobTitle(a.getJobVacancy().getTitle());
 			response.setAppliedDate(a.getAppliedDate().toString());
 			responses.add(response);
 		});
