@@ -7,7 +7,7 @@ import com.lawencon.base.BaseEntity;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "t_applicant")
+@Table(name = "t_applicant", uniqueConstraints = @UniqueConstraint(columnNames = {"applicant_code"}))
 public class Applicant extends BaseEntity {
 
 	@ManyToOne

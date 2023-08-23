@@ -41,6 +41,7 @@ import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.util.GeneratorUtil;
 
 @Service
 public class ApplicantService {
@@ -81,6 +82,7 @@ public class ApplicantService {
 		applicant.setCurrentStage("application");
 		applicant.setStgApplication(true);
 		applicant.setAppliedDate(LocalDate.now());
+		applicant.setApplicantCode(GeneratorUtil.generateCode());
 
 		Applicant createdApplicant = applicantDao.save(applicant);
 
