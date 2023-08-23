@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 import com.lawencon.admin.dao.CandidateDao;
 import com.lawencon.admin.dao.FileDao;
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.candidate.CandidateInsertReqDto;
 import com.lawencon.admin.dto.candidate.CandidateResDto;
 import com.lawencon.admin.dto.candidate.CandidateSeekerInsertReqDto;
+import com.lawencon.admin.dto.candidate.CandidateSeekerUpdateReqDto;
 import com.lawencon.admin.model.Candidate;
 import com.lawencon.admin.model.File;
+import com.lawencon.base.ConnHandler;
 import com.lawencon.util.GeneratorUtil;
 
 @Service
@@ -163,6 +166,49 @@ public class CandidateService {
 			response.setResumeId(null);
 		} else {
 			response.setResumeId(candidate.getResume().getId());
+		}
+
+		return response;
+	}
+
+	public UpdateResDto updateFromSeeker(CandidateSeekerUpdateReqDto data) {
+		ConnHandler.begin();
+		final UpdateResDto response = new UpdateResDto();
+		Supplier<String> supplier = () ->"df9351e2-9343-440b-99ce-c4af4ce9f767";
+		try {
+			Candidate candidate = candidateDao.getByCode(data.getCandidateCode());
+			candidate.setNik(data.getNik());
+			candidate.setName(data.getName());
+			candidate.setPhone(data.getPhone());
+			candidate.setBirthPlace(data.getBirthPlace());
+			candidate.setBirthDate(LocalDate.parse(data.getBirthDate()));
+			candidate.setSocmed1(data.getSocmed1());
+			candidate.setSocmed2(data.getSocmed2());
+			candidate.setSocmed3(data.getSocmed3());
+			candidate.setExperienceYear(data.getExperienceYear());
+			candidate.setSalaryExpectation(data.getSalaryExpectation());
+			if (data.getPhoto().getFiles() != null) {
+				File filePhoto = fileDao.getById(File.class, candidate.getPhoto().getId());
+				filePhoto.setFiles(data.getPhoto().getFiles());
+				filePhoto.setFileFormat(data.getPhoto().getFileFormat());
+				filePhoto.setVersion(filePhoto.getVersion() + 1);
+				fileDao.saveNoLogin(filePhoto, supplier);
+			}
+			if (data.getResume().getFiles() != null) {
+				File fileResume = fileDao.getById(File.class, candidate.getResume().getId());
+				fileResume.setFiles(data.getResume().getFiles());
+				fileResume.setFileFormat(data.getResume().getFileFormat());
+				fileResume.setVersion(fileResume.getVersion() + 1);
+				fileDao.saveNoLogin(fileResume,supplier);
+			}
+			Candidate upCandidate = candidateDao.saveNoLogin(candidate,supplier);
+			ConnHandler.commit();
+			response.setVer(upCandidate.getVersion());
+			response.setMessage("Success update candidate data!");
+		} catch (Exception e) {
+			ConnHandler.rollback();
+			e.printStackTrace();
+			throw new RuntimeException("Error while updating candidate's data!");
 		}
 
 		return response;
