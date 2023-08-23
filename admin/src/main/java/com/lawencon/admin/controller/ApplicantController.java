@@ -51,5 +51,12 @@ public class ApplicantController {
 		final UpdateResDto response = applicantService.updateApplicant(data);
 
 		return new ResponseEntity<>(response,HttpStatus.OK);
-	}	
+	}
+	
+	@GetMapping()
+	public ResponseEntity<List<ApplicantsResDto>> getAllApplicants(){
+		final List<ApplicantsResDto> response = applicantService.getAllApplicants();
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

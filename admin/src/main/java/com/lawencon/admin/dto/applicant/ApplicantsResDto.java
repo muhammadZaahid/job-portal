@@ -5,6 +5,7 @@ public class ApplicantsResDto {
     private String candidateName;
     private String candidateEmail;
     private String candidateNik;
+    private String jobTitle;
     private String currentStage;
     private String appliedDate;
 
@@ -43,6 +44,12 @@ public class ApplicantsResDto {
     }
     public void setAppliedDate(String appliedDate) {
         this.appliedDate = appliedDate;
+    }
+    public String getJobTitle() {
+        return jobTitle;
+    }
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
     
     
