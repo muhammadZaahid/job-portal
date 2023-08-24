@@ -14,4 +14,10 @@ public class DateUtil {
 		LocalDate dateInput = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 		return dateInput;
 	}
+
+	public static String parseLocalDateTimeToDate(LocalDateTime time){
+		String date = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+		return date;
+	}
 }

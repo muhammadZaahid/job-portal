@@ -12,6 +12,7 @@ import com.lawencon.admin.dto.assessment.AssessmentResDto;
 import com.lawencon.admin.dto.assessment.AssessmentUpdateReqDto;
 import com.lawencon.admin.model.Assessment;
 import com.lawencon.base.ConnHandler;
+import com.lawencon.util.DateUtil;
 
 @Service
 public class AssessmentService {
@@ -32,6 +33,11 @@ public class AssessmentService {
         response.setAssessmentNote(assessment.getAssessmentNote());
         response.setAssessmentScore(assessment.getAssessmentScore());
         response.setId(assessment.getId());
+        try{
+            response.setAssessmentTime(DateUtil.parseLocalDateTimeToDate(assessment.getAssessmentTime()));
+        }catch(Exception e){
+            response.setAssessmentTime(null);
+        }
 
         return response;
     }
