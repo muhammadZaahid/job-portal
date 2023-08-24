@@ -29,6 +29,7 @@ import com.lawencon.admin.dao.MedicalDao;
 import com.lawencon.admin.dao.UserDao;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
+import com.lawencon.admin.dto.applicant.ApplicantDetailResDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantsResDto;
@@ -251,5 +252,20 @@ public class ApplicantService {
 		});
 
 		return responses;
+	}
+
+	public ApplicantDetailResDto getById(String applicantId){
+		final ApplicantDetailResDto response = new ApplicantDetailResDto();
+		Applicant applicant = applicantDao.getById(Applicant.class, applicantId);
+		response.setCandidateId(applicant.getCandidate().getId());
+		response.setCurrentStage(applicant.getCurrentStage());
+		response.setApplication(applicant.isStgApplication());
+		response.setAssessment(applicant.isStgAssessment());
+		response.setInterview(applicant.isStgInterview());
+		response.setMcu(applicant.isStgMcu());
+		response.setOffer(applicant.isStgOffer());
+		response.setAppliedDate(applicant.getAppliedDate().toString());
+		response.setJobVacancyId(applicant.getJobVacancy().getId());
+		return response;
 	}
 }

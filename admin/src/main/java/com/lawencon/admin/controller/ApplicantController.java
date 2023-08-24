@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
+import com.lawencon.admin.dto.applicant.ApplicantDetailResDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantInsertReqDto;
 import com.lawencon.admin.dto.applicant.ApplicantsResDto;
@@ -56,6 +57,13 @@ public class ApplicantController {
 	@GetMapping()
 	public ResponseEntity<List<ApplicantsResDto>> getAllApplicants(){
 		final List<ApplicantsResDto> response = applicantService.getAllApplicants();
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ApplicantDetailResDto> getById(@PathVariable("id")String applicantId){
+		final ApplicantDetailResDto response = applicantService.getById(applicantId);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
