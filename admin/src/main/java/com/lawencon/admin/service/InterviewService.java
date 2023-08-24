@@ -13,6 +13,7 @@ import com.lawencon.admin.dao.InterviewDao;
 import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.interview.InterviewInsertReqDto;
+import com.lawencon.admin.dto.interview.InterviewResDto;
 import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
@@ -50,6 +51,20 @@ public class InterviewService {
             response.setId(createdInterview.getId());
             response.setMessage("Success Arrange Interview with Candidate!");
         }
+        return response;
+    }
+
+    public InterviewResDto getByApplicantId(String applicantId){
+        final InterviewResDto response = new InterviewResDto();
+
+        Interview interview = interviewDao.getByApplicantId(applicantId);
+        response.setId(interview.getId());
+        response.setApplicantId(applicantId);
+        response.setInterviewLocation(interview.getInterviewMap());
+        response.setInterviewVenue(interview.getInterviewVenue());
+        response.setInterviewTime(interview.getInterviewTime().toString());
+        response.setInterviewNote(interview.getInterviewNote());
+
         return response;
     }
 }

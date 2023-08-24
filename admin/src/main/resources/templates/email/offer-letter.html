@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title th:remove="all">Offering Letter Received!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <p >
+      Hello, <span th:text="${name}"></span>
+    </p>
+    <p>
+      You have received an offering letter from your application as <b th:text="${jobName}">Posisi</b> at <b th:text="${companyName}"</b>
+    </p>
+    <p>
+      Kindly check the attached letter and let your recruiter know whether you accept or want to discuss for better terms!
+    </p>
+    <p>
+      Regards, <br />
+      <em>The YukKerja Team</em>
+    </p>
+  </body>
+</html>

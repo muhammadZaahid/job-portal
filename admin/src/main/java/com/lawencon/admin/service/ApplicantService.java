@@ -134,6 +134,7 @@ public class ApplicantService {
 					Map<String, Object> properties = new HashMap<>();
 					properties.put("name", candidate.getName());
 					properties.put("jobName",jobVacancy.getTitle());
+					properties.put("companyName",jobVacancy.getCompany().getCompanyName());
 					properties.put("jobDate",applicant.getAppliedDate());
 					Email email = new Email();
 					email.setSubject("Success! You have applied for " + jobVacancy.getCompany().getCompanyName());
