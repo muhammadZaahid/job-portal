@@ -8,6 +8,7 @@ public class AssessmentResDto {
     private String picPhone;
     private String assessmentNote;
     private Double assessmentScore;
+    private String assessmentTime;
     
     public String getId() {
         return id;
@@ -50,6 +51,12 @@ public class AssessmentResDto {
     }
     public void setAssessmentScore(Double assessmentScore) {
         this.assessmentScore = assessmentScore;
+    }
+    public String getAssessmentTime() {
+        return assessmentTime;
+    }
+    public void setAssessmentTime(String assessmentTime) {
+        this.assessmentTime = assessmentTime;
     }
 
 
