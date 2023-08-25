@@ -24,6 +24,7 @@ public class EmailService {
     SpringTemplateEngine templateEngine;
 
     public void sendHtmlMessage(Email email) throws MessagingException {
+        Thread thread = new Thread();
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
         Context context = new Context();
@@ -34,6 +35,7 @@ public class EmailService {
         String html = templateEngine.process(email.getTemplate(), context);
         helper.setText(html, true);
         emailSender.send(message);
+        thread.start();
     }
     public void sendHtmlMessageWithAttachment(Email email,String fileName, byte[] file) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();

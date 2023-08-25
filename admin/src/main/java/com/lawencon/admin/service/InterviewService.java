@@ -30,6 +30,8 @@ public class InterviewService {
     JobVacancyDao jobVacancyDao;
     @Autowired
     RestTemplate restTemplate;
+    @Autowired
+    ApplicantService applicantService;
 
     public InsertResDto insertInterview (InterviewInsertReqDto data){
         final InsertResDto response = new InsertResDto();
@@ -39,7 +41,7 @@ public class InterviewService {
 
         Interview interview = new Interview();
         interview.setInterviewVenue(data.getInterviewVenue());
-        interview.setInterviewTime(DateUtil.parseStringToDate(data.getInterviewTime()));
+        interview.setInterviewTime(DateUtil.parseToLocalDateTime(data.getInterviewTime()));
         interview.setInterviewMap(data.getInterviewLocation());
         interview.setApplicant(applicant);
         interview.setInterviewPic(jobVacancy.getUser());
@@ -48,6 +50,7 @@ public class InterviewService {
         Interview createdInterview = interviewDao.save(interview);
 
         if(createdInterview != null){
+            applicantService.updateApplicant(data.getApplicantId());
             response.setId(createdInterview.getId());
             response.setMessage("Success Arrange Interview with Candidate!");
         }
@@ -62,7 +65,7 @@ public class InterviewService {
         response.setApplicantId(applicantId);
         response.setInterviewLocation(interview.getInterviewMap());
         response.setInterviewVenue(interview.getInterviewVenue());
-        response.setInterviewTime(interview.getInterviewTime().toString());
+        response.setInterviewTime(DateUtil.parseLocalDateTimeToDate(interview.getInterviewTime()));
         response.setInterviewNote(interview.getInterviewNote());
 
         return response;
