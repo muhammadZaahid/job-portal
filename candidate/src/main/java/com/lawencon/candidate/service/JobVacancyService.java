@@ -16,6 +16,7 @@ import com.lawencon.candidate.dao.UserDao;
 import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.jobvacancy.InsertJobVacancyReqDto;
+import com.lawencon.candidate.dto.jobvacancy.JobVacancyDetailResDto;
 import com.lawencon.candidate.dto.jobvacancy.JobVacancyResDto;
 import com.lawencon.candidate.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.candidate.model.Company;
@@ -123,5 +124,26 @@ public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
     	
     	return updateResDto;
     }
+
+	public JobVacancyDetailResDto getJobVacancyById(String jobVacancyId) {
+		
+		final JobVacancyDetailResDto response = new JobVacancyDetailResDto();		
+		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, jobVacancyId);
+		
+		response.setId(jobVacancy.getId());
+		response.setCode(jobVacancy.getJobVacancyCode());
+		response.setTitle(jobVacancy.getTitle());
+		response.setCompanyName(jobVacancy.getCompany().getCompanyName());
+		response.setJobLevelName(jobVacancy.getJobLevel().getJobLevelName());
+		response.setLocation(jobVacancy.getLocation());
+		response.setStartDate(jobVacancy.getStartDate().toString());
+		response.setEndDate(jobVacancy.getEndDate().toString());
+		response.setBenefitDesc(jobVacancy.getBenefitDesc());
+		response.setSalaryPublish(jobVacancy.isSalaryPublish());
+		response.setSalaryFrom(jobVacancy.getSalaryFrom());
+		response.setSalaryTo(jobVacancy.getSalaryTo());
+		
+		return response;
+	}
 
 }

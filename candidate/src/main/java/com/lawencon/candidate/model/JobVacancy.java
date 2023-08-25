@@ -30,10 +30,10 @@ public class JobVacancy extends BaseEntity {
     private String benefitDesc;
 
     @Column(name = "salary_from", nullable = false)
-    private Long salaryFrom;
+    private Double salaryFrom;
 
     @Column(name = "salary_to", nullable = false)
-    private Long salaryTo;
+    private Double salaryTo;
 
     @Column(name = "salary_publish", nullable = false)
     private boolean SalaryPublish;
@@ -68,23 +68,23 @@ public class JobVacancy extends BaseEntity {
         this.title = title;
     }
 
-    public Long getSalaryFrom() {
-        return salaryFrom;
-    }
+    public Double getSalaryFrom() {
+		return salaryFrom;
+	}
 
-    public void setSalaryFrom(Long salaryFrom) {
-        this.salaryFrom = salaryFrom;
-    }
+	public void setSalaryFrom(Double salaryFrom) {
+		this.salaryFrom = salaryFrom;
+	}
 
-    public Long getSalaryTo() {
-        return salaryTo;
-    }
+	public Double getSalaryTo() {
+		return salaryTo;
+	}
 
-    public void setSalaryTo(Long salaryTo) {
-        this.salaryTo = salaryTo;
-    }
+	public void setSalaryTo(Double salaryTo) {
+		this.salaryTo = salaryTo;
+	}
 
-    public boolean isSalaryPublish() {
+	public boolean isSalaryPublish() {
         return SalaryPublish;
     }
 
