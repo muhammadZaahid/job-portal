@@ -7,7 +7,9 @@ import com.lawencon.admin.dao.ApplicantDao;
 import com.lawencon.admin.dao.FileDao;
 import com.lawencon.admin.dao.MedicalDao;
 import com.lawencon.admin.dto.InsertResDto;
+import com.lawencon.admin.dto.file.FileReqDto;
 import com.lawencon.admin.dto.medical.MedicalInsertReqDto;
+import com.lawencon.admin.dto.medical.MedicalResDto;
 import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.File;
 import com.lawencon.admin.model.Medical;
@@ -33,7 +35,7 @@ public class MedicalService {
         if (applicant.getCurrentStage().equals("mcu")) {
             Medical medical = new Medical();
             medical.setApplicantId(applicant);
-            medical.setMedicalDate(DateUtil.parseToDateOnly(data.getMedicalDate()));
+            medical.setMedicalDate(DateUtil.parseToLocalDate(data.getMedicalDate()));
             medical.setMedicalLocation(data.getMedicalLocation());
             medical.setMedicalNotes(data.getMedicalNotes());
 
@@ -59,6 +61,23 @@ public class MedicalService {
 
         }else{
             throw new RuntimeException("Error, candidate belum mencapai tahap MCU");
+        }
+
+        return response;
+    }
+
+    public MedicalResDto getByApplicantId(String applicantId){
+        final MedicalResDto response = new MedicalResDto();
+
+        Medical medical = medicalDao.getByApplicantId(applicantId);
+        response.setMedicalNotes(medical.getMedicalNotes());
+        response.setMedicalDate(DateUtil.parseLocalDateToString(medical.getMedicalDate()));
+        response.setMedicalLocation(medical.getMedicalLocation());
+        if(medical.getMedicalFile() != null){
+            FileReqDto files = new FileReqDto();
+        files.setFiles(medical.getMedicalFile().getFiles());
+        files.setFileFormat(medical.getMedicalFile().getFileFormat());
+        response.setMedicalFile(files);
         }
 
         return response;
