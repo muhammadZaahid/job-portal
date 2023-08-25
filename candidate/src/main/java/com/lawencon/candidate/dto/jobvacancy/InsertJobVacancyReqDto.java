@@ -7,8 +7,8 @@ public class InsertJobVacancyReqDto {
     private String jobLevelId;
     private String location;
     private String benefitDesc;
-    private Long salaryFrom;
-    private Long salaryTo;
+    private Double salaryFrom;
+    private Double salaryTo;
     private Boolean salaryPublish;
     private String startDate;
     private String endDate;
@@ -48,20 +48,20 @@ public class InsertJobVacancyReqDto {
     }
     public void setBenefitDesc(String benefitDesc) {
         this.benefitDesc = benefitDesc;
-    }
-    public Long getSalaryFrom() {
-        return salaryFrom;
-    }
-    public void setSalaryFrom(Long salaryFrom) {
-        this.salaryFrom = salaryFrom;
-    }
-    public Long getSalaryTo() {
-        return salaryTo;
-    }
-    public void setSalaryTo(Long salaryTo) {
-        this.salaryTo = salaryTo;
-    }
-    public Boolean getSalaryPublish() {
+    }    
+    public Double getSalaryFrom() {
+		return salaryFrom;
+	}
+	public void setSalaryFrom(Double salaryFrom) {
+		this.salaryFrom = salaryFrom;
+	}
+	public Double getSalaryTo() {
+		return salaryTo;
+	}
+	public void setSalaryTo(Double salaryTo) {
+		this.salaryTo = salaryTo;
+	}
+	public Boolean getSalaryPublish() {
         return salaryPublish;
     }
     public void setSalaryPublish(Boolean salaryPublish) {
