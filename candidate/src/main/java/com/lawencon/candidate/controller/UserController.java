@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.user.UserInsertReqDto;
+import com.lawencon.candidate.dto.user.UserResDto;
 import com.lawencon.candidate.dto.user.UserUpdateReqDto;
 import com.lawencon.candidate.service.UserService;
 
@@ -36,5 +38,12 @@ public class UserController {
         final UpdateResDto response = userService.updateCandidate(userId,data);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping()
+    public ResponseEntity<UserResDto> getUser(){
+        final UserResDto response = userService.getDetailUser();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
