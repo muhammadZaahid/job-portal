@@ -15,7 +15,7 @@ public class JobVacancyDetailResDto {
     private Boolean salaryPublish;
     private Double SalaryFrom;
     private Double SalaryTo;
-    
+    private Boolean hasApplied;
 	public String getId() {
 		return id;
 	}
@@ -93,6 +93,12 @@ public class JobVacancyDetailResDto {
 	}
 	public void setJobDesc(String jobDesc) {
 		this.jobDesc = jobDesc;
+	}
+	public Boolean getHasApplied() {
+		return hasApplied;
+	}
+	public void setHasApplied(Boolean hasApplied) {
+		this.hasApplied = hasApplied;
 	}
     
     

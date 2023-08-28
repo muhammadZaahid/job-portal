@@ -139,4 +139,8 @@ public class ApplicantService {
 		}
 		return responses;
 	}
+
+	public Boolean checkIfApplied(String candidateId, String jobVacancyId){
+		return applicantDao.checkApplied(candidateId, jobVacancyId);
+	}
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.base.ConnHandler;
+import com.lawencon.candidate.dao.ApplicantDao;
 import com.lawencon.candidate.dao.CompanyDao;
 import com.lawencon.candidate.dao.JobLevelDao;
 import com.lawencon.candidate.dao.JobVacancyDao;
@@ -22,10 +23,12 @@ import com.lawencon.candidate.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.candidate.model.Company;
 import com.lawencon.candidate.model.JobLevel;
 import com.lawencon.candidate.model.JobVacancy;
+import com.lawencon.security.principal.PrincipalService;
 
 @Service
 public class JobVacancyService {
-
+    @Autowired
+	PrincipalService principalService;
     @Autowired
     JobVacancyDao jobVacancyDao;
     @Autowired
@@ -34,6 +37,8 @@ public class JobVacancyService {
     JobLevelDao jobLevelDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    ApplicantDao applicantDao;
 
     public InsertResDto insert(InsertJobVacancyReqDto data) {
         ConnHandler.begin();
@@ -130,6 +135,8 @@ public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
 		final JobVacancyDetailResDto response = new JobVacancyDetailResDto();		
 		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, jobVacancyId);
 		
+        Boolean hasApplied = applicantDao.checkApplied(principalService.getAuthPrincipal().toString(), jobVacancyId);
+
 		response.setId(jobVacancy.getId());
 		response.setCode(jobVacancy.getJobVacancyCode());
 		response.setTitle(jobVacancy.getTitle());
@@ -143,6 +150,7 @@ public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
 		response.setSalaryPublish(jobVacancy.isSalaryPublish());
 		response.setSalaryFrom(jobVacancy.getSalaryFrom());
 		response.setSalaryTo(jobVacancy.getSalaryTo());
+        response.setHasApplied(hasApplied);
 		
 		return response;
 	}
