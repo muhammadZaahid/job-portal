@@ -28,11 +28,13 @@ import com.lawencon.candidate.dto.login.LoginReqDto;
 import com.lawencon.candidate.dto.login.LoginResDto;
 import com.lawencon.candidate.dto.user.UserInsertAdminReqDto;
 import com.lawencon.candidate.dto.user.UserInsertReqDto;
+import com.lawencon.candidate.dto.user.UserResDto;
 import com.lawencon.candidate.dto.user.UserUpdateAdminReqDto;
 import com.lawencon.candidate.dto.user.UserUpdateReqDto;
 import com.lawencon.candidate.model.Candidate;
 import com.lawencon.candidate.model.File;
 import com.lawencon.candidate.model.User;
+import com.lawencon.security.principal.PrincipalService;
 import com.lawencon.util.GeneratorUtil;
 
 @Service
@@ -47,6 +49,8 @@ public class UserService implements UserDetailsService {
     PasswordEncoder passwordEncoder;
     @Autowired
     RestTemplate restTemplate;
+    @Autowired
+    PrincipalService principalService;
 
     public InsertResDto insertUser(UserInsertReqDto data) {
         ConnHandler.begin();
@@ -161,6 +165,40 @@ public class UserService implements UserDetailsService {
             e.printStackTrace();
             throw new RuntimeException("Error while updating profile!");
         }
+        return response;
+    }
+
+    public UserResDto getDetailUser(){
+        final UserResDto response = new UserResDto();
+
+        User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
+        response.setId(user.getCandidate().getId());
+		response.setNik(user.getCandidate().getNik());
+		response.setName(user.getCandidate().getName());
+		response.setEmail(user.getCandidate().getEmail());
+		response.setPhone(user.getCandidate().getPhone());
+		response.setBirthPlace(user.getCandidate().getBirthPlace());
+		if (user.getCandidate().getBirthDate() == null) {
+			response.setBirthDate(null);
+		} else {
+			response.setBirthDate(user.getCandidate().getBirthDate().toString());
+		}
+		response.setSocmed1(user.getCandidate().getSocmed1());
+		response.setSocmed2(user.getCandidate().getSocmed2());
+		response.setSocmed3(user.getCandidate().getSocmed3());
+		response.setExperienceYear(user.getCandidate().getExperienceYear());
+		response.setSalaryExpectation(user.getCandidate().getSalaryExpectation());
+		if (user.getCandidate().getPhoto() == null) {
+			response.setPhotoId(null);
+		} else {
+			response.setPhotoId(user.getCandidate().getPhoto().getId());
+		}
+		if (user.getCandidate().getResume() == null) {
+			response.setResumeId(null);
+		} else {
+			response.setResumeId(user.getCandidate().getResume().getId());
+		}
+
         return response;
     }
 }
