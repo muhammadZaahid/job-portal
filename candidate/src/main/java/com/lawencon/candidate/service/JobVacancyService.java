@@ -23,6 +23,7 @@ import com.lawencon.candidate.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.candidate.model.Company;
 import com.lawencon.candidate.model.JobLevel;
 import com.lawencon.candidate.model.JobVacancy;
+import com.lawencon.candidate.model.User;
 import com.lawencon.security.principal.PrincipalService;
 
 @Service
@@ -134,8 +135,8 @@ public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
 		
 		final JobVacancyDetailResDto response = new JobVacancyDetailResDto();		
 		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, jobVacancyId);
-		
-        Boolean hasApplied = applicantDao.checkApplied(principalService.getAuthPrincipal().toString(), jobVacancyId);
+		User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
+        Boolean hasApplied = applicantDao.checkApplied(user.getCandidate().getId(),jobVacancyId);
 
 		response.setId(jobVacancy.getId());
 		response.setCode(jobVacancy.getJobVacancyCode());
