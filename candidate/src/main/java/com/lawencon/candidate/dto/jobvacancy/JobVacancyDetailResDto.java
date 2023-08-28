@@ -11,6 +11,7 @@ public class JobVacancyDetailResDto {
     private String startDate;
     private String endDate;
     private String benefitDesc;
+	private String jobDesc;
     private Boolean salaryPublish;
     private Double SalaryFrom;
     private Double SalaryTo;
@@ -86,6 +87,12 @@ public class JobVacancyDetailResDto {
 	}
 	public void setSalaryTo(Double salaryTo) {
 		SalaryTo = salaryTo;
+	}
+	public String getJobDesc() {
+		return jobDesc;
+	}
+	public void setJobDesc(String jobDesc) {
+		this.jobDesc = jobDesc;
 	}
     
     

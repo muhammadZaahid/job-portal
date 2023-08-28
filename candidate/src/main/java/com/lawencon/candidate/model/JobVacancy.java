@@ -29,6 +29,9 @@ public class JobVacancy extends BaseEntity {
     @Column(name = "benefit_desc")
     private String benefitDesc;
 
+    @Column(name = "job_desc")
+    private String jobDesc;
+
     @Column(name = "salary_from", nullable = false)
     private Double salaryFrom;
 
@@ -131,4 +134,13 @@ public class JobVacancy extends BaseEntity {
     public void setBenefitDesc(String benefitDesc) {
         this.benefitDesc = benefitDesc;
     }
+
+    public String getJobDesc() {
+        return jobDesc;
+    }
+
+    public void setJobDesc(String jobDesc) {
+        this.jobDesc = jobDesc;
+    }
+    
 }
