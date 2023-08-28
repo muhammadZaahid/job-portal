@@ -25,6 +25,7 @@ public class JobVacancyUpdateSeekerReqDto {
 		this.jobLevelId = jobLevelId;
 		this.location = location;
 		this.benefitDesc = benefitDesc;
+		this.jobDesc = jobDesc;
 		this.salaryFrom = salaryFrom;
 		this.salaryTo = salaryTo;
 		this.salaryPublish = salaryPublish;

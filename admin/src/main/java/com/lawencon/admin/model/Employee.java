@@ -12,6 +12,10 @@ public class Employee extends BaseEntity{
 	@JoinColumn(name="candidate_id", nullable = false)
 	private Candidate candidate;
 
+	@OneToOne
+	@JoinColumn(name="company_id", nullable = false)
+	private Company company;
+
 	public Candidate getCandidate() {
 		return candidate;
 	}
@@ -19,8 +23,14 @@ public class Employee extends BaseEntity{
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
 	}
-	
-	
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 }
 
 
