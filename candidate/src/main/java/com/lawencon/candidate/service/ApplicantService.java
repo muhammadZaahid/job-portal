@@ -24,6 +24,7 @@ import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertReqDto;
 import com.lawencon.candidate.dto.applicant.ApplicantResDto;
+import com.lawencon.candidate.dto.applicant.ApplicantCheckApplyReqDto;
 import com.lawencon.candidate.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.candidate.model.Applicant;
 import com.lawencon.candidate.model.Candidate;
@@ -138,5 +139,9 @@ public class ApplicantService {
 			responses.add(response);
 		}
 		return responses;
+	}
+
+	public Boolean checkIfApplied(String candidateId, String jobVacancyId){
+		return applicantDao.checkApplied(candidateId, jobVacancyId);
 	}
 }

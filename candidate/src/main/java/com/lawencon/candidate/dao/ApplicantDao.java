@@ -35,4 +35,23 @@ public class ApplicantDao extends AbstractJpaDao{
 
         return queryResult;
     }
+
+    public Boolean checkApplied(String candidateId, String jobVacancyId){
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT * FROM t_applicant ");
+        sb.append("WHERE candidate_id = :candidateId ");
+        sb.append("AND job_vacancy_id = :jobVacancyId ");
+        try{
+            Object queryResult = ConnHandler.getManager()
+        .createNativeQuery(sb.toString(), Applicant.class)
+        .setParameter("candidateId",candidateId)
+        .setParameter("jobVacancyId", jobVacancyId)
+        .getSingleResult();
+
+        return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
