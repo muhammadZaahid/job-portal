@@ -22,7 +22,6 @@ import com.lawencon.candidate.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.candidate.model.Company;
 import com.lawencon.candidate.model.JobLevel;
 import com.lawencon.candidate.model.JobVacancy;
-import com.lawencon.util.DateUtil;
 
 @Service
 public class JobVacancyService {
@@ -140,6 +139,7 @@ public UpdateResDto updateJobVacancy(JobVacancyUpdateReqDto request) {
 		response.setStartDate(jobVacancy.getStartDate().toString());
 		response.setEndDate(jobVacancy.getEndDate().toString());
 		response.setBenefitDesc(jobVacancy.getBenefitDesc());
+        response.setJobDesc(jobVacancy.getJobDesc());
 		response.setSalaryPublish(jobVacancy.isSalaryPublish());
 		response.setSalaryFrom(jobVacancy.getSalaryFrom());
 		response.setSalaryTo(jobVacancy.getSalaryTo());
