@@ -3,6 +3,7 @@ package com.lawencon.candidate.dto.login;
 public class LoginResDto {
     private String token;
 	private String userId;
+	private String candidateId;
 	private String candidateName;
     private String candidateCode;
     public String getToken() {
@@ -17,7 +18,14 @@ public class LoginResDto {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    public String getCandidateName() {
+    
+    public String getCandidateId() {
+		return candidateId;
+	}
+	public void setCandidateId(String candidateId) {
+		this.candidateId = candidateId;
+	}
+	public String getCandidateName() {
         return candidateName;
     }
     public void setCandidateName(String profileName) {

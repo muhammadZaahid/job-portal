@@ -103,6 +103,7 @@ public class UserService implements UserDetailsService {
         if (user != null) {
             loginResDto.setCandidateName(user.getCandidate().getName());
             loginResDto.setUserId(user.getId());
+            loginResDto.setCandidateId(user.getCandidate().getId());
             loginResDto.setCandidateCode(user.getCandidate().getCandidateCode());
         }
 

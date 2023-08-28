@@ -50,6 +50,7 @@ public class LoginController {
 		final LoginResDto loginRes = new LoginResDto();
 		loginRes.setToken(jwtService.generateJwt(claims));
 		loginRes.setUserId(loggedInUser.getUserId());
+		loginRes.setCandidateId(loggedInUser.getCandidateId());
 		loginRes.setCandidateName(loggedInUser.getCandidateName());
         loginRes.setCandidateCode(loggedInUser.getCandidateCode());
 
