@@ -7,6 +7,7 @@ public class InsertJobVacancySeekerReqDto {
     private String jobLevelId;
     private String location;
     private String benefitDesc;
+    private String jobDesc;
     private Long salaryFrom;
     private Long salaryTo;
     private Boolean salaryPublish;
@@ -16,7 +17,7 @@ public class InsertJobVacancySeekerReqDto {
     
 
     public InsertJobVacancySeekerReqDto(String title, String companyCode, String jobVacancyCode, String jobLevelId,
-            String location, String benefitDesc, Long salaryFrom, Long salaryTo, Boolean salaryPublish,
+            String location, String benefitDesc, String jobDesc, Long salaryFrom, Long salaryTo, Boolean salaryPublish,
             String startDate, String endDate) {
         this.title = title;
         this.companyCode = companyCode;
@@ -24,6 +25,7 @@ public class InsertJobVacancySeekerReqDto {
         this.jobLevelId = jobLevelId;
         this.location = location;
         this.benefitDesc = benefitDesc;
+        this.jobDesc = jobDesc;
         this.salaryFrom = salaryFrom;
         this.salaryTo = salaryTo;
         this.salaryPublish = salaryPublish;
@@ -95,5 +97,11 @@ public class InsertJobVacancySeekerReqDto {
     }
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+    public String getJobDesc() {
+        return jobDesc;
+    }
+    public void setJobDesc(String jobDesc) {
+        this.jobDesc = jobDesc;
     }
 }
