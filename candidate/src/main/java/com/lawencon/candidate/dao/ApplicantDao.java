@@ -48,7 +48,11 @@ public class ApplicantDao extends AbstractJpaDao{
         .setParameter("jobVacancyId", jobVacancyId)
         .getSingleResult();
 
-        return true;
+        if(queryResult != null){
+            return true;
+        }else{
+            return false;
+        }
         }catch(Exception e){
             e.printStackTrace();
             return false;
