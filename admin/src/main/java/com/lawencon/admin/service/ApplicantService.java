@@ -23,6 +23,7 @@ import com.lawencon.admin.dao.ApplicantDao;
 import com.lawencon.admin.dao.ApplicationDao;
 import com.lawencon.admin.dao.AssessmentDao;
 import com.lawencon.admin.dao.CandidateDao;
+import com.lawencon.admin.dao.EmployeeDao;
 import com.lawencon.admin.dao.InterviewDao;
 import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dao.MedicalDao;
@@ -38,6 +39,7 @@ import com.lawencon.admin.model.Application;
 import com.lawencon.admin.model.Assessment;
 import com.lawencon.admin.model.Candidate;
 import com.lawencon.admin.model.Email;
+import com.lawencon.admin.model.Employee;
 import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.User;
@@ -63,6 +65,8 @@ public class ApplicantService {
 	MedicalDao medicalDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	EmployeeDao employeeDao;
 	@Autowired
 	EmailService emailService;
 	@Autowired
@@ -142,7 +146,7 @@ public class ApplicantService {
 					email.setRecipientName(candidate.getName());
 					email.setSenderEmail(emailSender);
 					email.setProperties(properties);
-					email.setTemplate("success-apply");
+					email.setTemplate("template-after-apply");
 					emailService.sendHtmlMessage(email);
 				} catch (MessagingException exception) {
 					exception.printStackTrace();
@@ -205,6 +209,13 @@ public class ApplicantService {
 					applicant.setStgOffer(true);
 					applicant.setVersion(applicant.getVersion() + 1);
 					applicantDao.save(applicant);
+				} else if(applicant.getCurrentStage().equals("offer")){
+					applicant.setCurrentStage("hired");
+					applicantDao.saveAndFlush(applicant);
+					Employee employee = new Employee();
+					employee.setCandidate(applicant.getCandidate());
+					employee.setCompany(applicant.getJobVacancy().getCompany());
+					employeeDao.save(employee);
 				}
 				ConnHandler.commit();
 				response.setVer(applicant.getVersion());
