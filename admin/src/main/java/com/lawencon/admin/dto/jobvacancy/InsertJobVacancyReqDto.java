@@ -7,6 +7,7 @@ public class InsertJobVacancyReqDto {
     private String jobLevelId;
     private String location;
     private String benefitDesc;
+    private String jobDesc;
     private Long salaryFrom;
     private Long salaryTo;
     private Boolean salaryPublish;
@@ -78,6 +79,12 @@ public class InsertJobVacancyReqDto {
     }
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+    public String getJobDesc() {
+        return jobDesc;
+    }
+    public void setJobDesc(String jobDesc) {
+        this.jobDesc = jobDesc;
     }
     
     

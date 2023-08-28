@@ -46,6 +46,7 @@ public class JobVacancyService {
         jobVacancy.setJobVacancyCode(data.getJobVacancyCode());
         jobVacancy.setLocation(data.getLocation());
         jobVacancy.setBenefitDesc(data.getBenefitDesc());
+        jobVacancy.setJobDesc(data.getJobDesc());
         jobVacancy.setSalaryPublish(data.getSalaryPublish());
         jobVacancy.setSalaryFrom(data.getSalaryFrom());
         jobVacancy.setSalaryTo(data.getSalaryTo());

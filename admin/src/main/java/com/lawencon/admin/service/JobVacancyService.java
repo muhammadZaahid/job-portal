@@ -31,7 +31,6 @@ import com.lawencon.admin.model.JobLevel;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
-import com.lawencon.util.DateUtil;
 import com.lawencon.util.GeneratorUtil;
 
 @Service
@@ -56,6 +55,7 @@ public class JobVacancyService {
         jobVacancy.setJobVacancyCode(GeneratorUtil.generateCode());
         jobVacancy.setLocation(data.getLocation());
         jobVacancy.setBenefitDesc(data.getBenefitDesc());
+        jobVacancy.setJobDesc(data.getJobDesc());
         jobVacancy.setSalaryPublish(data.getSalaryPublish());
         jobVacancy.setSalaryFrom(data.getSalaryFrom());
         jobVacancy.setSalaryTo(data.getSalaryTo());
@@ -80,7 +80,7 @@ public class JobVacancyService {
             HttpEntity<InsertJobVacancySeekerReqDto> reqBody = new HttpEntity<InsertJobVacancySeekerReqDto>(
                     new InsertJobVacancySeekerReqDto(data.getTitle(), company.getCompanyCode(),
                             createdJob.getJobVacancyCode(), data.getJobLevelId(), data.getLocation(),
-                            data.getBenefitDesc(), data.getSalaryFrom(), data.getSalaryTo(), data.getSalaryPublish(),
+                            data.getBenefitDesc(), data.getJobDesc(), data.getSalaryFrom(), data.getSalaryTo(), data.getSalaryPublish(),
                             data.getStartDate(), data.getEndDate()),
                     headers);
 
@@ -135,6 +135,7 @@ public class JobVacancyService {
         jobVacancy.setJobLevel(jobLevel);
         jobVacancy.setLocation(request.getLocation());
         jobVacancy.setBenefitDesc(request.getBenefitDesc());
+        jobVacancy.setJobDesc(request.getJobDesc());
         jobVacancy.setSalaryFrom(request.getSalaryFrom());
         jobVacancy.setSalaryTo(request.getSalaryTo());
         jobVacancy.setSalaryPublish(request.getSalaryPublish());
@@ -159,6 +160,7 @@ public class JobVacancyService {
                             request.getJobLevelId(),
                             request.getLocation(),
                             request.getBenefitDesc(),
+                            request.getJobDesc(),
                             request.getSalaryFrom(),
                             request.getSalaryTo(),
                             request.getSalaryPublish(),
@@ -193,6 +195,7 @@ public class JobVacancyService {
         response.setTitle(jobVacancy.getTitle());
         response.setPicId(jobVacancy.getUser().getId());
         response.setBenefitDesc(jobVacancy.getBenefitDesc());
+        response.setJobDesc(jobVacancy.getJobDesc());
         response.setSalaryFrom(jobVacancy.getSalaryFrom());
         response.setSalaryTo(jobVacancy.getSalaryTo());
         response.setSalaryPublish(jobVacancy.isSalaryPublish());
