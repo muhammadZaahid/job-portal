@@ -114,11 +114,11 @@ public class UserService implements UserDetailsService {
         return loginResDto;
     }
 
-    public UpdateResDto updateCandidate(String userId, UserUpdateReqDto data){
+    public UpdateResDto updateCandidate(UserUpdateReqDto data){
         ConnHandler.begin();
         final UpdateResDto response = new UpdateResDto();
         
-        User user = userDao.getById(User.class, userId);
+        User user = userDao.getById(User.class, data.getId());
         Candidate candidate = user.getCandidate();
 
         candidate.setNik(data.getNik());

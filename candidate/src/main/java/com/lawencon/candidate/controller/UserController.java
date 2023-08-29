@@ -33,9 +33,9 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UpdateResDto> update(@PathVariable("id") String userId, @RequestBody UserUpdateReqDto data){
-        final UpdateResDto response = userService.updateCandidate(userId,data);
+    @PutMapping()
+    public ResponseEntity<UpdateResDto> update(@RequestBody UserUpdateReqDto data){
+        final UpdateResDto response = userService.updateCandidate(data);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
