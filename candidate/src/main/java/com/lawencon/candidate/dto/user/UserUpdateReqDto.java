@@ -3,6 +3,7 @@ package com.lawencon.candidate.dto.user;
 import com.lawencon.candidate.dto.file.FileReqDto;
 
 public class UserUpdateReqDto {
+    private String id;
     private String nik;
 	private String name;
 	private String phone;
@@ -15,6 +16,7 @@ public class UserUpdateReqDto {
 	private Double salaryExpectation;
 	private FileReqDto photo;
 	private FileReqDto resume;
+    
     public String getNik() {
         return nik;
     }
@@ -86,5 +88,11 @@ public class UserUpdateReqDto {
     }
     public void setResume(FileReqDto resume) {
         this.resume = resume;
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 }
