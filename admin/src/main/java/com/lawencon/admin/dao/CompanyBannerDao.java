@@ -2,21 +2,14 @@ package com.lawencon.admin.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.admin.model.Application;
 import com.lawencon.admin.model.CompanyBanner;
 import com.lawencon.base.AbstractJpaDao;
 import com.lawencon.base.ConnHandler;
 
 @Repository
 public class CompanyBannerDao extends AbstractJpaDao{
-	
-	@PersistenceContext
-	EntityManager em;
 	
 
 	public String getCompanyBannerByCompanyId(String data) {
@@ -26,7 +19,7 @@ public class CompanyBannerDao extends AbstractJpaDao{
 		
 		try {
 			
-			final Object getId = this.em.createNativeQuery(sql)
+			final Object getId = ConnHandler.getManager().createNativeQuery(sql)
 					.setParameter("companyId", data)
 					.getSingleResult();
 			

@@ -80,6 +80,11 @@ public class ApplicantService {
 			} catch (Exception e) {
 				e.printStackTrace();
 				ConnHandler.rollback();
+				if(e.getMessage().contains("blacklist")){
+					throw new RuntimeException("You are blacklisted from this Company!");
+				}else{
+					throw new RuntimeException("Error! Cannot apply for this job");
+				}
 			}
 
 		} else {

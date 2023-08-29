@@ -1,18 +1,14 @@
 package com.lawencon.admin.dao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.admin.model.Profile;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.AbstractJpaDao;
+import com.lawencon.base.ConnHandler;
 
 @Repository
 public class UserDao extends AbstractJpaDao{
-	@PersistenceContext
-	private EntityManager em;
 
     public User getByEmail(String email){
         final String sql = "SELECT "
@@ -23,7 +19,7 @@ public class UserDao extends AbstractJpaDao{
 				+ "t_profile tp ON tu.profile_id = tp.id "
 				+ "WHERE tu.email = :email";
 		try {
-			final Object userObj = this.em.createNativeQuery(sql)
+			final Object userObj = ConnHandler.getManager().createNativeQuery(sql)
 					.setParameter("email", email)
 					.getSingleResult();
 			

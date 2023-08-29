@@ -68,6 +68,8 @@ public class ApplicantService {
 	@Autowired
 	EmployeeDao employeeDao;
 	@Autowired
+	BlacklistService blacklistService;
+	@Autowired
 	EmailService emailService;
 	@Autowired
 	RestTemplate restTemplate;
@@ -78,11 +80,11 @@ public class ApplicantService {
 	public InsertResDto createApplicant(ApplicantInsertReqDto request) {
 		ConnHandler.begin();
 		InsertResDto response = new InsertResDto();
-
 		Applicant applicant = new Applicant();
 		Candidate candidate = candidateDao.getById(Candidate.class, request.getCandidateId());
 		applicant.setCandidate(candidate);
 		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, request.getJobVacancyId());
+		blacklistService.checkBlacklist(request.getCandidateId(), jobVacancy.getCompany().getId());
 		applicant.setJobVacancy(jobVacancy);
 		applicant.setCurrentStage("application");
 		applicant.setStgApplication(true);
@@ -117,6 +119,7 @@ public class ApplicantService {
 			Candidate candidate = candidateDao.getByCode(request.getCandidateCode());
 			applicant.setCandidate(candidate);
 			JobVacancy jobVacancy = jobVacancyDao.getByCode(request.getJobVacancyCode());
+			blacklistService.checkBlacklist(candidate.getId(), jobVacancy.getCompany().getId());
 			applicant.setJobVacancy(jobVacancy);
 			applicant.setCurrentStage("application");
 			applicant.setStgApplication(true);
@@ -156,6 +159,7 @@ public class ApplicantService {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ConnHandler.rollback();
+			throw new RuntimeException(e.getMessage());
 		}
 
 		return response;
@@ -280,4 +284,5 @@ public class ApplicantService {
 		response.setJobVacancyId(applicant.getJobVacancy().getId());
 		return response;
 	}
+
 }
