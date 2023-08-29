@@ -19,6 +19,7 @@ import com.lawencon.base.ConnHandler;
 import com.lawencon.candidate.dao.ApplicantDao;
 import com.lawencon.candidate.dao.CandidateDao;
 import com.lawencon.candidate.dao.JobVacancyDao;
+import com.lawencon.candidate.dao.QuestionAssessmentDao;
 import com.lawencon.candidate.dao.UserDao;
 import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
@@ -28,6 +29,7 @@ import com.lawencon.candidate.dto.applicant.ApplicantInsertAdminReqDto;
 import com.lawencon.candidate.model.Applicant;
 import com.lawencon.candidate.model.Candidate;
 import com.lawencon.candidate.model.JobVacancy;
+import com.lawencon.candidate.model.QuestionAssessment;
 import com.lawencon.candidate.model.User;
 import com.lawencon.security.principal.PrincipalService;
 import com.lawencon.util.GeneratorUtil;
@@ -44,6 +46,8 @@ public class ApplicantService {
 	JobVacancyDao jobVacancyDao;
 	@Autowired
 	UserDao userDao;
+	@Autowired
+	QuestionAssessmentDao questionAssessmentDao;
 	@Autowired
 	RestTemplate restTemplate;
 
@@ -140,6 +144,21 @@ public class ApplicantService {
 			response.setCompanyName(applicants.get(i).getJobVacancy().getCompany().getCompanyName());
 			response.setCurrentStage(applicants.get(i).getCurrentStage());
 			response.setAppliedDate(applicants.get(i).getAppliedDate().toString());
+			try{
+				response.setCompanyPhotoId(applicants.get(i).getJobVacancy().getCompany().getCompanyLogo().getId());
+			}catch(Exception e){
+				response.setCompanyPhotoId(null);
+			}
+			try{
+				QuestionAssessment qAssesment = questionAssessmentDao.getByJobId(applicants.get(i).getJobVacancy().getId());
+				if(qAssesment != null){
+					response.setTopicId(qAssesment.getQuestionTopic().getId());
+				}else{
+					response.setTopicId(null);
+				}
+			}catch(Exception e){
+				response.setTopicId(null);
+			}
 			responses.add(response);
 		}
 		return responses;

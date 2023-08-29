@@ -37,9 +37,9 @@ public class QuestionController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     
-    @GetMapping("/{code}")
-    public ResponseEntity<List<QuestionsResDto>> getQuestions(@PathVariable("code") String code){
-        List<QuestionsResDto> response = questionService.getQuestionByCode(code);
+    @GetMapping("/{topicId}")
+    public ResponseEntity<List<QuestionsResDto>> getQuestions(@PathVariable("topicId") String topicId){
+        List<QuestionsResDto> response = questionService.getQuestionByTopicId(topicId);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
