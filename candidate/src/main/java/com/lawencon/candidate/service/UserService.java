@@ -114,13 +114,13 @@ public class UserService implements UserDetailsService {
         return loginResDto;
     }
 
-    public UpdateResDto updateCandidate(UserUpdateReqDto data){
+    public UpdateResDto updateCandidate(UserUpdateReqDto data) {
         ConnHandler.begin();
         final UpdateResDto response = new UpdateResDto();
-        
+
         User user = userDao.getById(User.class, data.getId());
         Candidate candidate = user.getCandidate();
-
+        
         candidate.setNik(data.getNik());
         candidate.setName(data.getName());
         candidate.setPhone(data.getPhone());
@@ -131,74 +131,108 @@ public class UserService implements UserDetailsService {
         candidate.setSocmed3(data.getSocmed3());
         candidate.setExperienceYear(data.getExperienceYear());
         candidate.setSalaryExpectation(data.getSalaryExpectation());
-        if(data.getPhoto() != null){
-            File filePhoto = fileDao.getById(File.class, candidate.getPhoto().getId());
-            filePhoto.setFiles(data.getPhoto().getFiles());
-            filePhoto.setFileFormat(data.getPhoto().getFileFormat());
-            fileDao.saveAndFlush(filePhoto);
+        Boolean isPhoto = false;
+        Boolean isResume = false;
+
+        if(candidate.getPhoto() != null){
+            isPhoto = true;
         }
-        if(data.getResume() != null){
-            File fileResume = fileDao.getById(File.class, candidate.getResume().getId());
-            fileResume.setFiles(data.getResume().getFiles());
-            fileResume.setFileFormat(data.getResume().getFileFormat());
-            fileDao.saveAndFlush(fileResume);
+
+        if(candidate.getResume() != null){
+            isResume = true;
+        }
+        if (data.getPhoto().getFiles() != null && !data.getPhoto().getFiles().isEmpty()) {
+            System.out.println("photo ga null");
+            if (isPhoto) {
+                File filePhoto = fileDao.getById(File.class,candidate.getPhoto().getId());
+                System.out.println(candidate.getPhoto().getId());
+                System.out.println("masuk ke photo");
+                filePhoto.setFiles(data.getPhoto().getFiles());
+                filePhoto.setFileFormat(data.getPhoto().getFileFormat());
+                fileDao.saveAndFlush(filePhoto);
+                candidate.setPhoto(filePhoto);
+            } else {
+                File newPhoto = new File();
+                newPhoto.setFiles(data.getPhoto().getFiles());
+                newPhoto.setFileFormat(data.getPhoto().getFileFormat());
+                fileDao.save(newPhoto);
+                candidate.setPhoto(newPhoto);
+            }
+        }
+        if (data.getResume() != null && !data.getResume().getFiles().isEmpty()) {
+            if (isResume) {
+                File fileResume = fileDao.getById(File.class,candidate.getResume().getId());
+                fileResume.setFiles(data.getResume().getFiles());
+                fileResume.setFileFormat(data.getResume().getFileFormat());
+                fileDao.saveAndFlush(fileResume);
+                candidate.setResume(fileResume);
+            } else {
+                File file = new File();
+                file.setFiles(data.getResume().getFiles());
+                file.setFileFormat(data.getResume().getFileFormat());
+                fileDao.save(file);
+                candidate.setResume(file);
+            }
         }
         Candidate updated = candidateDao.saveAndFlush(candidate);
 
-        try{
+        try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<UserUpdateAdminReqDto> reqBody = new HttpEntity<UserUpdateAdminReqDto>(
-                new UserUpdateAdminReqDto(candidate.getCandidateCode(), data.getNik(), data.getName(), data.getPhone(), 
-                data.getBirthPlace(), data.getBirthDate(), data.getSocmed1(), data.getSocmed2(), data.getSocmed3(), 
-                data.getExperienceYear(), data.getSalaryExpectation(), data.getPhoto(), data.getResume()));
-            
-            ResponseEntity<UpdateResDto> res = restTemplate.exchange("http://localhost:8080/admin/candidate/seeker",HttpMethod.PUT,reqBody,UpdateResDto.class);
-            if(res.getStatusCode().equals(HttpStatus.OK)){
+                    new UserUpdateAdminReqDto(candidate.getCandidateCode(), data.getNik(), data.getName(),
+                            data.getPhone(),
+                            data.getBirthPlace(), data.getBirthDate(), data.getSocmed1(), data.getSocmed2(),
+                            data.getSocmed3(),
+                            data.getExperienceYear(), data.getSalaryExpectation(), data.getPhoto(), data.getResume()));
+
+            ResponseEntity<UpdateResDto> res = restTemplate.exchange("http://localhost:8080/admin/candidate/seeker",
+                    HttpMethod.PUT, reqBody, UpdateResDto.class);
+            if (res.getStatusCode().equals(HttpStatus.OK)) {
                 ConnHandler.commit();
                 response.setVer(updated.getVersion());
                 response.setMessage("Success update profile!");
-            }else{
+            } else {
                 ConnHandler.rollback();
                 throw new RuntimeException("Error! Check Admin API!");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error while updating profile!");
         }
         return response;
     }
 
-    public UserResDto getDetailUser(){
+    public UserResDto getDetailUser() {
         final UserResDto response = new UserResDto();
 
         User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
         response.setId(user.getCandidate().getId());
-		response.setNik(user.getCandidate().getNik());
-		response.setName(user.getCandidate().getName());
-		response.setEmail(user.getCandidate().getEmail());
-		response.setPhone(user.getCandidate().getPhone());
-		response.setBirthPlace(user.getCandidate().getBirthPlace());
-		if (user.getCandidate().getBirthDate() == null) {
-			response.setBirthDate(null);
-		} else {
-			response.setBirthDate(user.getCandidate().getBirthDate().toString());
-		}
-		response.setSocmed1(user.getCandidate().getSocmed1());
-		response.setSocmed2(user.getCandidate().getSocmed2());
-		response.setSocmed3(user.getCandidate().getSocmed3());
-		response.setExperienceYear(user.getCandidate().getExperienceYear());
-		response.setSalaryExpectation(user.getCandidate().getSalaryExpectation());
-		if (user.getCandidate().getPhoto() == null) {
-			response.setPhotoId(null);
-		} else {
-			response.setPhotoId(user.getCandidate().getPhoto().getId());
-		}
-		if (user.getCandidate().getResume() == null) {
-			response.setResumeId(null);
-		} else {
-			response.setResumeId(user.getCandidate().getResume().getId());
-		}
+        response.setNik(user.getCandidate().getNik());
+        response.setName(user.getCandidate().getName());
+        response.setEmail(user.getCandidate().getEmail());
+        response.setPhone(user.getCandidate().getPhone());
+        response.setBirthPlace(user.getCandidate().getBirthPlace());
+        if (user.getCandidate().getBirthDate() == null) {
+            response.setBirthDate(null);
+        } else {
+            response.setBirthDate(user.getCandidate().getBirthDate().toString());
+        }
+        response.setSocmed1(user.getCandidate().getSocmed1());
+        response.setSocmed2(user.getCandidate().getSocmed2());
+        response.setSocmed3(user.getCandidate().getSocmed3());
+        response.setExperienceYear(user.getCandidate().getExperienceYear());
+        response.setSalaryExpectation(user.getCandidate().getSalaryExpectation());
+        if (user.getCandidate().getPhoto() == null) {
+            response.setPhotoId(null);
+        } else {
+            response.setPhotoId(user.getCandidate().getPhoto().getId());
+        }
+        if (user.getCandidate().getResume() == null) {
+            response.setResumeId(null);
+        } else {
+            response.setResumeId(user.getCandidate().getResume().getId());
+        }
 
         return response;
     }

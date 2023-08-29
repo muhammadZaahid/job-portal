@@ -21,7 +21,6 @@ import com.lawencon.admin.dto.offer.OfferingResDto;
 import com.lawencon.admin.dto.offer.OfferingUpdateReqDto;
 import com.lawencon.admin.model.Applicant;
 import com.lawencon.admin.model.Email;
-import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.admin.model.Offer;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
@@ -48,7 +47,7 @@ public class OfferService {
     EmailService emailService;
 
     @Value("${spring.mail.username}")
-	private String emailSender;
+    private String emailSender;
 
     @Transactional
     public InsertResDto insertOffer(OfferingInsertReqDto data) {
@@ -60,56 +59,50 @@ public class OfferService {
         if (data.getOfferSalary() < applicant.getJobVacancy().getSalaryFrom()) {
             throw new RuntimeException("Salary is less than the minimum advertised range!");
         }
-            Offer offer = new Offer();
-            offer.setApplicant(applicant);
-            offer.setOfferBasicSalary(data.getOfferSalary());
-            offer.setOfferLastEmailSend(LocalDateTime.now());
-            offer.setOfferPic(user);
-            offer.setOfferTime(LocalDateTime.now());
+        Offer offer = new Offer();
+        offer.setApplicant(applicant);
+        offer.setOfferBasicSalary(data.getOfferSalary());
+        offer.setOfferLastEmailSend(LocalDateTime.now());
+        offer.setOfferPic(user);
+        offer.setOfferTime(LocalDateTime.now());
 
-            Offer createdOffer = offerDao.save(offer);
+        Offer createdOffer = offerDao.save(offer);
 
-            if (createdOffer != null) {
-                try {
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("candidateName", applicant.getCandidate().getName());
-                    params.put("jobTitle", applicant.getJobVacancy().getTitle());
-                    params.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
-                    params.put("salaryOffer", offer.getOfferBasicSalary());
-                    params.put("benefitDesc", applicant.getJobVacancy().getBenefitDesc());
-                    System.out.println(params.get("candidateName"));
-                    byte[] report = jasperUtil.responseToByteArray(null, params, "offer_letter");
-                    //UpdateResDto update = applicantService.updateApplicant(data.getApplicantId());
-                    //if (update.getMessage().toLowerCase().contains("success")) {
-                        Map<String, Object> properties = new HashMap<>();
-                        properties.put("name", applicant.getCandidate().getName());
-                        properties.put("jobName", applicant.getJobVacancy().getTitle());
-                        properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
-                        Email email = new Email();
-                        email.setSubject("You have received an offering letter from "
-                                + applicant.getJobVacancy().getCompany().getCompanyName() + " !");
-                        email.setRecipientEmail(applicant.getCandidate().getEmail());
-                        email.setRecipientName(applicant.getCandidate().getName());
-                        email.setSenderEmail(emailSender);
-                        email.setProperties(properties);
-                        email.setTemplate("offer-letter");
-                        emailService.sendHtmlMessageWithAttachment(email, "offer_letter", report);
-                        ConnHandler.commit();
-                        response.setId(createdOffer.getId());
-                        response.setMessage("Success create Offering to Candidate");
-                    //} else {
-                    //    ConnHandler.rollback();
-                    //}
-                } catch (Exception e) {
-                    ConnHandler.rollback();
-                    e.printStackTrace();
-                    throw new RuntimeException("Terdapat error!");
-                }
-
-            } else {
-                throw new RuntimeException("Please fill all the data");
+        if (createdOffer != null) {
+            try {
+                Map<String, Object> params = new HashMap<>();
+                params.put("candidateName", applicant.getCandidate().getName());
+                params.put("jobTitle", applicant.getJobVacancy().getTitle());
+                params.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+                params.put("salaryOffer", offer.getOfferBasicSalary());
+                params.put("benefitDesc", applicant.getJobVacancy().getBenefitDesc());
+                System.out.println(params.get("candidateName"));
+                byte[] report = jasperUtil.responseToByteArray(null, params, "offer_letter");
+                Map<String, Object> properties = new HashMap<>();
+                properties.put("name", applicant.getCandidate().getName());
+                properties.put("jobName", applicant.getJobVacancy().getTitle());
+                properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+                Email email = new Email();
+                email.setSubject("You have received an offering letter from "
+                        + applicant.getJobVacancy().getCompany().getCompanyName() + " !");
+                email.setRecipientEmail(applicant.getCandidate().getEmail());
+                email.setRecipientName(applicant.getCandidate().getName());
+                email.setSenderEmail(emailSender);
+                email.setProperties(properties);
+                email.setTemplate("offer-letter");
+                emailService.sendHtmlMessageWithAttachment(email, "offer_letter", report);
+                ConnHandler.commit();
+                response.setId(createdOffer.getId());
+                response.setMessage("Success create Offering to Candidate");
+            } catch (Exception e) {
+                ConnHandler.rollback();
+                e.printStackTrace();
+                throw new RuntimeException("Terdapat error!");
             }
-        
+
+        } else {
+            throw new RuntimeException("Please fill all the data");
+        }
 
         return response;
     }
