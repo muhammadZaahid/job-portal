@@ -119,9 +119,9 @@ public class QuestionService {
         return response;
     }
 
-    public List<QuestionsResDto> getQuestionByCode(String code) {
+    public List<QuestionsResDto> getQuestionByTopicId(String topicId) {
         List<QuestionsResDto> responses = new ArrayList<>();
-        QuestionTopic topic = qTopicDao.getByCode(code);
+        QuestionTopic topic = qTopicDao.getById(QuestionTopic.class, topicId);
         questionDao.getQuestionsByTopic(topic.getId()).forEach(c -> {
             QuestionsResDto response = new QuestionsResDto();
             response.setQuestionDesc(c.getQuestion());

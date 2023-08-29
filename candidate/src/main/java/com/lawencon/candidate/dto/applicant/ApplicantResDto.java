@@ -6,6 +6,8 @@ public class ApplicantResDto {
     private String companyName;
     private String currentStage;
     private String appliedDate;
+    private String companyPhotoId;
+    private String topicId;
     
     public String getJobTitle() {
         return jobTitle;
@@ -37,5 +39,17 @@ public class ApplicantResDto {
     public void setJobVacancyId(String jobVacancyId) {
         this.jobVacancyId = jobVacancyId;
     }
-
+    public String getCompanyPhotoId() {
+        return companyPhotoId;
+    }
+    public void setCompanyPhotoId(String companyPhotoId) {
+        this.companyPhotoId = companyPhotoId;
+    }
+    public String getTopicId() {
+        return topicId;
+    }
+    public void setTopicId(String assessmentId) {
+        this.topicId = assessmentId;
+    }
+    
 }
