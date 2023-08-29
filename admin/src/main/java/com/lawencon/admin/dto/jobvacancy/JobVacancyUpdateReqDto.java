@@ -14,6 +14,7 @@ public class JobVacancyUpdateReqDto {
     private Boolean salaryPublish;
     private String startDate;
     private String endDate;
+	private String topicId;
     
 	public String getJobVacancyId() {
 		return jobVacancyId;

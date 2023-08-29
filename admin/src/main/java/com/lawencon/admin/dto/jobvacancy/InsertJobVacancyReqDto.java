@@ -13,6 +13,7 @@ public class InsertJobVacancyReqDto {
     private Boolean salaryPublish;
     private String startDate;
     private String endDate;
+    private String topicId;
     
     public String getTitle() {
         return title;
@@ -86,6 +87,11 @@ public class InsertJobVacancyReqDto {
     public void setJobDesc(String jobDesc) {
         this.jobDesc = jobDesc;
     }
-    
+    public String getTopicId() {
+        return topicId;
+    }
+    public void setTopicId(String topicId) {
+        this.topicId = topicId;
+    }
     
 }
