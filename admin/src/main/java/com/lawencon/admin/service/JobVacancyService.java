@@ -26,6 +26,7 @@ import com.lawencon.admin.dto.jobvacancy.InsertJobVacancySeekerReqDto;
 import com.lawencon.admin.dto.jobvacancy.JobVacancyResDto;
 import com.lawencon.admin.dto.jobvacancy.JobVacancyUpdateReqDto;
 import com.lawencon.admin.dto.jobvacancy.JobVacancyUpdateSeekerReqDto;
+import com.lawencon.admin.dto.question.QuestionAssessmentInsertReqDto;
 import com.lawencon.admin.model.Company;
 import com.lawencon.admin.model.JobLevel;
 import com.lawencon.admin.model.JobVacancy;
@@ -44,6 +45,8 @@ public class JobVacancyService {
     CompanyDao companyDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    QuestionService questionService;
     @Autowired
     RestTemplate restTemplate;
 
@@ -90,6 +93,14 @@ public class JobVacancyService {
                 ConnHandler.commit();
                 response.setId(createdJob.getId());
                 response.setMessage("Success Create Job Vacancy!");
+
+                if(data.getTopicId() != null && !data.getTopicId().isEmpty()){
+                QuestionAssessmentInsertReqDto insertTopic = new QuestionAssessmentInsertReqDto();
+                insertTopic.setJobVacancyId(createdJob.getId());
+                insertTopic.setTopicId(data.getTopicId());
+
+                questionService.insertAssessment(insertTopic);                
+            }
             } else {
                 ConnHandler.rollback();
             }

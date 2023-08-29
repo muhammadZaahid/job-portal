@@ -25,6 +25,7 @@ import com.lawencon.admin.model.Offer;
 import com.lawencon.admin.model.User;
 import com.lawencon.base.ConnHandler;
 import com.lawencon.security.principal.PrincipalService;
+import com.lawencon.util.DateUtil;
 import com.lawencon.util.JasperUtil;
 
 @Service
@@ -116,7 +117,7 @@ public class OfferService {
         response.setId(offer.getId());
         response.setOfferLastEmailSend(offer.getOfferLastEmailSend().toString());
         response.setOfferPicName(offer.getOfferPic().getProfile().getName());
-        response.setOfferTime(offer.getOfferTime().toString());
+        response.setOfferTime(DateUtil.parseLocalDateTimeToDate(offer.getOfferTime()));
         response.setOfferSalary(offer.getOfferBasicSalary());
 
         return response;
