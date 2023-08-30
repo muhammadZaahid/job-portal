@@ -79,6 +79,10 @@ public class ApplicantService {
 
 	public InsertResDto createApplicant(ApplicantInsertReqDto request) {
 		ConnHandler.begin();
+		Boolean hasApplied = applicantDao.checkHasApplied(request.getCandidateId(), request.getJobVacancyId());
+		if(hasApplied){
+			throw new RuntimeException("This Candidate has already applied to this job!");
+		}
 		InsertResDto response = new InsertResDto();
 		Applicant applicant = new Applicant();
 		Candidate candidate = candidateDao.getById(Candidate.class, request.getCandidateId());
@@ -252,20 +256,21 @@ public class ApplicantService {
 		return responses;
 	}
 
-	public List<ApplicantsResDto> getAllApplicants() {
+	public List<ApplicantsResDto> getAllApplicants(Integer page, Integer limit) {
 		List<ApplicantsResDto> responses = new ArrayList<>();
 
-		applicantDao.getAll(Applicant.class).forEach(a -> {
+		List<Applicant> a = applicantDao.getAllPaged(page,limit);
+		for(int i=0;i<a.size();i++){
 			ApplicantsResDto response = new ApplicantsResDto();
-			response.setApplicantId(a.getId());
-			response.setCandidateNik(a.getCandidate().getNik());
-			response.setCandidateName(a.getCandidate().getName());
-			response.setCandidateEmail(a.getCandidate().getEmail());
-			response.setCurrentStage(a.getCurrentStage());
-			response.setJobTitle(a.getJobVacancy().getTitle());
-			response.setAppliedDate(a.getAppliedDate().toString());
+			response.setApplicantId(a.get(i).getId());
+			response.setCandidateNik(a.get(i).getCandidate().getNik());
+			response.setCandidateName(a.get(i).getCandidate().getName());
+			response.setCandidateEmail(a.get(i).getCandidate().getEmail());
+			response.setCurrentStage(a.get(i).getCurrentStage());
+			response.setJobTitle(a.get(i).getJobVacancy().getTitle());
+			response.setAppliedDate(a.get(i).getAppliedDate().toString());
 			responses.add(response);
-		});
+		};
 
 		return responses;
 	}

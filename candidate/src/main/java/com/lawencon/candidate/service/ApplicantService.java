@@ -53,12 +53,18 @@ public class ApplicantService {
 
 	public InsertResDto createApplicant(ApplicantInsertReqDto request) {
 		ConnHandler.begin();
+		LocalDate today = LocalDate.now();
 		InsertResDto response = new InsertResDto();
-
 		Applicant applicant = new Applicant();
 		Candidate candidate = candidateDao.getById(Candidate.class, request.getCandidateId());
 		applicant.setCandidate(candidate);
 		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, request.getJobVacancyId());
+		Boolean expired = jobVacancy.getEndDate().isBefore(today);
+		if(expired){
+			throw new RuntimeException("This Job Listing has Expired!");
+		}
+
+
 		applicant.setJobVacancy(jobVacancy);
 		applicant.setCurrentStage("application");
 		applicant.setStgApplication(true);

@@ -17,38 +17,59 @@ import com.lawencon.admin.model.Email;
 
 @Service
 public class EmailService {
-    
+
     @Autowired
     JavaMailSender emailSender;
     @Autowired
     SpringTemplateEngine templateEngine;
 
     public void sendHtmlMessage(Email email) throws MessagingException {
-        Thread thread = new Thread();
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
-        Context context = new Context();
-        context.setVariables(email.getProperties());
-        helper.setFrom(email.getSenderEmail());
-        helper.setTo(email.getRecipientEmail());
-        helper.setSubject(email.getSubject());
-        String html = templateEngine.process(email.getTemplate(), context);
-        helper.setText(html, true);
-        emailSender.send(message);
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    MimeMessage message = emailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message,
+                            MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+                    Context context = new Context();
+                    context.setVariables(email.getProperties());
+                    helper.setFrom(email.getSenderEmail());
+                    helper.setTo(email.getRecipientEmail());
+                    helper.setSubject(email.getSubject());
+                    String html = templateEngine.process(email.getTemplate(), context);
+                    helper.setText(html, true);
+                    emailSender.send(message);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         thread.start();
     }
-    public void sendHtmlMessageWithAttachment(Email email,String fileName, byte[] file) throws MessagingException {
-        MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
-        Context context = new Context();
-        context.setVariables(email.getProperties());
-        helper.setFrom(email.getSenderEmail());
-        helper.setTo(email.getRecipientEmail());
-        helper.setSubject(email.getSubject());
-        ByteArrayResource files = new ByteArrayResource(file);
-        helper.addAttachment(fileName, files);
-        String html = templateEngine.process(email.getTemplate(), context);
-        helper.setText(html, true);
-        emailSender.send(message);
+
+    public void sendHtmlMessageWithAttachment(Email email, String fileName, byte[] file) throws MessagingException {
+        Thread thread = new Thread() {
+            public void run() {
+                try {
+                    MimeMessage message = emailSender.createMimeMessage();
+                    MimeMessageHelper helper = new MimeMessageHelper(message,
+                            MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+                            StandardCharsets.UTF_8.name());
+                    Context context = new Context();
+                    context.setVariables(email.getProperties());
+                    helper.setFrom(email.getSenderEmail());
+                    helper.setTo(email.getRecipientEmail());
+                    helper.setSubject(email.getSubject());
+                    ByteArrayResource files = new ByteArrayResource(file);
+                    helper.addAttachment(fileName, files);
+                    String html = templateEngine.process(email.getTemplate(), context);
+                    helper.setText(html, true);
+                    emailSender.send(message);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
     }
+
 }

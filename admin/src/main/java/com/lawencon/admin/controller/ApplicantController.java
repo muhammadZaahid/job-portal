@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.dto.InsertResDto;
@@ -55,8 +56,8 @@ public class ApplicantController {
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<ApplicantsResDto>> getAllApplicants(){
-		final List<ApplicantsResDto> response = applicantService.getAllApplicants();
+	public ResponseEntity<List<ApplicantsResDto>> getAllApplicants(@RequestParam(required = false,name = "page") Integer page, @RequestParam(required = false,name = "limit") Integer limit){
+		final List<ApplicantsResDto> response = applicantService.getAllApplicants(page,limit);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
