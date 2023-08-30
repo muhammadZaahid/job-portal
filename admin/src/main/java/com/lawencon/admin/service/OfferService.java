@@ -91,7 +91,7 @@ public class OfferService {
                 email.setSenderEmail(emailSender);
                 email.setProperties(properties);
                 email.setTemplate("offer-letter");
-                emailService.sendHtmlMessageWithAttachment(email, "offer_letter", report);
+                emailService.sendHtmlMessageWithAttachment(email, "offer_letter.pdf", report);
                 ConnHandler.commit();
                 response.setId(createdOffer.getId());
                 response.setMessage("Success create Offering to Candidate");
