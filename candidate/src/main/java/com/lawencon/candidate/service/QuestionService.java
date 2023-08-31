@@ -145,6 +145,7 @@ public class QuestionService {
     }
 
     public InsertResDto calculateAssessmentScore(QuestionSubmitAssessmentReqDto data) {
+        ConnHandler.begin();
         final InsertResDto response = new InsertResDto();
         Double score = Double.valueOf(0);
         Applicant applicant = applicantDao.getById(Applicant.class, data.getApplicantId());
@@ -167,8 +168,11 @@ public class QuestionService {
             if(res.getStatusCode().equals(HttpStatus.OK)){
                 response.setId(data.getApplicantId());
                 response.setMessage("Assessment berhasil di submit!");
+                applicant.setHasAssessment(true);
+                ConnHandler.commit();
             }
         }catch(Exception e){
+            ConnHandler.rollback();
             throw new RuntimeException();
         }
 
