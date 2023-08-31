@@ -45,8 +45,8 @@ public class ApplicantController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ApplicantResDto>> getAllApplicants(){
-        final List<ApplicantResDto> response = applicantService.getApplicantByUser();
+    public ResponseEntity<List<ApplicantResDto>> getAllApplicants(@RequestParam(name = "currStage", required = false)String currentStage){
+        final List<ApplicantResDto> response = applicantService.getApplicantByUser(currentStage);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

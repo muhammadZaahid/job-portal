@@ -1,5 +1,7 @@
 package com.lawencon.candidate.dto.user;
 
+import com.lawencon.candidate.dto.file.FileReqDto;
+
 public class UserResDto {
 
 	private String id;
@@ -16,6 +18,8 @@ public class UserResDto {
 	private Double salaryExpectation;
 	private String photoId;
 	private String resumeId;
+	private FileReqDto photo;
+	private FileReqDto resume;
 	
 	public String getId() {
 		return id;
@@ -102,6 +106,16 @@ public class UserResDto {
 	public void setResumeId(String resumeId) {
 		this.resumeId = resumeId;
 	}
-	
-	
+	public FileReqDto getPhoto() {
+		return photo;
+	}
+	public void setPhoto(FileReqDto photo) {
+		this.photo = photo;
+	}
+	public FileReqDto getResume() {
+		return resume;
+	}
+	public void setResume(FileReqDto resume) {
+		this.resume = resume;
+	}
 }

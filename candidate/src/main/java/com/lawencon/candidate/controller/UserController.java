@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.lawencon.candidate.dto.user.UserResDto;
 import com.lawencon.candidate.dto.user.UserUpdateReqDto;
 import com.lawencon.candidate.service.UserService;
 
+@Validated
 @RestController
 @RequestMapping("seeker/users")
 public class UserController {
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @PutMapping()
-    public ResponseEntity<UpdateResDto> update(@RequestBody UserUpdateReqDto data){
+    public ResponseEntity<UpdateResDto> update(@Valid @RequestBody UserUpdateReqDto data){
         final UpdateResDto response = userService.updateCandidate(data);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
