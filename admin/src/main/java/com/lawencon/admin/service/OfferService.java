@@ -2,6 +2,7 @@ package com.lawencon.admin.service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -71,13 +72,15 @@ public class OfferService {
 
         if (createdOffer != null) {
             try {
+                String totalSalary = String.format(Locale.US, "%,d",(offer.getOfferBasicSalary().intValue())).replace(',', '.');
+                System.out.println("IDR " +totalSalary);
                 Map<String, Object> params = new HashMap<>();
                 params.put("candidateName", applicant.getCandidate().getName());
                 params.put("jobTitle", applicant.getJobVacancy().getTitle());
                 params.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
-                params.put("salaryOffer", offer.getOfferBasicSalary());
+                params.put("salaryOffer", "IDR "+totalSalary);
                 params.put("benefitDesc", applicant.getJobVacancy().getBenefitDesc());
-                byte[] report = jasperUtil.responseToByteArray(null, params, "offer_letter");
+                byte[] report = jasperUtil.responseToByteArray(null, params, "offering_letter");
                 Map<String, Object> properties = new HashMap<>();
                 properties.put("name", applicant.getCandidate().getName());
                 properties.put("jobName", applicant.getJobVacancy().getTitle());
