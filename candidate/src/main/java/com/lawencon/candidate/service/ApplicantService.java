@@ -60,10 +60,9 @@ public class ApplicantService {
 		applicant.setCandidate(candidate);
 		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, request.getJobVacancyId());
 		Boolean expired = jobVacancy.getEndDate().isBefore(today);
-		if(expired){
+		if (expired) {
 			throw new RuntimeException("This Job Listing has Expired!");
 		}
-
 
 		applicant.setJobVacancy(jobVacancy);
 		applicant.setCurrentStage("application");
@@ -90,9 +89,9 @@ public class ApplicantService {
 			} catch (Exception e) {
 				e.printStackTrace();
 				ConnHandler.rollback();
-				if(e.getMessage().contains("blacklist")){
+				if (e.getMessage().contains("blacklist")) {
 					throw new RuntimeException("You are blacklisted from this Company!");
-				}else{
+				} else {
 					throw new RuntimeException("Error! Cannot apply for this job");
 				}
 			}
@@ -150,27 +149,29 @@ public class ApplicantService {
 			response.setCompanyName(applicants.get(i).getJobVacancy().getCompany().getCompanyName());
 			response.setCurrentStage(applicants.get(i).getCurrentStage());
 			response.setAppliedDate(applicants.get(i).getAppliedDate().toString());
-			try{
+			try {
 				response.setCompanyPhotoId(applicants.get(i).getJobVacancy().getCompany().getCompanyLogo().getId());
-			}catch(Exception e){
+			} catch (Exception e) {
 				response.setCompanyPhotoId(null);
 			}
-			try{
-				QuestionAssessment qAssesment = questionAssessmentDao.getByJobId(applicants.get(i).getJobVacancy().getId());
-				if(qAssesment != null){
-					response.setTopicId(qAssesment.getQuestionTopic().getId());
-				}else{
-					response.setTopicId(null);
-				}
-			}catch(Exception e){
+			try {
+				QuestionAssessment qAssesment = questionAssessmentDao
+						.getByJobId(applicants.get(i).getJobVacancy().getId());
+				response.setTopicId(qAssesment.getQuestionTopic().getId());
+			} catch (Exception e) {
 				response.setTopicId(null);
+			}
+			try {
+				response.setDoneAssessment(applicants.get(i).isHasAssessment());
+			} catch (Exception e) {
+				response.setDoneAssessment(null);
 			}
 			responses.add(response);
 		}
 		return responses;
 	}
 
-	public Boolean checkIfApplied(String candidateId, String jobVacancyId){
+	public Boolean checkIfApplied(String candidateId, String jobVacancyId) {
 		return applicantDao.checkApplied(candidateId, jobVacancyId);
 	}
 }

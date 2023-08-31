@@ -8,6 +8,7 @@ public class ApplicantResDto {
     private String appliedDate;
     private String companyPhotoId;
     private String topicId;
+    private Boolean doneAssessment;
     
     public String getJobTitle() {
         return jobTitle;
@@ -50,6 +51,12 @@ public class ApplicantResDto {
     }
     public void setTopicId(String assessmentId) {
         this.topicId = assessmentId;
+    }
+    public Boolean getDoneAssessment() {
+        return doneAssessment;
+    }
+    public void setDoneAssessment(Boolean doneAssessment) {
+        this.doneAssessment = doneAssessment;
     }
     
 }

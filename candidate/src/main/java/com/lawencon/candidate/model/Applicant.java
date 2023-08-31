@@ -41,6 +41,9 @@ public class Applicant extends BaseEntity {
 	@Column(name = "stg_offer")
 	private boolean stgOffer;
 
+	@Column(name = "done_assessment")
+	private boolean hasAssessment;
+
 	public Candidate getCandidate() {
 		return candidate;
 	}
@@ -119,6 +122,14 @@ public class Applicant extends BaseEntity {
 
 	public void setApplicantCode(String applicantCode) {
 		this.applicantCode = applicantCode;
+	}
+
+	public boolean isHasAssessment() {
+		return hasAssessment;
+	}
+
+	public void setHasAssessment(boolean hasAssessment) {
+		this.hasAssessment = hasAssessment;
 	}
 
 }
