@@ -137,9 +137,9 @@ public class ApplicantService {
 		return response;
 	}
 
-	public List<ApplicantResDto> getApplicantByUser() {
+	public List<ApplicantResDto> getApplicantByUser(String currentStage) {
 		User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
-		List<Applicant> applicants = applicantDao.getAllByCandidate(user.getCandidate().getId());
+		List<Applicant> applicants = applicantDao.getAllByCandidate(user.getCandidate().getId(),currentStage);
 		List<ApplicantResDto> responses = new ArrayList<>();
 
 		for (int i = 0; i < applicants.size(); i++) {

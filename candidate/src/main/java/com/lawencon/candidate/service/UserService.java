@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +27,7 @@ import com.lawencon.candidate.dao.FileDao;
 import com.lawencon.candidate.dao.UserDao;
 import com.lawencon.candidate.dto.InsertResDto;
 import com.lawencon.candidate.dto.UpdateResDto;
+import com.lawencon.candidate.dto.file.FileReqDto;
 import com.lawencon.candidate.dto.login.LoginReqDto;
 import com.lawencon.candidate.dto.login.LoginResDto;
 import com.lawencon.candidate.dto.user.UserInsertAdminReqDto;
@@ -117,10 +121,14 @@ public class UserService implements UserDetailsService {
     public UpdateResDto updateCandidate(UserUpdateReqDto data) {
         ConnHandler.begin();
         final UpdateResDto response = new UpdateResDto();
-
+        try{
+            valNonBK(data);
+        }catch(Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
         User user = userDao.getById(User.class, data.getId());
         Candidate candidate = user.getCandidate();
-        
+
         candidate.setNik(data.getNik());
         candidate.setName(data.getName());
         candidate.setPhone(data.getPhone());
@@ -134,19 +142,16 @@ public class UserService implements UserDetailsService {
         Boolean isPhoto = false;
         Boolean isResume = false;
 
-        if(candidate.getPhoto() != null){
+        if (candidate.getPhoto() != null) {
             isPhoto = true;
         }
 
-        if(candidate.getResume() != null){
+        if (candidate.getResume() != null) {
             isResume = true;
         }
         if (data.getPhoto().getFiles() != null && !data.getPhoto().getFiles().isEmpty()) {
-            System.out.println("photo ga null");
             if (isPhoto) {
-                File filePhoto = fileDao.getById(File.class,candidate.getPhoto().getId());
-                System.out.println(candidate.getPhoto().getId());
-                System.out.println("masuk ke photo");
+                File filePhoto = fileDao.getById(File.class, candidate.getPhoto().getId());
                 filePhoto.setFiles(data.getPhoto().getFiles());
                 filePhoto.setFileFormat(data.getPhoto().getFileFormat());
                 fileDao.saveAndFlush(filePhoto);
@@ -161,7 +166,7 @@ public class UserService implements UserDetailsService {
         }
         if (data.getResume() != null && !data.getResume().getFiles().isEmpty()) {
             if (isResume) {
-                File fileResume = fileDao.getById(File.class,candidate.getResume().getId());
+                File fileResume = fileDao.getById(File.class, candidate.getResume().getId());
                 fileResume.setFiles(data.getResume().getFiles());
                 fileResume.setFileFormat(data.getResume().getFileFormat());
                 fileDao.saveAndFlush(fileResume);
@@ -225,15 +230,51 @@ public class UserService implements UserDetailsService {
         response.setSalaryExpectation(user.getCandidate().getSalaryExpectation());
         if (user.getCandidate().getPhoto() == null) {
             response.setPhotoId(null);
+            response.setPhoto(null);
         } else {
             response.setPhotoId(user.getCandidate().getPhoto().getId());
+            FileReqDto photo = new FileReqDto();
+            photo.setFiles(user.getCandidate().getPhoto().getFiles());
+            photo.setFileFormat(user.getCandidate().getPhoto().getFileFormat());
+            response.setPhoto(photo);
         }
         if (user.getCandidate().getResume() == null) {
             response.setResumeId(null);
+            response.setResume(null);
         } else {
             response.setResumeId(user.getCandidate().getResume().getId());
+            FileReqDto resume = new FileReqDto();
+            resume.setFiles(user.getCandidate().getResume().getFiles());
+            resume.setFileFormat(user.getCandidate().getResume().getFileFormat());
+            response.setResume(resume);
         }
 
         return response;
+    }
+
+    public void valNonBK(UserUpdateReqDto user){
+
+        if (user.getName() == null && user.getName().isEmpty()) {
+            throw new RuntimeException("Please fill your name!");
+        }
+        if (user.getNik() == null && user.getNik().isEmpty()) {
+            throw new RuntimeException("Please fill your identity number!");
+        }
+        if (user.getPhone() == null && user.getPhone().isEmpty()) {
+            System.out.println("kan kosong");
+            throw new RuntimeException("Please fill your mobile / phone number!");
+        }
+        if (user.getBirthPlace() == null) {
+            throw new RuntimeException("Please fill your birth place!");
+        }
+        if (user.getBirthDate() == null) {
+            throw new RuntimeException("Please fill your birth date!");
+        }
+        if (user.getExperienceYear() == null) {
+            throw new RuntimeException("Please fill your experience year!");
+        }
+        if (user.getSalaryExpectation() == null) {
+            throw new RuntimeException("Please fill your salary expectation!");
+        }
     }
 }

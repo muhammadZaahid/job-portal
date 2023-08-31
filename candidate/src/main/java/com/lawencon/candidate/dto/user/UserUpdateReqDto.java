@@ -1,11 +1,19 @@
 package com.lawencon.candidate.dto.user;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.springframework.validation.annotation.Validated;
+
 import com.lawencon.candidate.dto.file.FileReqDto;
 
+@Validated
 public class UserUpdateReqDto {
     private String id;
+    @NotEmpty(message = "nik tidak boleh kosong")
     private String nik;
+    @NotEmpty(message = "nama tidak boleh kosong")
 	private String name;
+    @NotEmpty(message = "nomor hp tidak boleh kosong")
 	private String phone;
 	private String birthPlace;
 	private String birthDate;
