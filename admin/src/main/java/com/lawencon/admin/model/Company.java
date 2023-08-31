@@ -5,7 +5,7 @@ import javax.persistence.*;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name = "t_company")
+@Table(name = "t_company",uniqueConstraints = {@UniqueConstraint(columnNames = {"company_code"}),@UniqueConstraint(columnNames = {"company_tax_number"})})
 public class Company extends BaseEntity {
 
     @Column(name = "company_code", nullable = false)

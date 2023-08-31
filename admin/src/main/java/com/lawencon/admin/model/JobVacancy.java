@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "t_job_vacancy")
+@Table(name = "t_job_vacancy",uniqueConstraints = {@UniqueConstraint(columnNames = {"job_vacancy_code"})})
 public class JobVacancy extends BaseEntity {
 
     @ManyToOne

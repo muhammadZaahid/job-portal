@@ -1,5 +1,7 @@
 package com.lawencon.admin.service;
 
+import javax.persistence.PersistenceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +26,8 @@ public class BlacklistService {
 
     public InsertResDto insert(BlacklistInsertReqDto data){
         ConnHandler.begin();
-        final InsertResDto response = new InsertResDto();
+        try{
+            final InsertResDto response = new InsertResDto();
 
         Candidate candidate = candidateDao.getById(Candidate.class, data.getCandidateId());
         Company company = companyDao.getById(Company.class, data.getCompanyId());
@@ -43,6 +46,9 @@ public class BlacklistService {
         }
 
         return response;
+        }catch(PersistenceException ex){
+            throw new RuntimeException("Candidate sudah masuk ke blacklist Company tersebut!");
+        }
     }
 
     public void checkBlacklist(String candidateId, String companyId){

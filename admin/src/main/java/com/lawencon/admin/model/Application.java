@@ -5,11 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_application")
+@Table(name="t_application",uniqueConstraints = {@UniqueConstraint(columnNames = {"applicant_id"}) })
 public class Application extends BaseEntity{
 
 	@OneToOne

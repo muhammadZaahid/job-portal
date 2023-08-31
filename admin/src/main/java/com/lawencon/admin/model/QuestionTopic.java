@@ -3,11 +3,12 @@ package com.lawencon.admin.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_question_topic")
+@Table(name="t_question_topic",uniqueConstraints = {@UniqueConstraint(columnNames = "code")})
 public class QuestionTopic extends BaseEntity{
     
     @Column(name="title")
