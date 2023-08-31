@@ -119,11 +119,15 @@ public class QuestionService {
         return response;
     }
 
-    public List<QuestionsResDto> getQuestionByTopicId(String topicId) {
+    public List<QuestionsResDto> getQuestionByTopicId(String topicId, String candidateId, String jobVacanyId) {
         List<QuestionsResDto> responses = new ArrayList<>();
         QuestionTopic topic = qTopicDao.getById(QuestionTopic.class, topicId);
+        
+        String applicantId = applicantDao.getApplicantId(candidateId, jobVacanyId);
+        
         questionDao.getQuestionsByTopic(topic.getId()).forEach(c -> {
             QuestionsResDto response = new QuestionsResDto();
+            response.setApplicantId(applicantId);
             response.setQuestionDesc(c.getQuestion());
             response.setQuestionId(c.getId());
             List<QuestionAnswerResDto> options = new ArrayList<>();

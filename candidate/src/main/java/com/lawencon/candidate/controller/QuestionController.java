@@ -37,9 +37,13 @@ public class QuestionController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
     
-    @GetMapping("/{topicId}")
-    public ResponseEntity<List<QuestionsResDto>> getQuestions(@PathVariable("topicId") String topicId){
-        List<QuestionsResDto> response = questionService.getQuestionByTopicId(topicId);
+    @GetMapping("/{topicId}/{candidateId}/{jobVacancyId}")
+    public ResponseEntity<List<QuestionsResDto>> getQuestions(
+    		@PathVariable("topicId") String topicId,
+    		@PathVariable("candidateId") String candidateId,
+    		@PathVariable("jobVacancyId") String jobVacancyId
+    		){
+        List<QuestionsResDto> response = questionService.getQuestionByTopicId(topicId,candidateId,jobVacancyId);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
