@@ -7,11 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_candidate")
+@Table(name="t_candidate",uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class Candidate extends BaseEntity{
     @Column(name="nik")
     private String nik;
@@ -19,7 +20,7 @@ public class Candidate extends BaseEntity{
     @Column(name="name", nullable = false)
     private String name;
 
-    @Column(name="email", unique = true, nullable = false)
+    @Column(name="email", nullable = false)
     private String email;
 
     @Column(name="phone")

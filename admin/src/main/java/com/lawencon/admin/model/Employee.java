@@ -5,7 +5,7 @@ import javax.persistence.*;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_employee")
+@Table(name="t_employee",uniqueConstraints = {@UniqueConstraint(columnNames = {"candidate_id","company_id"})})
 public class Employee extends BaseEntity{
 
 	@ManyToOne

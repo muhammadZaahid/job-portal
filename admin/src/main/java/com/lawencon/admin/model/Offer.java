@@ -9,9 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="t_offer")
+@Table(name="t_offer",uniqueConstraints = {@UniqueConstraint(columnNames = {"applicant_id"})})
 public class Offer extends BaseEntity {
 	
 	@OneToOne

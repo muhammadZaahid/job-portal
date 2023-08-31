@@ -5,7 +5,7 @@ import javax.persistence.*;
 import com.lawencon.base.BaseEntity;
 
 @Entity
-@Table(name="t_company_banner")
+@Table(name="t_company_banner",uniqueConstraints = {@UniqueConstraint(columnNames = {"company_id"}),@UniqueConstraint(columnNames = {"file_id"})})
 public class CompanyBanner extends BaseEntity{
 
     @OneToOne

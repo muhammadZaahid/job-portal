@@ -6,17 +6,17 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name="t_user")
+@Table(name="t_user",uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class User extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name="profile_id")
     private Profile profile;
 
-    @Column(name = "email",unique = true, nullable = true)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password",nullable = true)
+    @Column(name = "password",nullable = false)
     private String password;
 
     public Profile getProfile() {
