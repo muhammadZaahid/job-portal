@@ -47,6 +47,7 @@ public class SecurityConfig {
 		final List<RequestMatcher> matchers = new ArrayList<>();
 		matchers.add(new AntPathRequestMatcher("/admin/login", HttpMethod.POST.toString()));
 		matchers.add(new AntPathRequestMatcher("/admin/file/**", HttpMethod.GET.toString()));
+		matchers.add(new AntPathRequestMatcher("/admin/report/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/swagger-ui/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/v3/**", HttpMethod.GET.toString()));
 		matchers.add(new AntPathRequestMatcher("/admin/candidate/seeker", HttpMethod.POST.toString()));
