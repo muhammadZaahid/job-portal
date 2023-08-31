@@ -77,7 +77,6 @@ public class OfferService {
                 params.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
                 params.put("salaryOffer", offer.getOfferBasicSalary());
                 params.put("benefitDesc", applicant.getJobVacancy().getBenefitDesc());
-                System.out.println(params.get("candidateName"));
                 byte[] report = jasperUtil.responseToByteArray(null, params, "offer_letter");
                 Map<String, Object> properties = new HashMap<>();
                 properties.put("name", applicant.getCandidate().getName());
