@@ -2,6 +2,8 @@ package com.lawencon.candidate.dao;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.base.AbstractJpaDao;
@@ -56,6 +58,25 @@ public class ApplicantDao extends AbstractJpaDao{
         }catch(Exception e){
             e.printStackTrace();
             return false;
+        }
+    }
+    
+    public String getApplicantId(String candidateId, String jobVacancyId ) {
+        String sql = "SELECT id FROM t_applicant ta "
+                + "WHERE ta.candidate_id = :candidateId "
+                + "AND ta.job_vacancy_id = :jobVacancId ";
+        
+        try {
+        	
+        	String result = (String) ConnHandler.getManager()
+        					.createNativeQuery(sql)
+        					.setParameter("candidateId", candidateId)
+                            .setParameter("jobVacancId", jobVacancyId)
+                            .getSingleResult();
+        	return result;
+        }catch(Exception e) {
+        	e.printStackTrace();
+        	return null;
         }
     }
 }
