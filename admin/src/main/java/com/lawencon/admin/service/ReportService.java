@@ -14,7 +14,7 @@ public class ReportService {
     @Autowired
     ReportDao reportDao;
 
-    public List<ApplicantReportPojo> getApplicantReport(){
-        return reportDao.getForApplicant();
+    public List<ApplicantReportPojo> getApplicantReport(String startDate, String endDate){
+        return reportDao.getForApplicant(startDate,endDate);
     }
 }

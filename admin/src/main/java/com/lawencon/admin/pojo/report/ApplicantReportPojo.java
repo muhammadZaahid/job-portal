@@ -5,6 +5,7 @@ public class ApplicantReportPojo {
     public String jobTitle;
     public String currentStage;
     public String totalDays;
+    public Integer daysNumber;
     
     public String getCandidateName() {
         return candidateName;
@@ -29,6 +30,12 @@ public class ApplicantReportPojo {
     }
     public void setTotalDays(String totalDays) {
         this.totalDays = totalDays;
+    }
+    public Integer getDaysNumber() {
+        return daysNumber;
+    }
+    public void setDaysNumber(Integer daysNumber) {
+        this.daysNumber = daysNumber;
     }
     
 }
