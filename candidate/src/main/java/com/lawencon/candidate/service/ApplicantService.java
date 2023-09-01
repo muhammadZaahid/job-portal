@@ -57,6 +57,9 @@ public class ApplicantService {
 		InsertResDto response = new InsertResDto();
 		Applicant applicant = new Applicant();
 		Candidate candidate = candidateDao.getById(Candidate.class, request.getCandidateId());
+		if(candidate.getPhoto() == null && candidate.getResume() == null){
+			throw new RuntimeException("Please Complete your Profile!");
+		}
 		applicant.setCandidate(candidate);
 		JobVacancy jobVacancy = jobVacancyDao.getById(JobVacancy.class, request.getJobVacancyId());
 		Boolean expired = jobVacancy.getEndDate().isBefore(today);

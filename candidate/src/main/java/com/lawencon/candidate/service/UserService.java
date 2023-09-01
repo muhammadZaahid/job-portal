@@ -277,4 +277,13 @@ public class UserService implements UserDetailsService {
             throw new RuntimeException("Please fill your salary expectation!");
         }
     }
+
+    public Boolean checkProfile(){
+        User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
+        if(user.getCandidate().getResume() == null && user.getCandidate().getPhoto() == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

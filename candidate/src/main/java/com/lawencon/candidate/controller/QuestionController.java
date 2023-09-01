@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.candidate.dto.InsertResDto;
-import com.lawencon.candidate.dto.question.QuestionAssessmentAnswerReqDto;
 import com.lawencon.candidate.dto.question.QuestionAssessmentInsertReqDto;
 import com.lawencon.candidate.dto.question.QuestionSubmitAssessmentReqDto;
 import com.lawencon.candidate.dto.question.QuestionTopicInsertSeekerReqDto;
