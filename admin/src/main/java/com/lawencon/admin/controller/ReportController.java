@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.admin.pojo.report.ApplicantReportPojo;
@@ -26,16 +27,19 @@ public class ReportController {
     JasperUtil jasperUtil;
 
     @GetMapping("/applicant")
-    public ResponseEntity<List<ApplicantReportPojo>> getApplicantReport() {
-        List<ApplicantReportPojo> response = reportService.getApplicantReport();
+    public ResponseEntity<List<ApplicantReportPojo>> getApplicantReport(
+    @RequestParam(required = false) String startDate, 
+    @RequestParam(required = false) String endDate) {
+        List<ApplicantReportPojo> response = reportService.getApplicantReport(startDate,endDate);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/tes")
-    public ResponseEntity<?> getReport() {
+    public ResponseEntity<?> getReport(@RequestParam(name = "startDate",required = false)String startDate, 
+    @RequestParam(name = "endDate",required = false)String endDate) {
         try {
-            final List<ApplicantReportPojo> list = reportService.getApplicantReport();
+            final List<ApplicantReportPojo> list = reportService.getApplicantReport(startDate,endDate);
             byte[] report = jasperUtil.responseToByteArray(list, null, "Report_Applicant_1");
             return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "application_report" + "." + "pdf")
