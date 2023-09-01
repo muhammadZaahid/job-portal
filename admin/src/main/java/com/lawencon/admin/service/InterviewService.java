@@ -67,6 +67,9 @@ public class InterviewService {
         response.setInterviewVenue(interview.getInterviewVenue());
         response.setInterviewTime(DateUtil.parseLocalDateTimeToDate(interview.getInterviewTime()));
         response.setInterviewNote(interview.getInterviewNote());
+        response.setInterviewName(interview.getInterviewPic().getProfile().getName());
+        response.setInterviewPhone(interview.getInterviewPic().getProfile().getPhone());
+        response.setInterviewEmail(interview.getInterviewPic().getEmail());
 
         return response;
     }

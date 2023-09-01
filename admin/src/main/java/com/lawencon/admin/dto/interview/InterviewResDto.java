@@ -7,6 +7,9 @@ public class InterviewResDto {
     private String interviewTime;
     private String interviewLocation;
     private String interviewNote;
+    private String interviewName;
+    private String interviewPhone;
+    private String interviewEmail;
     
     public String getId() {
         return id;
@@ -43,5 +46,23 @@ public class InterviewResDto {
     }
     public void setInterviewNote(String interviewNote) {
         this.interviewNote = interviewNote;
+    }
+    public String getInterviewName() {
+        return interviewName;
+    }
+    public void setInterviewName(String interviewName) {
+        this.interviewName = interviewName;
+    }
+    public String getInterviewPhone() {
+        return interviewPhone;
+    }
+    public void setInterviewPhone(String interviewPhone) {
+        this.interviewPhone = interviewPhone;
+    }
+    public String getInterviewEmail() {
+        return interviewEmail;
+    }
+    public void setInterviewEmail(String interviewEmail) {
+        this.interviewEmail = interviewEmail;
     }
 }
