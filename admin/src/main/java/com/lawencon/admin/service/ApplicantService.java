@@ -287,6 +287,13 @@ public class ApplicantService {
 		response.setOffer(applicant.isStgOffer());
 		response.setAppliedDate(applicant.getAppliedDate().toString());
 		response.setJobVacancyId(applicant.getJobVacancy().getId());
+		try{
+			if(medicalDao.getByApplicantId(applicantId).getId() != null){
+				response.setHasMedicalFile(true);
+			}
+		}catch(NullPointerException ex){
+			response.setHasMedicalFile(false);
+		}
 		return response;
 	}
 

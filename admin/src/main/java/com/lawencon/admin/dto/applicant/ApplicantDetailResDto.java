@@ -10,6 +10,7 @@ public class ApplicantDetailResDto {
     private Boolean offer;
     private String jobVacancyId;
     private String appliedDate;
+    private Boolean hasMedicalFile;
     
     public String getCandidateId() {
         return candidateId;
@@ -64,6 +65,12 @@ public class ApplicantDetailResDto {
     }
     public void setAppliedDate(String appliedDate) {
         this.appliedDate = appliedDate;
+    }
+    public Boolean getHasMedicalFile() {
+        return hasMedicalFile;
+    }
+    public void setHasMedicalFile(Boolean hasMedicalFile) {
+        this.hasMedicalFile = hasMedicalFile;
     }
     
 }
