@@ -72,28 +72,28 @@ public class OfferService {
 
         if (createdOffer != null) {
             try {
-                String totalSalary = String.format(Locale.US, "%,d",(offer.getOfferBasicSalary().intValue())).replace(',', '.');
-                System.out.println("IDR " +totalSalary);
-                Map<String, Object> params = new HashMap<>();
-                params.put("candidateName", applicant.getCandidate().getName());
-                params.put("jobTitle", applicant.getJobVacancy().getTitle());
-                params.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
-                params.put("salaryOffer", "IDR "+totalSalary);
-                params.put("benefitDesc", applicant.getJobVacancy().getBenefitDesc());
-                byte[] report = jasperUtil.responseToByteArray(null, params, "offering_letter");
-                Map<String, Object> properties = new HashMap<>();
-                properties.put("name", applicant.getCandidate().getName());
-                properties.put("jobName", applicant.getJobVacancy().getTitle());
-                properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
-                Email email = new Email();
-                email.setSubject("You have received an offering letter from "
-                        + applicant.getJobVacancy().getCompany().getCompanyName() + " !");
-                email.setRecipientEmail(applicant.getCandidate().getEmail());
-                email.setRecipientName(applicant.getCandidate().getName());
-                email.setSenderEmail(emailSender);
-                email.setProperties(properties);
-                email.setTemplate("offer-letter");
-                emailService.sendHtmlMessageWithAttachment(email, "offer_letter.pdf", report);
+//                String totalSalary = String.format(Locale.US, "%,d",(offer.getOfferBasicSalary().intValue())).replace(',', '.');
+//                System.out.println("IDR " +totalSalary);
+//                Map<String, Object> params = new HashMap<>();
+//                params.put("candidateName", applicant.getCandidate().getName());
+//                params.put("jobTitle", applicant.getJobVacancy().getTitle());
+//                params.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+//                params.put("salaryOffer", "IDR "+totalSalary);
+//                params.put("benefitDesc", applicant.getJobVacancy().getBenefitDesc());
+//                byte[] report = jasperUtil.responseToByteArray(null, params, "offering_letter");
+//                Map<String, Object> properties = new HashMap<>();
+//                properties.put("name", applicant.getCandidate().getName());
+//                properties.put("jobName", applicant.getJobVacancy().getTitle());
+//                properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+//                Email email = new Email();
+//                email.setSubject("You have received an offering letter from "
+//                        + applicant.getJobVacancy().getCompany().getCompanyName() + " !");
+//                email.setRecipientEmail(applicant.getCandidate().getEmail());
+//                email.setRecipientName(applicant.getCandidate().getName());
+//                email.setSenderEmail(emailSender);
+//                email.setProperties(properties);
+//                email.setTemplate("offer-letter");
+//                emailService.sendHtmlMessageWithAttachment(email, "offer_letter.pdf", report);
                 ConnHandler.commit();
                 response.setId(createdOffer.getId());
                 response.setMessage("Success create Offering to Candidate");

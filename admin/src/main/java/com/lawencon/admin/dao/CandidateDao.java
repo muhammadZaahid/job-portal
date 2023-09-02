@@ -1,5 +1,6 @@
 package com.lawencon.admin.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -24,4 +25,5 @@ public class CandidateDao extends AbstractJpaDao {
             return null;
         }
     }
+       
 }

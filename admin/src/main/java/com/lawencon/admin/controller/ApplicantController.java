@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.applicant.ApplicantDetailResDto;
@@ -67,5 +68,13 @@ public class ApplicantController {
 		final ApplicantDetailResDto response = applicantService.getById(applicantId);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/count")
+	public ResponseEntity<CountResDto> getTotalApplicant(){
+		
+		final CountResDto response = applicantService.getTotalApplicant();
+		return new ResponseEntity<>(response, HttpStatus.OK);
+		
 	}
 }

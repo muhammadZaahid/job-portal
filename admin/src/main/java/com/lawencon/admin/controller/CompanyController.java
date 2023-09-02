@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.company.CompanyDetailResDto;
@@ -62,4 +63,11 @@ public class CompanyController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 				
 	}	
+	
+	@GetMapping("/count")
+	public ResponseEntity<CountResDto> getTotalCompany(){
+		CountResDto response = companyService.getTotalCompany();
+		
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
 }

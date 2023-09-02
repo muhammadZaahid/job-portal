@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.admin.dao.CandidateDao;
+import com.lawencon.admin.dao.ConstantDao;
 import com.lawencon.admin.dao.FileDao;
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.candidate.CandidateInsertReqDto;
@@ -30,6 +32,9 @@ public class CandidateService {
 
 	@Autowired
 	FileDao fileDao;
+	
+	@Autowired
+	ConstantDao constantDao;
 
 	public InsertResDto createCandidate(CandidateInsertReqDto request) {
 
@@ -240,6 +245,14 @@ public class CandidateService {
 			throw new RuntimeException("Error while updating candidate's data!");
 		}
 
+		return response;
+	}
+	
+	public CountResDto getTotalCandidate() {		
+		CountResDto response = new CountResDto();
+		String total = constantDao.getTotal("t_candidate");
+		response.setTotal(total);
+		
 		return response;
 	}
 }
