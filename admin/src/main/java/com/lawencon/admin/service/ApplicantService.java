@@ -84,7 +84,7 @@ public class ApplicantService {
 	public InsertResDto createApplicant(ApplicantInsertReqDto request) {
 		ConnHandler.begin();
 		Boolean hasApplied = applicantDao.checkHasApplied(request.getCandidateId(), request.getJobVacancyId());
-		if(hasApplied){
+		if (hasApplied) {
 			throw new RuntimeException("This Candidate has already applied to this job!");
 		}
 		InsertResDto response = new InsertResDto();
@@ -148,9 +148,8 @@ public class ApplicantService {
 				try {
 					Map<String, Object> properties = new HashMap<>();
 					properties.put("name", candidate.getName());
-					properties.put("jobName",jobVacancy.getTitle());
-					properties.put("companyName",jobVacancy.getCompany().getCompanyName());
-					properties.put("jobDate",applicant.getAppliedDate());
+					properties.put("jobName", jobVacancy.getTitle());
+					properties.put("companyName", jobVacancy.getCompany().getCompanyName());
 					Email email = new Email();
 					email.setSubject("Success! You have applied for " + jobVacancy.getCompany().getCompanyName());
 					email.setRecipientEmail(candidate.getEmail());
@@ -200,6 +199,23 @@ public class ApplicantService {
 					Application application = applicationDao.getByApplicant(data);
 					application.setIsAccepted(true);
 					applicationDao.save(application);
+					try {
+						Map<String, Object> properties = new HashMap<>();
+						properties.put("name", applicant.getCandidate().getName());
+						properties.put("jobName", applicant.getJobVacancy().getTitle());
+						properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+						Email email = new Email();
+						email.setSubject("Your application for " + applicant.getJobVacancy().getTitle()
+								+ " has reached Assessment stage!");
+						email.setRecipientEmail(applicant.getCandidate().getEmail());
+						email.setRecipientName(applicant.getCandidate().getName());
+						email.setSenderEmail(emailSender);
+						email.setProperties(properties);
+						email.setTemplate("template-assessment");
+						emailService.sendHtmlMessage(email);
+					} catch (MessagingException exception) {
+						exception.printStackTrace();
+					}
 				} else if (applicant.getCurrentStage().equals("assessment")) {
 					applicant.setCurrentStage("interview");
 					applicant.setStgInterview(true);
@@ -208,6 +224,7 @@ public class ApplicantService {
 					Assessment assessment = assessmentDao.getByApplicantId(data);
 					assessment.setIsAccepted(true);
 					assessmentDao.saveAndFlush(assessment);
+
 				} else if (applicant.getCurrentStage().equals("interview")) {
 					applicant.setCurrentStage("mcu");
 					applicant.setStgMcu(true);
@@ -216,18 +233,51 @@ public class ApplicantService {
 					Interview interview = interviewDao.getByApplicantId(data);
 					interview.setIsAccepted(true);
 					assessmentDao.saveAndFlush(interview);
+					try {
+						Map<String, Object> properties = new HashMap<>();
+						properties.put("name", applicant.getCandidate().getName());
+						properties.put("jobName", applicant.getJobVacancy().getTitle());
+						properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+						Email email = new Email();
+						email.setSubject("Your application for " + applicant.getJobVacancy().getTitle()
+								+ " has reached Medical stage!");
+						email.setRecipientEmail(applicant.getCandidate().getEmail());
+						email.setRecipientName(applicant.getCandidate().getName());
+						email.setSenderEmail(emailSender);
+						email.setProperties(properties);
+						email.setTemplate("template-medical");
+						emailService.sendHtmlMessage(email);
+					} catch (MessagingException exception) {
+						exception.printStackTrace();
+					}
 				} else if (applicant.getCurrentStage().equals("mcu")) {
 					applicant.setCurrentStage("offer");
 					applicant.setStgOffer(true);
 					applicant.setVersion(applicant.getVersion() + 1);
 					applicantDao.save(applicant);
-				} else if(applicant.getCurrentStage().equals("offer")){
+				} else if (applicant.getCurrentStage().equals("offer")) {
 					applicant.setCurrentStage("hired");
 					applicantDao.saveAndFlush(applicant);
 					Employee employee = new Employee();
 					employee.setCandidate(applicant.getCandidate());
 					employee.setCompany(applicant.getJobVacancy().getCompany());
 					employeeDao.save(employee);
+					try {
+						Map<String, Object> properties = new HashMap<>();
+						properties.put("name", applicant.getCandidate().getName());
+						properties.put("jobName", applicant.getJobVacancy().getTitle());
+						properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+						Email email = new Email();
+						email.setSubject("You are now hired as " + applicant.getJobVacancy().getTitle());
+						email.setRecipientEmail(applicant.getCandidate().getEmail());
+						email.setRecipientName(applicant.getCandidate().getName());
+						email.setSenderEmail(emailSender);
+						email.setProperties(properties);
+						email.setTemplate("template-hired");
+						emailService.sendHtmlMessage(email);
+					} catch (MessagingException exception) {
+						exception.printStackTrace();
+					}
 				}
 				ConnHandler.commit();
 				response.setVer(applicant.getVersion());
@@ -263,8 +313,8 @@ public class ApplicantService {
 	public List<ApplicantsResDto> getAllApplicants(Integer page, Integer limit) {
 		List<ApplicantsResDto> responses = new ArrayList<>();
 
-		List<Applicant> a = applicantDao.getAllPaged(page,limit);
-		for(int i=0;i<a.size();i++){
+		List<Applicant> a = applicantDao.getAllPaged(page, limit);
+		for (int i = 0; i < a.size(); i++) {
 			ApplicantsResDto response = new ApplicantsResDto();
 			response.setApplicantId(a.get(i).getId());
 			response.setCandidateNik(a.get(i).getCandidate().getNik());
@@ -274,12 +324,13 @@ public class ApplicantService {
 			response.setJobTitle(a.get(i).getJobVacancy().getTitle());
 			response.setAppliedDate(a.get(i).getAppliedDate().toString());
 			responses.add(response);
-		};
+		}
+		;
 
 		return responses;
 	}
 
-	public ApplicantDetailResDto getById(String applicantId){
+	public ApplicantDetailResDto getById(String applicantId) {
 		final ApplicantDetailResDto response = new ApplicantDetailResDto();
 		Applicant applicant = applicantDao.getById(Applicant.class, applicantId);
 		response.setCandidateId(applicant.getCandidate().getId());
@@ -291,11 +342,11 @@ public class ApplicantService {
 		response.setOffer(applicant.isStgOffer());
 		response.setAppliedDate(applicant.getAppliedDate().toString());
 		response.setJobVacancyId(applicant.getJobVacancy().getId());
-		try{
-			if(medicalDao.getByApplicantId(applicantId).getId() != null){
+		try {
+			if (medicalDao.getByApplicantId(applicantId).getId() != null) {
 				response.setHasMedicalFile(true);
 			}
-		}catch(NullPointerException ex){
+		} catch (NullPointerException ex) {
 			response.setHasMedicalFile(false);
 		}
 		return response;
