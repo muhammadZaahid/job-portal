@@ -50,7 +50,7 @@ public class ReportController {
             }
             averageDays = sumDays / list.size();
             params.put("averageDays", averageDays+" days");
-            byte[] report = jasperUtil.responseToByteArray(list, params, "Report_Applicant_2");
+            byte[] report = jasperUtil.responseToByteArray(list, params, "Report_Applicant_1");
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION,
                             "attachment; filename=" + "application_report" + "." + "pdf")
