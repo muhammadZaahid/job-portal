@@ -54,7 +54,7 @@ public class JobVacancyController {
    	}
     
     @GetMapping("/{id}")
-    public ResponseEntity<JobVacancyDetailResDto> getCompany(@PathVariable("id") String id){
+    public ResponseEntity<JobVacancyDetailResDto> getById(@PathVariable("id") String id){
     	
     	JobVacancyDetailResDto response = jobVacancyService.getJobVacancyById(id);
     	

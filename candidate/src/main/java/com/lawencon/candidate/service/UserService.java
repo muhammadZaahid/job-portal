@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -121,11 +119,7 @@ public class UserService implements UserDetailsService {
     public UpdateResDto updateCandidate(UserUpdateReqDto data) {
         ConnHandler.begin();
         final UpdateResDto response = new UpdateResDto();
-        try{
-            valNonBK(data);
-        }catch(Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
+        valNonBK(data);
         User user = userDao.getById(User.class, data.getId());
         Candidate candidate = user.getCandidate();
 
@@ -252,22 +246,21 @@ public class UserService implements UserDetailsService {
         return response;
     }
 
-    public void valNonBK(UserUpdateReqDto user){
-
-        if (user.getName() == null && user.getName().isEmpty()) {
+    public void valNonBK(UserUpdateReqDto user) {
+        if (user.getName() != null || !user.getName().isEmpty()) {
             throw new RuntimeException("Please fill your name!");
         }
-        if (user.getNik() == null && user.getNik().isEmpty()) {
+        if (user.getNik() == null || user.getNik().isEmpty()) {
             throw new RuntimeException("Please fill your identity number!");
         }
-        if (user.getPhone() == null && user.getPhone().isEmpty()) {
+        if (user.getPhone() == null || user.getPhone().isEmpty()) {
             System.out.println("kan kosong");
             throw new RuntimeException("Please fill your mobile / phone number!");
         }
-        if (user.getBirthPlace() == null) {
+        if (user.getBirthPlace() == null || user.getBirthPlace().isEmpty()) {
             throw new RuntimeException("Please fill your birth place!");
         }
-        if (user.getBirthDate() == null) {
+        if (user.getBirthDate() == null || user.getBirthDate().isEmpty()) {
             throw new RuntimeException("Please fill your birth date!");
         }
         if (user.getExperienceYear() == null) {
@@ -278,11 +271,11 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public Boolean checkProfile(){
+    public Boolean checkProfile() {
         User user = userDao.getById(User.class, principalService.getAuthPrincipal().toString());
-        if(user.getCandidate().getResume() == null && user.getCandidate().getPhoto() == null){
+        if (user.getCandidate().getResume() == null && user.getCandidate().getPhoto() == null) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
