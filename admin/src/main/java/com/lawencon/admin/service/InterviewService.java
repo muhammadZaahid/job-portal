@@ -2,9 +2,13 @@ package com.lawencon.admin.service;
 
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +19,7 @@ import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.interview.InterviewInsertReqDto;
 import com.lawencon.admin.dto.interview.InterviewResDto;
 import com.lawencon.admin.model.Applicant;
+import com.lawencon.admin.model.Email;
 import com.lawencon.admin.model.Interview;
 import com.lawencon.admin.model.JobVacancy;
 import com.lawencon.util.DateUtil;
@@ -32,6 +37,11 @@ public class InterviewService {
     RestTemplate restTemplate;
     @Autowired
     ApplicantService applicantService;
+    @Autowired
+    EmailService emailService;
+
+    @Value("${spring.mail.username}")
+	private String emailSender;
 
     public InsertResDto insertInterview (InterviewInsertReqDto data){
         final InsertResDto response = new InsertResDto();
@@ -51,6 +61,25 @@ public class InterviewService {
 
         if(createdInterview != null){
             applicantService.updateApplicant(data.getApplicantId());
+            try {
+						Map<String, Object> properties = new HashMap<>();
+						properties.put("name", applicant.getCandidate().getName());
+						properties.put("jobName", applicant.getJobVacancy().getTitle());
+						properties.put("companyName", applicant.getJobVacancy().getCompany().getCompanyName());
+                        properties.put("venue",interview.getInterviewVenue());
+                        properties.put("location",interview.getInterviewMap());
+                        properties.put("date",DateUtil.parseLocalDateTimeToDate(interview.getInterviewTime()));
+						Email email = new Email();
+						email.setSubject("Your application for " + applicant.getJobVacancy().getTitle()+" has reached Interview stage!");
+						email.setRecipientEmail(applicant.getCandidate().getEmail());
+						email.setRecipientName(applicant.getCandidate().getName());
+						email.setSenderEmail(emailSender);
+						email.setProperties(properties);
+						email.setTemplate("template-interview");
+						emailService.sendHtmlMessage(email);
+					} catch (MessagingException exception) {
+						exception.printStackTrace();
+					}
             response.setId(createdInterview.getId());
             response.setMessage("Success Arrange Interview with Candidate!");
         }

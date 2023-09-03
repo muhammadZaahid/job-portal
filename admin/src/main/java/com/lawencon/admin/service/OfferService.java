@@ -92,7 +92,7 @@ public class OfferService {
                 email.setRecipientName(applicant.getCandidate().getName());
                 email.setSenderEmail(emailSender);
                 email.setProperties(properties);
-                email.setTemplate("offer-letter");
+                email.setTemplate("template-offer");
                 emailService.sendHtmlMessageWithAttachment(email, "offer_letter.pdf", report);
                 ConnHandler.commit();
                 response.setId(createdOffer.getId());
