@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.user.UserInsertReqDto;
 import com.lawencon.admin.dto.user.UsersListResDto;
@@ -51,5 +52,12 @@ public class UserController {
         final List<UsersListResDto> response = userService.getUsers();
 
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+    
+    @GetMapping("/count")
+    public ResponseEntity<CountResDto> getTotalUser(){
+    	CountResDto response = userService.getTotalUser();
+    	
+    	return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

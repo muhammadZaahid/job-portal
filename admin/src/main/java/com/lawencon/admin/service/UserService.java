@@ -1,7 +1,9 @@
 package com.lawencon.admin.service;
 
+import com.lawencon.admin.dao.ConstantDao;
 import com.lawencon.admin.dao.ProfileDao;
 import com.lawencon.admin.dao.UserDao;
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class UserService implements UserDetailsService{
     UserDao userDao;
     @Autowired
     ProfileDao profileDao;
+    @Autowired
+    ConstantDao constantDao;
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -105,5 +109,14 @@ public class UserService implements UserDetailsService{
         });
 
         return responses;
+    }
+    
+    public CountResDto getTotalUser() {
+    	
+    	CountResDto response = new CountResDto();
+    	String total = constantDao.getTotal("t_user");
+    	response.setTotal(total);
+    	
+    	return response;
     }
 }

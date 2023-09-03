@@ -23,11 +23,13 @@ import com.lawencon.admin.dao.ApplicantDao;
 import com.lawencon.admin.dao.ApplicationDao;
 import com.lawencon.admin.dao.AssessmentDao;
 import com.lawencon.admin.dao.CandidateDao;
+import com.lawencon.admin.dao.ConstantDao;
 import com.lawencon.admin.dao.EmployeeDao;
 import com.lawencon.admin.dao.InterviewDao;
 import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dao.MedicalDao;
 import com.lawencon.admin.dao.UserDao;
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.applicant.ApplicantDetailResDto;
@@ -67,6 +69,8 @@ public class ApplicantService {
 	UserDao userDao;
 	@Autowired
 	EmployeeDao employeeDao;
+	@Autowired
+	ConstantDao constantDao;
 	@Autowired
 	BlacklistService blacklistService;
 	@Autowired
@@ -345,6 +349,15 @@ public class ApplicantService {
 		} catch (NullPointerException ex) {
 			response.setHasMedicalFile(false);
 		}
+		return response;
+	}
+	
+	public CountResDto getTotalApplicant() {
+		
+		CountResDto response = new CountResDto();
+		String total = constantDao.getTotal("t_applicant");
+		response.setTotal(total);
+		
 		return response;
 	}
 

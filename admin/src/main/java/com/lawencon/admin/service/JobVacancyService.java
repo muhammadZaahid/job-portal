@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.lawencon.admin.dao.CompanyDao;
+import com.lawencon.admin.dao.ConstantDao;
 import com.lawencon.admin.dao.JobLevelDao;
 import com.lawencon.admin.dao.JobVacancyDao;
 import com.lawencon.admin.dao.UserDao;
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.jobvacancy.AllJobVacancyResDto;
@@ -45,6 +47,8 @@ public class JobVacancyService {
     CompanyDao companyDao;
     @Autowired
     UserDao userDao;
+    @Autowired
+    ConstantDao constantDao;
     @Autowired
     QuestionService questionService;
     @Autowired
@@ -216,5 +220,16 @@ public class JobVacancyService {
         response.setEndDate(jobVacancy.getEndDate().toString());
 
         return response;
+    }
+    
+    public CountResDto getTotalJobVacancy() {
+    	
+    	CountResDto response = new CountResDto();
+    	String total = constantDao.getTotal("t_job_vacancy");
+    	
+    	response.setTotal(total);
+    	
+    	return response;
+    	
     }
 }

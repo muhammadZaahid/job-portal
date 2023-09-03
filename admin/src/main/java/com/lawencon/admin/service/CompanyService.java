@@ -16,7 +16,9 @@ import org.springframework.web.client.RestTemplate;
 import com.lawencon.admin.dao.CompanyBannerDao;
 import com.lawencon.admin.dao.CompanyDao;
 import com.lawencon.admin.dao.CompanyLogoDao;
+import com.lawencon.admin.dao.ConstantDao;
 import com.lawencon.admin.dao.FileDao;
+import com.lawencon.admin.dto.CountResDto;
 import com.lawencon.admin.dto.InsertResDto;
 import com.lawencon.admin.dto.UpdateResDto;
 import com.lawencon.admin.dto.company.CompanyDetailResDto;
@@ -47,6 +49,9 @@ public class CompanyService {
 
 	@Autowired
 	CompanyBannerDao companyBannerDao;
+	
+	@Autowired
+	ConstantDao constantDao;
 
 	@Autowired
 	RestTemplate restTemplate;
@@ -241,5 +246,13 @@ public class CompanyService {
 		
 		
 		return updateResDto;
+	}
+	
+	public CountResDto getTotalCompany() {
+		CountResDto response = new CountResDto();
+		String total = constantDao.getTotal("t_company");
+		response.setTotal(total);
+		
+		return response;
 	}
 }
